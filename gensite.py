@@ -20,6 +20,7 @@ with open('data.json', 'r') as file:
 for f in files:
     template = env.get_template(f)
     data[f]["url"] = f
+    data[f]["name"] = f.replace(".html", "")
 
     with open("public/%s" % (f), "w") as file:
         file.write(template.render(page = data[f]))

@@ -77,7 +77,7 @@
 	</div>
 
   <div class="nav mobile-nav"><ul class="wsite-menu-default">
-		<li id="active" class="wsite-menu-item-wrap">
+		<li id="{% if page.name == "index" %}active{% else %}pg761516497616537586{% endif %}" class="wsite-menu-item-wrap">
 			<a
 						href="index.html"
 				class="wsite-menu-item"
@@ -86,7 +86,7 @@
 			</a>
 
 		</li>
-		<li id="pg538065792992340264" class="wsite-menu-item-wrap">
+                <li id="{% if page.name == "about" %}active{% else %}pg538065792992340264{% endif %}" class="wsite-menu-item-wrap">
 			<a
 				class="wsite-menu-item"
 				>
@@ -203,7 +203,7 @@
 </div>
 
 		</li>
-		<li id="pg169787988694262249" class="wsite-menu-item-wrap">
+                <li id="{% if page.name == "members" %}active{% else %}pg169787988694262249{% endif %}" class="wsite-menu-item-wrap">
 			<a
 				class="wsite-menu-item"
 				>
@@ -350,7 +350,7 @@
 </div>
 
 		</li>
-		<li id="pg866172995135331545" class="wsite-menu-item-wrap">
+                <li id="{% if page.name == "registration1" %}active{% else %}pg866172995135331545{% endif %}" class="wsite-menu-item-wrap">
 			<a
 						href="registration1.html"
 				class="wsite-menu-item"
@@ -359,7 +359,7 @@
 			</a>
 
 		</li>
-		<li id="pg671129197513098846" class="wsite-menu-item-wrap">
+                <li id="{% if page.name == "support-us" %}active{% else %}pg671129197513098846{% endif %}" class="wsite-menu-item-wrap">
 			<a
 						href="support-us.html"
 				class="wsite-menu-item"
@@ -412,7 +412,7 @@
 </div>
 
 		</li>
-		<li id="pg438860998316097464" class="wsite-menu-item-wrap">
+                <li id="{% if page.name == "newsletter" %}active{% else %}pg438860998316097464{% endif %}" class="wsite-menu-item-wrap">
 			<a
 						href="newsletter.html"
 				class="wsite-menu-item"
