@@ -8,19 +8,20 @@ from os.path import isfile, join
 
 import json
 
-templates_dir = "templates"
-env = Environment(loader=CachingFileSystemLoader(templates_dir, ext=".html"))
+def generate(templates_dir: string, output_dir: string, data_file: string) -> int:
+    env = Environment(loader=CachingFileSystemLoader(templates_dir, ext=".html"))
 
-output_dir = "public"
-files = [f for f in listdir(templates_dir) if isfile(f)]
+    files = [f for f in listdir(templates_dir) if isfile(f)]
 
-with open('data.json', 'r') as file:
-    data = json.load(file)
+    with open(data_file, 'r') as file:
+        data = json.load(file)
 
-for f in files:
-    template = env.get_template(f)
-    data[f]["url"] = f
-    data[f]["name"] = f.replace(".html", "")
+    for f in files:
+        template = env.get_template(f)
+        data[f]["url"] = f
+        data[f]["name"] = f.replace(".html", "")
 
-    with open("public/%s" % (f), "w") as file:
-        file.write(template.render(page = data[f]))
+        with open("public/%s" % (f), "w") as file:
+            file.write(template.render(page = data[f]))
+
+    return len(files)
