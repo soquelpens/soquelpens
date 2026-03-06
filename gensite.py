@@ -11,7 +11,10 @@ import json
 def generate(templates_dir: string, output_dir: string, data_file: string) -> int:
     env = Environment(loader=CachingFileSystemLoader(templates_dir, ext=".html"))
 
-    files = [f for f in listdir(templates_dir) if isfile(f)]
+    files = []
+    for f in listdir(templates_dir):
+        if isfile(join(templates_dir, f)) and not f.startswith("_"):
+            files.append(f)
 
     with open(data_file, 'r') as file:
         data = json.load(file)
