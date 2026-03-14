@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soquel Parent Education Nursery School</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Lato',sans-serif;background:#fff;color:#333;font-size:16px;line-height:1.7;}
+
+/* NAV */
+nav{background:#fff;border-bottom:1px solid #e8e8e8;position:sticky;top:0;z-index:100;}
+.nav-top{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;}
+.nav-logo{font-family:'Montserrat',sans-serif;font-size:0.9rem;font-weight:700;color:#222;text-decoration:none;letter-spacing:0.03em;max-width:200px;line-height:1.3;}
+.nav-links{display:flex;gap:2rem;list-style:none;align-items:center;}
+.nav-links>li{position:relative;}
+.nav-links a{text-decoration:none;font-family:'Montserrat',sans-serif;font-size:0.78rem;font-weight:600;color:#444;letter-spacing:0.08em;text-transform:uppercase;padding:0.4rem 0;transition:color 0.2s;}
+.nav-links a:hover{color:#000;}
+.nav-dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid #e8e8e8;min-width:200px;z-index:200;box-shadow:0 4px 16px rgba(0,0,0,0.06);}
+.nav-links li:hover .nav-dropdown{display:block;}
+.nav-dropdown a{display:block;padding:0.65rem 1.1rem;font-size:0.75rem;font-weight:500;color:#555;text-transform:none;letter-spacing:0.03em;border-bottom:1px solid #f0f0f0;}
+.nav-dropdown a:hover{background:#f8f8f8;color:#222;}
+.nav-right{display:flex;gap:1rem;align-items:center;}
+.nav-donate{font-family:'Montserrat',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#fff;background:#2b6b4f;border:none;padding:0.5rem 1.1rem;cursor:pointer;text-decoration:none;display:inline-block;}
+
+/* HAMBURGER */
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;background:none;border:none;cursor:pointer;padding:4px;width:36px;height:36px;}
+.hamburger span{display:block;width:22px;height:2px;background:#333;border-radius:2px;transition:all 0.25s;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+/* MOBILE MENU */
+.mobile-menu{display:none;flex-direction:column;background:#fff;border-top:1px solid #e8e8e8;padding:1rem 0;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{display:block;padding:0.75rem 1.5rem;font-family:'Montserrat',sans-serif;font-size:0.82rem;font-weight:600;color:#333;text-decoration:none;letter-spacing:0.06em;text-transform:uppercase;border-bottom:1px solid #f5f5f5;}
+.mobile-menu a:hover{background:#f8f8f8;}
+.mobile-menu .m-sub{padding-left:2.5rem;font-size:0.78rem;font-weight:400;text-transform:none;letter-spacing:0.03em;color:#666;}
+.mobile-menu .m-section{padding:0.5rem 1.5rem 0.25rem;font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#aaa;border-bottom:none;}
+.mobile-donate{margin:1rem 1.5rem 0.5rem;display:block;text-align:center;background:#2b6b4f;color:#fff;padding:0.75rem;font-family:'Montserrat',sans-serif;font-size:0.8rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;}
+
+/* HERO */
+.hero{position:relative;height:88vh;min-height:480px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;}
+.hero-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.42);}
+.hero-content{position:relative;z-index:2;text-align:center;color:#fff;padding:1.5rem;}
+.hero-content h1{font-family:'Montserrat',sans-serif;font-size:clamp(1.7rem,5vw,3.8rem);font-weight:700;letter-spacing:-0.01em;line-height:1.15;margin-bottom:0.75rem;text-shadow:0 2px 20px rgba(0,0,0,0.4);}
+.hero-content h1 em{font-style:italic;font-family:'Lato',sans-serif;font-weight:300;}
+.hero-content p{font-family:'Lato',sans-serif;font-size:1rem;font-weight:300;letter-spacing:0.04em;margin-bottom:1.5rem;opacity:0.92;}
+.hero-content .hero-sub{font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;font-weight:400;opacity:0.75;margin-bottom:1.5rem;}
+.hero-btns{display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;}
+.hero-btn{display:inline-block;font-family:'Montserrat',sans-serif;font-size:0.8rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#fff;border:2px solid rgba(255,255,255,0.8);padding:0.8rem 1.75rem;text-decoration:none;transition:all 0.2s;}
+.hero-btn:hover{background:#fff;color:#222;}
+.hero-btn.filled{background:#fff;color:#2b6b4f;}
+.hero-btn.filled:hover{background:transparent;color:#fff;}
+
+/* OPEN HOUSE BANNER */
+.banner{background:#f7f4ee;border-top:3px solid #c4714a;border-bottom:1px solid #e0d8cc;padding:1.25rem 1.5rem;text-align:center;}
+.banner h3{font-family:'Montserrat',sans-serif;font-size:0.82rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#333;margin-bottom:0.4rem;}
+.banner p{font-family:'Lato',sans-serif;font-size:0.9rem;color:#555;font-weight:400;}
+.banner strong{color:#c4714a;}
+
+/* SECTIONS */
+.section-white{background:#fff;padding:4rem 2rem;}
+.section-light{background:#f9f8f6;padding:4rem 2rem;}
+.section-dark{background:#1a1a1a;padding:4rem 2rem;color:#fff;}
+.inner{max-width:1080px;margin:0 auto;}
+.inner-narrow{max-width:720px;margin:0 auto;}
+
+/* INTRO */
+.intro{text-align:center;}
+.intro h2{font-family:'Montserrat',sans-serif;font-size:clamp(1.5rem,3vw,2.2rem);font-weight:700;color:#222;margin-bottom:1rem;letter-spacing:-0.01em;}
+.intro .lead{font-size:1rem;color:#555;max-width:680px;margin:0 auto 1.5rem;font-weight:300;line-height:1.8;}
+.divider{width:48px;height:2px;background:#2b6b4f;margin:1.5rem auto;}
+
+/* QUOTE */
+blockquote{border-left:3px solid #2b6b4f;padding:1rem 1.5rem;margin:2rem 0;font-style:italic;font-size:1.05rem;color:#444;line-height:1.7;}
+blockquote cite{display:block;font-style:normal;font-size:0.82rem;color:#888;margin-top:0.5rem;letter-spacing:0.05em;}
+
+/* CARD GRID */
+.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:0;}
+.card{overflow:hidden;position:relative;background:#fff;}
+.card-photo-placeholder{width:100%;height:280px;display:flex;align-items:center;justify-content:center;}
+.card-body{padding:2rem;}
+.card-body h2{font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#222;margin-bottom:0.75rem;}
+.card-body p{font-size:0.95rem;color:#555;line-height:1.75;margin-bottom:1.25rem;font-weight:300;}
+.card-link{font-family:'Montserrat',sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#2b6b4f;text-decoration:none;border-bottom:2px solid #2b6b4f;padding-bottom:1px;transition:opacity 0.2s;}
+.card-link:hover{opacity:0.6;}
+.card-border-top{border-top:3px solid #2b6b4f;}
+
+/* PROGRAM SECTION */
+.prog-cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2.5rem;margin-top:3rem;}
+.prog-col h3{font-family:'Montserrat',sans-serif;font-size:0.82rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#2b6b4f;margin-bottom:1rem;border-bottom:2px solid #2b6b4f;padding-bottom:0.5rem;}
+.prog-col ul{list-style:none;padding:0;}
+.prog-col ul li{padding:0.45rem 0;font-size:0.92rem;color:#444;border-bottom:1px solid #f0f0f0;padding-left:1rem;position:relative;}
+.prog-col ul li::before{content:'→';position:absolute;left:0;color:#c4714a;font-size:0.8rem;}
+
+/* FEES */
+.fees-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2.5rem;}
+.fee-box{text-align:center;padding:1.75rem 1rem;border:1px solid #e0e0e0;background:#fff;}
+.fee-num{font-family:'Montserrat',sans-serif;font-size:2.2rem;font-weight:700;color:#2b6b4f;margin-bottom:0.4rem;}
+.fee-label{font-size:0.82rem;color:#777;line-height:1.5;}
+
+/* PROGRAMS 2-col grid */
+.prog-2col{display:grid;grid-template-columns:1fr 1fr;gap:2rem;}
+
+/* HOW TO JOIN */
+.steps-list{list-style:none;padding:0;margin-top:2.5rem;}
+.steps-list li{display:flex;gap:1.5rem;padding:1.75rem 0;border-bottom:1px solid #eee;align-items:flex-start;}
+.step-n{font-family:'Montserrat',sans-serif;font-size:1.8rem;font-weight:700;color:#e8e0d8;flex-shrink:0;width:2rem;text-align:right;line-height:1;}
+.step-content h4{font-family:'Montserrat',sans-serif;font-size:0.85rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#222;margin-bottom:0.4rem;}
+.step-content p{font-size:0.9rem;color:#666;line-height:1.65;}
+
+/* CTA SECTION */
+.cta-center{text-align:center;}
+.cta-center h2{font-family:'Montserrat',sans-serif;font-size:clamp(1.4rem,3vw,1.8rem);font-weight:700;color:#fff;margin-bottom:1rem;}
+.cta-center p{font-size:1rem;color:rgba(255,255,255,0.75);max-width:500px;margin:0 auto 2rem;font-weight:300;}
+.cta-btns{display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;}
+.cta-btn{display:inline-block;font-family:'Montserrat',sans-serif;font-size:0.8rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#fff;border:2px solid #fff;padding:0.85rem 1.75rem;text-decoration:none;transition:all 0.2s;}
+.cta-btn:hover{background:#fff;color:#1a1a1a;}
+.cta-btn.solid{background:#2b6b4f;border-color:#2b6b4f;}
+.cta-btn.solid:hover{background:#1a4a35;}
+
+/* TESTIMONIAL STRIP */
+.testimonial-strip{background:#2b6b4f;padding:3.5rem 2rem;text-align:center;color:#fff;}
+.testimonial-strip blockquote{border-left:none;color:rgba(255,255,255,0.92);font-size:1.15rem;max-width:680px;margin:0 auto;}
+.testimonial-strip blockquote cite{color:rgba(255,255,255,0.55);}
+
+/* FOOTER */
+footer{background:#1a1a1a;color:#aaa;padding:3rem 2rem;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2.5rem;}
+.footer-brand{font-family:'Montserrat',sans-serif;}
+.footer-brand .logo{font-size:0.9rem;font-weight:700;color:#fff;display:block;margin-bottom:0.75rem;letter-spacing:0.03em;}
+.footer-brand p{font-size:0.82rem;line-height:1.75;color:#888;}
+.footer-brand a{color:#aaa;text-decoration:none;}
+footer h4{font-family:'Montserrat',sans-serif;font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#666;margin-bottom:1rem;}
+footer ul{list-style:none;}
+footer ul li{margin-bottom:0.5rem;}
+footer ul a{text-decoration:none;color:#888;font-size:0.82rem;transition:color 0.2s;}
+footer ul a:hover{color:#fff;}
+.footer-bottom{background:#111;padding:1rem 2rem;display:flex;justify-content:space-between;font-size:0.75rem;color:#555;align-items:center;flex-wrap:wrap;gap:0.5rem;}
+
+/* INSTAGRAM SLIDESHOW */
+.ig-handle{display:inline-block;font-family:'Montserrat',sans-serif;font-size:0.85rem;font-weight:700;letter-spacing:0.06em;color:#2b6b4f;text-decoration:none;border-bottom:2px solid #2b6b4f;padding-bottom:2px;margin-top:0.25rem;margin-bottom:2rem;}
+.ig-handle:hover{opacity:0.7;}
+.ig-slideshow-wrap{position:relative;max-width:720px;margin:0 auto;user-select:none;}
+.ig-slideshow{overflow:hidden;border-radius:4px;}
+.ig-slide{display:none;animation:igFade 0.45s ease;}
+.ig-slide.active{display:block;}
+@keyframes igFade{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
+.ig-img-wrap{position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;}
+.ig-img-wrap svg{display:block;width:100%;height:100%;}
+.ig-overlay{position:absolute;top:12px;right:12px;opacity:0.85;}
+.ig-icon{width:26px;height:26px;}
+.ig-caption{background:#fff;border:1px solid #eee;border-top:none;padding:1rem 1.25rem;font-size:0.88rem;color:#444;line-height:1.6;}
+.ig-caption strong{color:#222;font-weight:600;}
+.ig-tag{display:block;margin-top:0.4rem;font-size:0.78rem;color:#2b6b4f;font-family:'Montserrat',sans-serif;letter-spacing:0.02em;}
+.ig-prev,.ig-next{position:absolute;top:calc(50% - 28px);transform:translateY(-50%);background:rgba(255,255,255,0.92);border:1px solid #ddd;width:40px;height:40px;border-radius:50%;font-size:1.4rem;line-height:1;cursor:pointer;color:#333;display:flex;align-items:center;justify-content:center;z-index:10;transition:all 0.2s;}
+.ig-prev{left:-20px;}
+.ig-next{right:-20px;}
+.ig-prev:hover,.ig-next:hover{background:#fff;box-shadow:0 2px 12px rgba(0,0,0,0.12);}
+.ig-dots{display:flex;justify-content:center;gap:8px;margin-top:1.25rem;}
+.ig-dot{width:8px;height:8px;border-radius:50%;border:none;background:#ddd;cursor:pointer;padding:0;transition:background 0.2s;}
+.ig-dot.active{background:#2b6b4f;}
+.ig-follow-btn{display:inline-flex;align-items:center;font-family:'Montserrat',sans-serif;font-size:0.8rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#2b6b4f;border:2px solid #2b6b4f;padding:0.75rem 1.75rem;text-decoration:none;transition:all 0.2s;}
+.ig-follow-btn:hover{background:#2b6b4f;color:#fff;}
+@media(max-width:768px){
+  .ig-prev{left:-10px;}
+  .ig-next{right:-10px;}
+  .ig-slideshow-wrap{max-width:100%;}
+}
+
+@media(max-width:768px){
+  /* Nav */
+  .nav-links{display:none;}
+  .nav-right .nav-donate{display:none;}
+  .hamburger{display:flex;}
+  .nav-top{padding:0 1.25rem;}
+
+  /* Hero */
+  .hero{height:75vh;min-height:420px;}
+  .hero-content{padding:1rem 1.25rem;}
+  .hero-content h1{font-size:clamp(1.6rem,7vw,2.4rem);}
+  .hero-btns{flex-direction:column;align-items:center;}
+  .hero-btn{width:100%;max-width:280px;text-align:center;}
+
+  /* Banner */
+  .banner{padding:1.25rem 1.25rem;}
+
+  /* Sections */
+  .section-white,.section-light,.section-dark{padding:3rem 1.25rem;}
+
+  /* Cards: stack vertically */
+  .card-grid{grid-template-columns:1fr;}
+  .card-photo-placeholder{height:220px;}
+
+  /* Prog cols: stack */
+  .prog-cols{grid-template-columns:1fr;gap:2rem;}
+
+  /* Fees: 1 column */
+  .fees-row{grid-template-columns:1fr;gap:1rem;}
+
+  /* Programs 2-col: stack */
+  .prog-2col{grid-template-columns:1fr;}
+
+  /* CTA buttons: stack */
+  .cta-btns{flex-direction:column;align-items:center;}
+  .cta-btn{width:100%;max-width:300px;text-align:center;}
+
+  /* Footer: single column */
+  footer{grid-template-columns:1fr;gap:2rem;padding:2.5rem 1.25rem;}
+  .footer-bottom{flex-direction:column;text-align:center;padding:1rem 1.25rem;}
+
+  /* Testimonial */
+  .testimonial-strip{padding:2.5rem 1.25rem;}
+  .testimonial-strip blockquote{font-size:1rem;}
+
+  /* Blockquote */
+  blockquote{font-size:1rem;margin:1.5rem 0;}
+}
+
+@media(max-width:480px){
+  .hero-content h1{font-size:1.5rem;}
+  .nav-logo{font-size:0.82rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-top">
+    <a href="#" class="nav-logo">Soquel Parent Education<br>Nursery School</a>
+    <ul class="nav-links">
+      <li>
+        <a href="#">About ▾</a>
+        <div class="nav-dropdown">
+          <a href="#">What We Do</a>
+          <a href="#">Teachers</a>
+          <a href="#">Parent's Role</a>
+          <a href="#">Program Fees</a>
+          <a href="#">Board of Directors</a>
+          <a href="#">Contact</a>
+          <a href="#">Open Houses</a>
+        </div>
+      </li>
+      <li>
+        <a href="#">Classes ▾</a>
+        <div class="nav-dropdown">
+          <a href="#">Two-Day Program</a>
+          <a href="#">Three-Day Program</a>
+          <a href="#">A Typical Day</a>
+          <a href="#">Enrollment</a>
+          <a href="#">School Calendar</a>
+        </div>
+      </li>
+      <li><a href="#">Member Forms</a></li>
+      <li><a href="#">Blog</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="#" class="nav-donate">Donate</a>
+      <button class="hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobile-menu">
+    <span class="m-section">About</span>
+    <a href="#" class="m-sub">What We Do</a>
+    <a href="#" class="m-sub">Teachers</a>
+    <a href="#" class="m-sub">Parent's Role</a>
+    <a href="#" class="m-sub">Program Fees</a>
+    <a href="#" class="m-sub">Board of Directors</a>
+    <a href="#" class="m-sub">Contact</a>
+    <a href="#" class="m-sub">Open Houses</a>
+    <span class="m-section">Classes</span>
+    <a href="#" class="m-sub">Two-Day Program</a>
+    <a href="#" class="m-sub">Three-Day Program</a>
+    <a href="#" class="m-sub">A Typical Day</a>
+    <a href="#" class="m-sub">Enrollment</a>
+    <a href="#" class="m-sub">School Calendar</a>
+    <a href="#">Member Forms</a>
+    <a href="#">Blog</a>
+    <a href="#" class="mobile-donate">Donate</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg" style="background:url('/uploads/6/4/9/4/64940231/background-images/971612588.jpg') center center / cover no-repeat;"></div>
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <p class="hero-sub">Est. 1949 · Soquel, California</p>
+    <h1>Soquel PENS is not just a preschool.<br><em>It's like family.</em></h1>
+    <p>Learn more about our Two-Day and Three-Day Programs</p>
+    <div class="hero-btns" style="margin-top:1.5rem;">
+      <a href="#" class="hero-btn filled">Enroll Now</a>
+      <a href="#" class="hero-btn">Learn More</a>
+    </div>
+  </div>
+</div>
+
+<!-- OPEN HOUSE BANNER -->
+<div class="banner">
+  <h3>Spring 2026 Open Houses</h3>
+  <p><strong>Wednesday, February 11, 4–5:30 PM &nbsp;·&nbsp; Wednesday, March 18, 4–5:30 PM</strong><br>
+  Come meet our teachers, talk with current members, and tour our campus. Children are welcome.</p>
+</div>
+
+<!-- INTRO -->
+<section class="section-white">
+  <div class="inner-narrow intro">
+    <h2>A Community Treasure Since 1949</h2>
+    <div class="divider"></div>
+    <p class="lead">Soquel Parent Education Nursery School (Soquel PENS) is a parent participation preschool serving families in the Santa Cruz County foothills. Our non-profit parent cooperative has been an integral part of this community since 1949, offering quality education to both child and parent.</p>
+    <blockquote>
+      "I wish more families knew that Soquel PENS was such a fabulous place for both preschoolers and parents to learn and grow into incredible members of the community."
+      <cite>— Mary H., Soquel PENS alumna parent</cite>
+    </blockquote>
+  </div>
+</section>
+
+<!-- CARD GRID: ABOUT + ENROLL -->
+<section class="section-light" style="padding:0;">
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-photo-placeholder" style="background:linear-gradient(135deg,#d4e8da,#a8c9a0);">
+        <svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+          <rect x="70" y="80" width="18" height="70" rx="4" fill="#6a9c7a" opacity="0.8"/>
+          <circle cx="79" cy="62" r="42" fill="#4a8a5a" opacity="0.9"/>
+          <circle cx="50" cy="80" r="30" fill="#5a9a6a" opacity="0.7"/>
+          <circle cx="112" cy="75" r="34" fill="#3a7a4a" opacity="0.8"/>
+          <circle cx="130" cy="130" r="8" fill="#e8b84a" opacity="0.7"/>
+          <circle cx="115" cy="125" r="6" fill="#f5d0b0" opacity="0.7"/>
+          <circle cx="125" cy="118" r="6" fill="#f5d0b0" opacity="0.7"/>
+        </svg>
+      </div>
+      <div class="card-body card-border-top">
+        <h2>About Soquel PENS</h2>
+        <p>Read about our school, mission, methods, and the results of our decades of education — or come visit us at an open house.</p>
+        <a href="#" class="card-link">Learn More →</a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-photo-placeholder" style="background:linear-gradient(135deg,#f5e8d8,#e8c8a0);">
+        <svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="90" cy="60" r="24" fill="#e8b070" opacity="0.9"/>
+          <rect x="72" y="84" width="36" height="50" rx="8" fill="#c47040" opacity="0.8"/>
+          <circle cx="50" cy="65" r="20" fill="#f0c090" opacity="0.8"/>
+          <rect x="34" y="86" width="30" height="42" rx="7" fill="#d08050" opacity="0.7"/>
+          <circle cx="130" cy="65" r="20" fill="#f0c090" opacity="0.8"/>
+          <rect x="116" y="86" width="30" height="42" rx="7" fill="#d08050" opacity="0.7"/>
+          <path d="M60 95 Q90 80 120 95" stroke="#2b6b4f" stroke-width="3" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="card-body card-border-top">
+        <h2>Join Our Program</h2>
+        <p>Ready to take the next step? Contact our Membership Coordinator to learn about available spots and complete your enrollment.</p>
+        <a href="#" class="card-link">Enroll Now →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAM PHILOSOPHY -->
+<section class="section-white">
+  <div class="inner">
+    <div class="intro" style="margin-bottom:0;">
+      <h2>Our Program Philosophy</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="inner-narrow" style="margin:0 auto;">
+      <blockquote>
+        "We have had two children go through the co-op. I can't imagine a stronger, better foundation for our children — or for us as parents."
+        <cite>— Soquel PENS parent</cite>
+      </blockquote>
+      <p style="color:#555;font-size:1rem;line-height:1.8;margin-bottom:1.25rem;font-weight:300;">At Soquel PENS, children learn about themselves and the world around them through play. By participating in a stimulating learning environment with other children their own age, students develop skills and build confidence — socially, emotionally, cognitively and physically.</p>
+      <p style="color:#555;font-size:1rem;line-height:1.8;font-weight:300;">Parents actively involved in their child's learning are better able to understand and meet their child's needs. They observe credentialed teachers and practice new skills in a supportive environment. Monthly evening meetings offer in-depth parent education from teachers and guest speakers.</p>
+    </div>
+    <div class="prog-cols">
+      <div class="prog-col">
+        <h3>Children will…</h3>
+        <ul>
+          <li>Discover joy through age-appropriate play</li>
+          <li>Develop social skills and unique strengths</li>
+          <li>Build kindergarten readiness</li>
+          <li>Benefit from high adult-to-child ratio</li>
+          <li>Feel a sense of belonging and acceptance</li>
+        </ul>
+      </div>
+      <div class="prog-col">
+        <h3>Parents will…</h3>
+        <ul>
+          <li>Gain confidence in child development</li>
+          <li>Practice positive discipline skills</li>
+          <li>Actively participate in education</li>
+          <li>Benefit from a supportive community</li>
+          <li>Enjoy lower tuition through involvement</li>
+        </ul>
+      </div>
+      <div class="prog-col">
+        <h3>Together you will…</h3>
+        <ul>
+          <li>Make lifelong friends</li>
+          <li>Share joy, comfort and pride</li>
+          <li>Build a true sense of community</li>
+          <li>Experience two-generation growth</li>
+          <li>Carry these friendships for years</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL STRIP -->
+<div class="testimonial-strip">
+  <blockquote>
+    "The cooperative organization provides preschool experiences within the financial means of most families — and a community that enriches every aspect of life."
+    <cite>— Soquel PENS, founded 1949</cite>
+  </blockquote>
+</div>
+
+<!-- INSTAGRAM FEED -->
+<section class="section-white" id="instagram-section">
+  <div class="inner">
+    <div class="intro">
+      <h2>Life at Soquel PENS</h2>
+      <div class="divider"></div>
+      <p class="lead">Follow along on Instagram for daily glimpses of our classroom, garden, and community.</p>
+      <a href="https://www.instagram.com/soquelpens/" target="_blank" rel="noopener" class="ig-handle">@soquelpens</a>
+    </div>
+
+    <!-- SLIDESHOW -->
+    <div class="ig-slideshow-wrap">
+      <div class="ig-slideshow" id="igSlideshow">
+
+        <!-- Slide 1 -->
+        <div class="ig-slide active">
+          <div class="ig-img-wrap" style="background:linear-gradient(135deg,#c8dfc8 0%,#8fba8f 100%);">
+            <svg viewBox="0 0 480 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;">
+              <rect width="480" height="360" fill="#b5d4b5"/>
+              <ellipse cx="240" cy="400" rx="320" ry="180" fill="#8fba8f"/>
+              <rect x="210" y="120" width="22" height="160" rx="5" fill="#5a7a3a"/>
+              <circle cx="221" cy="98" r="60" fill="#4a7c59"/>
+              <circle cx="175" cy="125" r="44" fill="#5a8f66"/>
+              <circle cx="268" cy="118" r="48" fill="#3d6a4d"/>
+              <circle cx="120" cy="260" r="10" fill="#e8c84a" opacity="0.9"/>
+              <circle cx="108" cy="250" r="8" fill="#fff" opacity="0.8"/>
+              <circle cx="132" cy="250" r="8" fill="#fff" opacity="0.8"/>
+              <circle cx="140" cy="262" r="8" fill="#fff" opacity="0.8"/>
+              <circle cx="132" cy="274" r="8" fill="#fff" opacity="0.8"/>
+              <circle cx="120" cy="274" r="8" fill="#fff" opacity="0.8"/>
+              <circle cx="108" cy="262" r="8" fill="#fff" opacity="0.8"/>
+              <circle cx="80" cy="200" r="36" fill="#3d7a50" opacity="0.7"/>
+              <rect x="65" y="190" width="14" height="100" rx="3" fill="#5a3a1f"/>
+              <circle cx="350" cy="250" r="10" fill="#c4714a" opacity="0.9"/>
+              <circle cx="338" cy="240" r="8" fill="#f2ddd4" opacity="0.85"/>
+              <circle cx="362" cy="240" r="8" fill="#f2ddd4" opacity="0.85"/>
+              <circle cx="370" cy="252" r="8" fill="#f2ddd4" opacity="0.85"/>
+              <circle cx="362" cy="264" r="8" fill="#f2ddd4" opacity="0.85"/>
+              <circle cx="338" cy="264" r="8" fill="#f2ddd4" opacity="0.85"/>
+              <!-- Child figure -->
+              <circle cx="240" cy="270" r="18" fill="#f5d4b8"/>
+              <rect x="228" y="288" width="24" height="36" rx="6" fill="#5a8fba"/>
+            </svg>
+            <div class="ig-overlay">
+              <svg class="ig-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="5" stroke="white" stroke-width="1.5"/><circle cx="12" cy="12" r="5" stroke="white" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1.2" fill="white"/></svg>
+            </div>
+          </div>
+          <div class="ig-caption">
+            <strong>@soquelpens</strong> Outdoor exploration time in our garden — one of the children's favorite parts of the day. 🌱🌿
+            <span class="ig-tag">#SoquelPENS #CoopPreschool #NaturePlay</span>
+          </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="ig-slide">
+          <div class="ig-img-wrap" style="background:linear-gradient(135deg,#f5e8d8 0%,#e8c8a0 100%);">
+            <svg viewBox="0 0 480 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;">
+              <rect width="480" height="360" fill="#f5e8d8"/>
+              <!-- Art table scene -->
+              <rect x="80" y="180" width="320" height="16" rx="4" fill="#c4a070"/>
+              <rect x="100" y="196" width="16" height="80" rx="3" fill="#c4a070"/>
+              <rect x="364" y="196" width="16" height="80" rx="3" fill="#c4a070"/>
+              <!-- Paint blobs -->
+              <circle cx="160" cy="175" r="18" fill="#c4714a" opacity="0.8"/>
+              <circle cx="210" cy="172" r="15" fill="#4a7c59" opacity="0.8"/>
+              <circle cx="255" cy="174" r="17" fill="#5a8fba" opacity="0.8"/>
+              <circle cx="300" cy="172" r="14" fill="#e8c84a" opacity="0.8"/>
+              <!-- Paper on table -->
+              <rect x="130" y="155" width="80" height="25" rx="2" fill="white" opacity="0.9"/>
+              <rect x="270" y="157" width="80" height="22" rx="2" fill="white" opacity="0.9"/>
+              <!-- Child 1 -->
+              <circle cx="170" cy="120" r="20" fill="#f5d4b8"/>
+              <rect x="158" y="140" width="24" height="38" rx="6" fill="#c4714a"/>
+              <!-- Child 2 -->
+              <circle cx="310" cy="118" r="20" fill="#f5d4b8"/>
+              <rect x="298" y="138" width="24" height="38" rx="6" fill="#4a7c59"/>
+              <!-- Brushes -->
+              <line x1="155" y1="168" x2="165" y2="145" stroke="#8B6914" stroke-width="3" stroke-linecap="round"/>
+              <line x1="305" y1="168" x2="315" y2="143" stroke="#8B6914" stroke-width="3" stroke-linecap="round"/>
+              <!-- Rainbow on wall -->
+              <path d="M80 120 Q240 40 400 120" stroke="#c4714a" stroke-width="8" fill="none" opacity="0.3" stroke-linecap="round"/>
+              <path d="M95 130 Q240 55 385 130" stroke="#e8c84a" stroke-width="8" fill="none" opacity="0.3" stroke-linecap="round"/>
+              <path d="M110 140 Q240 70 370 140" stroke="#4a7c59" stroke-width="8" fill="none" opacity="0.3" stroke-linecap="round"/>
+            </svg>
+            <div class="ig-overlay">
+              <svg class="ig-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="5" stroke="white" stroke-width="1.5"/><circle cx="12" cy="12" r="5" stroke="white" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1.2" fill="white"/></svg>
+            </div>
+          </div>
+          <div class="ig-caption">
+            <strong>@soquelpens</strong> Art time is always full of color and creativity. Every child is an artist! 🎨
+            <span class="ig-tag">#ArtPlay #EarlyChildhood #Preschool</span>
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="ig-slide">
+          <div class="ig-img-wrap" style="background:linear-gradient(135deg,#daeaf5 0%,#a0c8e8 100%);">
+            <svg viewBox="0 0 480 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;">
+              <rect width="480" height="360" fill="#daeaf5"/>
+              <!-- Storytime / circle scene -->
+              <ellipse cx="240" cy="300" rx="200" ry="60" fill="#b8d8f0" opacity="0.5"/>
+              <!-- Teacher figure (larger) -->
+              <circle cx="240" cy="160" r="26" fill="#f5d4b8"/>
+              <rect x="224" y="186" width="32" height="50" rx="8" fill="#2b6b4f"/>
+              <!-- Book -->
+              <rect x="215" y="195" width="50" height="36" rx="3" fill="#c4714a"/>
+              <line x1="240" y1="195" x2="240" y2="231" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+              <!-- Kids sitting in circle -->
+              <circle cx="140" cy="250" r="16" fill="#f5d4b8"/>
+              <rect x="130" y="266" width="20" height="28" rx="5" fill="#5a8fba"/>
+              <circle cx="190" cy="270" r="15" fill="#f0c898"/>
+              <rect x="181" y="285" width="18" height="26" rx="5" fill="#c4714a"/>
+              <circle cx="290" cy="270" r="15" fill="#f5d4b8"/>
+              <rect x="281" y="285" width="18" height="26" rx="5" fill="#e8c84a"/>
+              <circle cx="340" cy="250" r="16" fill="#f0c898"/>
+              <rect x="330" y="266" width="20" height="28" rx="5" fill="#4a7c59"/>
+              <!-- Stars on ceiling -->
+              <circle cx="100" cy="60" r="4" fill="#e8c84a" opacity="0.6"/>
+              <circle cx="380" cy="80" r="5" fill="#e8c84a" opacity="0.5"/>
+              <circle cx="60" cy="100" r="3" fill="#e8c84a" opacity="0.4"/>
+              <circle cx="420" cy="50" r="4" fill="#e8c84a" opacity="0.6"/>
+              <circle cx="240" cy="40" r="5" fill="#e8c84a" opacity="0.5"/>
+            </svg>
+            <div class="ig-overlay">
+              <svg class="ig-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="5" stroke="white" stroke-width="1.5"/><circle cx="12" cy="12" r="5" stroke="white" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1.2" fill="white"/></svg>
+            </div>
+          </div>
+          <div class="ig-caption">
+            <strong>@soquelpens</strong> Circle time with our wonderful teachers — stories, songs, and so much laughter. 📚✨
+            <span class="ig-tag">#StoryTime #CoopPreschool #SantaCruzKids</span>
+          </div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="ig-slide">
+          <div class="ig-img-wrap" style="background:linear-gradient(135deg,#f2ddd4 0%,#e8b090 100%);">
+            <svg viewBox="0 0 480 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;">
+              <rect width="480" height="360" fill="#f2ddd4"/>
+              <!-- Outdoor play / sandbox -->
+              <ellipse cx="240" cy="310" rx="280" ry="80" fill="#c4a060" opacity="0.5"/>
+              <ellipse cx="240" cy="300" rx="200" ry="50" fill="#d4b070" opacity="0.6"/>
+              <!-- Sandbox toys -->
+              <rect x="150" y="270" width="40" height="28" rx="4" fill="#5a8fba" opacity="0.9"/>
+              <rect x="290" y="275" width="34" height="22" rx="4" fill="#c4714a" opacity="0.9"/>
+              <!-- Cloud -->
+              <ellipse cx="120" cy="80" rx="65" ry="30" fill="white" opacity="0.7"/>
+              <ellipse cx="155" cy="68" rx="48" ry="28" fill="white" opacity="0.7"/>
+              <ellipse cx="90" cy="74" rx="38" ry="22" fill="white" opacity="0.7"/>
+              <ellipse cx="360" cy="100" rx="55" ry="25" fill="white" opacity="0.65"/>
+              <ellipse cx="385" cy="90" rx="38" ry="22" fill="white" opacity="0.65"/>
+              <!-- Sun -->
+              <circle cx="400" cy="60" r="36" fill="#f5d76e" opacity="0.85"/>
+              <!-- Kids playing -->
+              <circle cx="185" cy="245" r="18" fill="#f5d4b8"/>
+              <rect x="174" y="263" width="22" height="32" rx="6" fill="#4a7c59"/>
+              <circle cx="260" cy="240" r="20" fill="#f0c898"/>
+              <rect x="248" y="260" width="24" height="35" rx="6" fill="#5a8fba"/>
+              <circle cx="330" cy="248" r="17" fill="#f5d4b8"/>
+              <rect x="320" y="265" width="20" height="30" rx="5" fill="#c4714a"/>
+              <!-- Slide -->
+              <rect x="60" y="160" width="20" height="100" rx="4" fill="#8B6914" opacity="0.7"/>
+              <path d="M70 160 L130 250" stroke="#8B6914" stroke-width="12" stroke-linecap="round" opacity="0.7"/>
+            </svg>
+            <div class="ig-overlay">
+              <svg class="ig-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="5" stroke="white" stroke-width="1.5"/><circle cx="12" cy="12" r="5" stroke="white" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1.2" fill="white"/></svg>
+            </div>
+          </div>
+          <div class="ig-caption">
+            <strong>@soquelpens</strong> Free play outside is where so much learning happens. Friendships forged in the sandbox! 🏖️☀️
+            <span class="ig-tag">#PlayBasedLearning #OutdoorPlay #Preschool</span>
+          </div>
+        </div>
+
+        <!-- Slide 5 -->
+        <div class="ig-slide">
+          <div class="ig-img-wrap" style="background:linear-gradient(135deg,#d4e8da 0%,#f5e8d8 100%);">
+            <svg viewBox="0 0 480 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;">
+              <rect width="480" height="360" fill="#e8f0e0"/>
+              <!-- Community/family gathering -->
+              <!-- Tables -->
+              <rect x="60" y="220" width="140" height="14" rx="4" fill="#c4a070"/>
+              <rect x="280" y="220" width="140" height="14" rx="4" fill="#c4a070"/>
+              <!-- Food/items on tables -->
+              <circle cx="100" cy="215" r="12" fill="#c4714a" opacity="0.8"/>
+              <circle cx="130" cy="214" r="10" fill="#4a7c59" opacity="0.8"/>
+              <circle cx="160" cy="215" r="12" fill="#e8c84a" opacity="0.8"/>
+              <circle cx="320" cy="215" r="11" fill="#5a8fba" opacity="0.8"/>
+              <circle cx="350" cy="214" r="13" fill="#c4714a" opacity="0.8"/>
+              <circle cx="385" cy="215" r="10" fill="#4a7c59" opacity="0.8"/>
+              <!-- Adult figures -->
+              <circle cx="130" cy="165" r="22" fill="#f5d4b8"/>
+              <rect x="116" y="187" width="28" height="44" rx="7" fill="#2b6b4f"/>
+              <circle cx="310" cy="162" r="22" fill="#f0c898"/>
+              <rect x="296" y="184" width="28" height="44" rx="7" fill="#5a8fba"/>
+              <circle cx="370" cy="168" r="20" fill="#f5d4b8"/>
+              <rect x="358" y="188" width="24" height="40" rx="6" fill="#c4714a"/>
+              <!-- Child figures -->
+              <circle cx="130" cy="260" r="15" fill="#f5d4b8"/>
+              <rect x="121" y="275" width="18" height="28" rx="5" fill="#e8c84a"/>
+              <circle cx="310" cy="262" r="14" fill="#f0c898"/>
+              <rect x="302" y="276" width="16" height="26" rx="5" fill="#c4714a"/>
+              <!-- Banner at top -->
+              <path d="M80 60 L160 80 L240 60 L320 80 L400 60" stroke="#4a7c59" stroke-width="3" fill="none"/>
+              <rect x="88" y="55" width="62" height="28" rx="4" fill="#4a7c59"/>
+              <rect x="170" y="55" width="62" height="28" rx="4" fill="#c4714a"/>
+              <rect x="252" y="55" width="62" height="28" rx="4" fill="#e8c84a"/>
+              <rect x="334" y="55" width="62" height="28" rx="4" fill="#5a8fba"/>
+            </svg>
+            <div class="ig-overlay">
+              <svg class="ig-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="5" stroke="white" stroke-width="1.5"/><circle cx="12" cy="12" r="5" stroke="white" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1.2" fill="white"/></svg>
+            </div>
+          </div>
+          <div class="ig-caption">
+            <strong>@soquelpens</strong> Our annual community potluck — this is what co-op is all about. 🥳💚
+            <span class="ig-tag">#CommunityFirst #CoopFamily #SoquelPENS</span>
+          </div>
+        </div>
+
+      </div><!-- /.ig-slideshow -->
+
+      <!-- Controls -->
+      <button class="ig-prev" id="igPrev" aria-label="Previous">&#8249;</button>
+      <button class="ig-next" id="igNext" aria-label="Next">&#8250;</button>
+
+      <!-- Dots -->
+      <div class="ig-dots" id="igDots">
+        <button class="ig-dot active" data-idx="0"></button>
+        <button class="ig-dot" data-idx="1"></button>
+        <button class="ig-dot" data-idx="2"></button>
+        <button class="ig-dot" data-idx="3"></button>
+        <button class="ig-dot" data-idx="4"></button>
+      </div>
+    </div><!-- /.ig-slideshow-wrap -->
+
+    <div style="text-align:center;margin-top:2rem;">
+      <a href="https://www.instagram.com/soquelpens/" target="_blank" rel="noopener" class="ig-follow-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;margin-right:6px;"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor"/></svg>
+        Follow @soquelpens on Instagram
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAMS: 2-day & 3-day -->
+<section class="section-light">
+  <div class="inner">
+    <div class="intro" style="margin-bottom:2.5rem;">
+      <h2>Our Two Programs</h2>
+      <div class="divider"></div>
+      <p class="lead">Choose the schedule that fits your family. Both programs run September through June, following the Santa Cruz school calendar.</p>
+    </div>
+    <div class="prog-2col">
+      <div style="background:#fff;border:1px solid #e8e8e8;padding:2.5rem;border-top:3px solid #2b6b4f;">
+        <p style="font-family:'Montserrat',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#2b6b4f;margin-bottom:0.75rem;">Mon · Wed · Fri</p>
+        <h3 style="font-family:'Montserrat',sans-serif;font-size:1.15rem;font-weight:700;color:#222;margin-bottom:1rem;">Three-Day Program</h3>
+        <p style="color:#555;font-size:0.95rem;line-height:1.75;margin-bottom:1rem;font-weight:300;">Our most popular option, giving children rhythm and consistency while forming deep friendships across the full week. Up to 15–16 children plus siblings.</p>
+        <p style="font-size:0.82rem;color:#999;font-family:'Montserrat',sans-serif;letter-spacing:0.05em;">Ages 2½–5 &nbsp;·&nbsp; 9:00 AM – 12:00 PM</p>
+      </div>
+      <div style="background:#fff;border:1px solid #e8e8e8;padding:2.5rem;border-top:3px solid #c4714a;">
+        <p style="font-family:'Montserrat',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#c4714a;margin-bottom:0.75rem;">Tue · Thu</p>
+        <h3 style="font-family:'Montserrat',sans-serif;font-size:1.15rem;font-weight:700;color:#222;margin-bottom:1rem;">Two-Day Program</h3>
+        <p style="color:#555;font-size:0.95rem;line-height:1.75;margin-bottom:1rem;font-weight:300;">A wonderful introduction to co-op preschool. Ideal for younger children and families new to the cooperative model. Up to 14–16 children plus siblings.</p>
+        <p style="font-size:0.82rem;color:#999;font-family:'Montserrat',sans-serif;letter-spacing:0.05em;">Ages 2½–5 &nbsp;·&nbsp; 9:00 AM – 12:00 PM</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEES -->
+<section class="section-white">
+  <div class="inner">
+    <div class="intro">
+      <h2>Program Fees</h2>
+      <div class="divider"></div>
+      <p class="lead">The cooperative model keeps our tuition accessible. Scholarships are available for families who need support — please ask us.</p>
+    </div>
+    <div class="fees-row">
+      <div class="fee-box">
+        <div class="fee-num">$100</div>
+        <div class="fee-label">Non-refundable enrollment deposit to hold your child's spot</div>
+      </div>
+      <div class="fee-box">
+        <div class="fee-num">$50</div>
+        <div class="fee-label">Refundable attendance deposit returned at the end of the year</div>
+      </div>
+      <div class="fee-box">
+        <div class="fee-num">10%</div>
+        <div class="fee-label">Sibling discount on lowest tuition when a second child is enrolled</div>
+      </div>
+    </div>
+    <p style="text-align:center;margin-top:2rem;font-size:0.88rem;color:#888;">Contact us for current monthly tuition rates. Financial assistance available.</p>
+  </div>
+</section>
+
+<!-- HOW TO JOIN -->
+<section class="section-light">
+  <div class="inner">
+    <div class="inner-narrow" style="margin:0 auto;">
+      <div class="intro">
+        <h2>How to Enroll</h2>
+        <div class="divider"></div>
+      </div>
+      <ul class="steps-list">
+        <li>
+          <span class="step-n">1</span>
+          <div class="step-content">
+            <h4>Contact our Membership Coordinator</h4>
+            <p>Email <a href="/cdn-cgi/l/email-protection#2655495753434a564348554b434b444354554e4f5666414b474f4a0845494b" style="color:#2b6b4f;"><span class="__cf_email__" data-cfemail="91e2fee0e4f4fde1f4ffe2fcf4fcf3f4e3e2f9f8e1d1f6fcf0f8fdbff2fefc">[email&#160;protected]</span></a> to express interest. Spaces are filled on a first-come, first-served basis.</p>
+          </div>
+        </li>
+        <li>
+          <span class="step-n">2</span>
+          <div class="step-content">
+            <h4>Pay the enrollment deposit</h4>
+            <p>Submit a $100 non-refundable enrollment fee via PayPal, cash, or check (made out to Soquel PENS, child's name in memo).</p>
+          </div>
+        </li>
+        <li>
+          <span class="step-n">3</span>
+          <div class="step-content">
+            <h4>Complete registration paperwork</h4>
+            <p>Pick up your registration packet at school. Include immunization records, a TB test result (within 4 years), and all completed forms.</p>
+          </div>
+        </li>
+        <li>
+          <span class="step-n">4</span>
+          <div class="step-content">
+            <h4>Complete fingerprint clearance</h4>
+            <p>All adults participating in the classroom must complete a Live Scan fingerprint clearance. This typically takes 1–3 weeks. Once cleared, you're ready to start!</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CTA DARK -->
+<section class="section-dark">
+  <div class="inner cta-center">
+    <h2>Ready to join our community?</h2>
+    <p>Spots for 2025–2026 are still available. We'd love to welcome your family to Soquel PENS.</p>
+    <div class="cta-btns">
+      <a href="/cdn-cgi/l/email-protection#285b47595d4d44584d465b454d454a4d5a5b404158684f45494144064b4745" class="cta-btn solid">Contact Membership</a>
+      <a href="#" class="cta-btn">Attend an Open House</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <span class="logo">Soquel Parent Education Nursery School</span>
+    <p>397 Old San Jose Road<br>Soquel, CA 95073<br>831.462.PENS<br><a href="/cdn-cgi/l/email-protection#2c5f435d5949405c49425f4149414e495e5f44455c6c4b414d4540024f4341"><span class="__cf_email__" data-cfemail="5d2e322c2838312d38332e3038303f382f2e35342d1d3a303c3431733e3230">[email&#160;protected]</span></a><br><br>Soquel PENS is a 501(c)(3) nonprofit organization.</p>
+  </div>
+  <div>
+    <h4>About</h4>
+    <ul>
+      <li><a href="#">What We Do</a></li>
+      <li><a href="#">Teachers</a></li>
+      <li><a href="#">Parent's Role</a></li>
+      <li><a href="#">Program Fees</a></li>
+      <li><a href="#">Board of Directors</a></li>
+      <li><a href="#">Open Houses</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </div>
+  <div>
+    <h4>Classes</h4>
+    <ul>
+      <li><a href="#">Three-Day Program</a></li>
+      <li><a href="#">Two-Day Program</a></li>
+      <li><a href="#">A Typical Day</a></li>
+      <li><a href="#">Enrollment</a></li>
+      <li><a href="#">School Calendar</a></li>
+      <li><a href="#">Member Forms</a></li>
+    </ul>
+  </div>
+  <div>
+    <h4>Support</h4>
+    <ul>
+        <li><a href="#">Donate</a></li>
+      <li><a href="#">Raise Right</a></li>
+      <li><a href="#">Member Blog</a></li>
+      <li><a href="#">Resources</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <span>© 2025 Soquel Parent Education Nursery School. All rights reserved.</span>
+  <span>Non-profit · 501(c)(3)</span>
+</div>
+
+<script>
+var btn = document.getElementById('hamburger');
+var menu = document.getElementById('mobile-menu');
+btn.addEventListener('click', function(){
+  var open = menu.classList.toggle('open');
+  btn.classList.toggle('open', open);
+});
+
+// Instagram Slideshow
+(function(){
+  var slides = document.querySelectorAll('.ig-slide');
+  var dots   = document.querySelectorAll('.ig-dot');
+  var cur    = 0;
+  var total  = slides.length;
+  var timer;
+
+  function goTo(n){
+    slides[cur].classList.remove('active');
+    dots[cur].classList.remove('active');
+    cur = (n + total) % total;
+    slides[cur].classList.add('active');
+    dots[cur].classList.add('active');
+    resetTimer();
+  }
+
+  function resetTimer(){
+    clearInterval(timer);
+    timer = setInterval(function(){ goTo(cur + 1); }, 5000);
+  }
+
+  document.getElementById('igNext').addEventListener('click', function(){ goTo(cur + 1); });
+  document.getElementById('igPrev').addEventListener('click', function(){ goTo(cur - 1); });
+  dots.forEach(function(dot){
+    dot.addEventListener('click', function(){ goTo(parseInt(dot.dataset.idx)); });
+  });
+
+  // Touch/swipe support
+  var startX = 0;
+  var sl = document.getElementById('igSlideshow');
+  sl.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; }, {passive:true});
+  sl.addEventListener('touchend', function(e){
+    var dx = e.changedTouches[0].clientX - startX;
+    if(Math.abs(dx) > 40){ goTo(dx < 0 ? cur + 1 : cur - 1); }
+  }, {passive:true});
+
+  resetTimer();
+})();
+</script>
+</body>
+</html>
