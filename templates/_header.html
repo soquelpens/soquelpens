@@ -14,7 +14,7 @@
      ║  v1, HTML Templates, CSS Variables       ║
      ╚══════════════════════════════════════════╝ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/2.8.0/webcomponents-bundle.js"></script>
-<script src="https://www.paypalobjects.com/ncp/cart/cart.js data-merchant-id=SLD7AWNYJ2EGC"></script>
+<script src=https://www.paypalobjects.com/ncp/cart/cart.js data-merchant-id=SLD7AWNYJ2EGC></script>
 
 </head>
 <body>
@@ -54,6 +54,7 @@
     <div class="nav-right">
       <a href="/donate" class="nav-donate">Donate</a>
       <a href="/registation" class="nav-donate">Register</a>
+      <paypal-cart-button data-id="pp-view-cart"></paypal-cart-button><script>cartPaypal.Cart({ id: "pp-view-cart" })</script>
       <button class="hamburger" id="hamburger" aria-label="Open menu">
         <span></span><span></span><span></span>
       </button>
