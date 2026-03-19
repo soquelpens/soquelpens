@@ -1,10 +1,35 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Lato',sans-serif;background:#fff;color:#333;font-size:16px;line-height:1.7;}
 
+/* ── CSS Custom Properties (inherit into all Shadow Roots) ── */
+:root {
+  --cream:      #fdf6ed;
+  --warm-white: #fffcf7;
+  --terracotta: #c4603a;
+  --sage:       #7a9e7e;
+  --sage-dark:  #4d7352;
+  --ochre:      #d4a84b;
+  --bark:       #3d2b1f;
+  --bark-light: #6b4c3b;
+  --mist:       #e8ede8;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'DM Sans', sans-serif;
+  --nav-h:      64px;
+  --radius-card: 18px;
+  --radius-sm:   12px;
+}
+
 /* NAV */
 nav{background:#fff;border-bottom:1px solid #e8e8e8;position:sticky;top:0;z-index:100;}
 .nav-top{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;}
-.nav-logo{font-family:'Montserrat',sans-serif;font-size:0.9rem;font-weight:700;color:#222;text-decoration:none;letter-spacing:0.03em;max-width:200px;line-height:1.3;}
+
+.nav-logo {
+            font-family: var(--font-display);
+            font-size: 1.25rem; color: var(--bark);
+            text-decoration: none; white-space: nowrap; flex-shrink: 0;
+ }
+.nav-logo span { color: var(--terracotta); }
+
 .nav-links{display:flex;gap:2rem;list-style:none;align-items:center;}
 .nav-links>li{position:relative;}
 .nav-links a{text-decoration:none;font-family:'Montserrat',sans-serif;font-size:0.78rem;font-weight:600;color:#444;letter-spacing:0.08em;text-transform:uppercase;padding:0.4rem 0;transition:color 0.2s;}

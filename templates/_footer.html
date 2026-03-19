@@ -38,10 +38,11 @@
   </div>
 </footer>
 <div class="footer-bottom">
-  <span>© 2025 Soquel Parent Education Nursery School. All rights reserved.</span>
+  <span>© 2026 Soquel Parent Education Nursery School. All rights reserved.</span>
   <span>Non-profit · 501(c)(3)</span>
 </div>
 
+<script src="/js/wc.js"></script>
 <script>
 var btn = document.getElementById('hamburger');
 var menu = document.getElementById('mobile-menu');
@@ -49,46 +50,6 @@ btn.addEventListener('click', function(){
   var open = menu.classList.toggle('open');
   btn.classList.toggle('open', open);
 });
-
-// Instagram Slideshow
-(function(){
-  var slides = document.querySelectorAll('.ig-slide');
-  var dots   = document.querySelectorAll('.ig-dot');
-  var cur    = 0;
-  var total  = slides.length;
-  var timer;
-
-  function goTo(n){
-    slides[cur].classList.remove('active');
-    dots[cur].classList.remove('active');
-    cur = (n + total) % total;
-    slides[cur].classList.add('active');
-    dots[cur].classList.add('active');
-    resetTimer();
-  }
-
-  function resetTimer(){
-    clearInterval(timer);
-    timer = setInterval(function(){ goTo(cur + 1); }, 5000);
-  }
-
-  document.getElementById('igNext').addEventListener('click', function(){ goTo(cur + 1); });
-  document.getElementById('igPrev').addEventListener('click', function(){ goTo(cur - 1); });
-  dots.forEach(function(dot){
-    dot.addEventListener('click', function(){ goTo(parseInt(dot.dataset.idx)); });
-  });
-
-  // Touch/swipe support
-  var startX = 0;
-  var sl = document.getElementById('igSlideshow');
-  sl.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; }, {passive:true});
-  sl.addEventListener('touchend', function(e){
-    var dx = e.changedTouches[0].clientX - startX;
-    if(Math.abs(dx) > 40){ goTo(dx < 0 ? cur + 1 : cur - 1); }
-  }, {passive:true});
-
-  resetTimer();
-})();
 </script>
 </body>
 </html>

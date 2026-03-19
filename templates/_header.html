@@ -7,13 +7,24 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet">
 <link rel='stylesheet' type='text/css' href='/css/main.css' />
 <link rel="shortcut icon" href="uploads/favicon.ico" type="image/x-icon" />
+
+<!-- ╔══════════════════════════════════════════╗
+     ║  Web Components Polyfill (v2.8.0)        ║
+     ║  Covers: Custom Elements v1, Shadow DOM  ║
+     ║  v1, HTML Templates, CSS Variables       ║
+     ╚══════════════════════════════════════════╝ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/2.8.0/webcomponents-bundle.js"></script>
+<script src="https://www.paypalobjects.com/ncp/cart/cart.js data-merchant-id=SLD7AWNYJ2EGC"></script>
+
 </head>
 <body>
 
 <!-- NAV -->
 <nav>
   <div class="nav-top">
-    <a href="/" class="nav-logo">Soquel Parent Education<br>Nursery School</a>
+    <a class="nav-logo" href="index.html">
+      <div class="logo">Soquel <span>PENS</span></div>
+    </a>
     <ul class="nav-links">
       <li>
         <a href="/about">About ▾</a>
@@ -42,6 +53,7 @@
     </ul>
     <div class="nav-right">
       <a href="/donate" class="nav-donate">Donate</a>
+      <a href="/registation" class="nav-donate">Register</a>
       <button class="hamburger" id="hamburger" aria-label="Open menu">
         <span></span><span></span><span></span>
       </button>
