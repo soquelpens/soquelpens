@@ -34,6 +34,11 @@ function defineComponents() {
     bark:  'rgba(61,43,31,0.08)',
   };
 
+  const CHIP_COLORS = {
+    terra: { bg:'rgba(196,96,58,0.12)', color:'var(--terracotta)' },
+    sage:  { bg:'rgba(122,158,126,0.16)', color:'var(--sage-dark)' },
+    ochre: { bg:'rgba(212,168,75,0.14)', color:'#8a6a1a' },
+  };
 
   /* ══════════════════════════════════════════════════════════════
      1. <pens-banner>
@@ -230,7 +235,7 @@ function defineComponents() {
 
 
   /* ══════════════════════════════════════════════════════════════
-     3. <pens-page-hero heading="" heading-accent="" subheading="" breadcrumb="">
+     3. <pens-page-hero heading="" heading-accent="" subheading="" breadcrumb="" bgimage="">
         Dark bark hero with breadcrumb trail, animated h1, and subheading.
         heading + heading-accent are joined with the accent in <em>.
      ══════════════════════════════════════════════════════════════ */
@@ -241,6 +246,7 @@ function defineComponents() {
       const accent       = this.getAttribute('heading-accent') || '';
       const subheading   = this.getAttribute('subheading') || '';
       const breadcrumb   = this.getAttribute('breadcrumb') || 'Page';
+      const bgimage      = this.getAttribute('bgimage') || '/uploads/6/4/9/4/64940231/background-images/1134880908.jpg';
 
       this.shadowRoot.innerHTML = `
         <style>
@@ -248,9 +254,7 @@ function defineComponents() {
           :host { background: var(--bark); display: block; overflow: hidden; position: relative; }
           .bg {
             position: absolute; inset: 0; pointer-events: none;
-            background:
-              radial-gradient(ellipse 60% 80% at 90% 50%, rgba(122,158,126,0.14) 0%, transparent 70%),
-              radial-gradient(ellipse 40% 60% at 10% 80%, rgba(212,168,75,0.1) 0%, transparent 65%);
+            background: url('${bgimage}') center center / cover no-repeat;
           }
           .inner {
             position: relative; max-width: 1140px; margin: 0 auto;
@@ -261,18 +265,18 @@ function defineComponents() {
             font-size: 12.5px; color: rgba(253,246,237,0.45);
             margin-bottom: 20px;
           }
-          .crumb a { color: rgba(253,246,237,0.45); text-decoration: none; transition: color 0.2s; }
+          .crumb a { color: rgba(0,0,0,1.0); text-decoration: none; transition: color 0.2s; }
           .crumb a:hover { color: var(--ochre); }
-          .crumb-sep { color: rgba(253,246,237,0.25); }
+          .crumb-sep { color: rgba(0,0,0,1.0); }
           h1 {
             font-family: var(--font-display);
             font-size: clamp(2.2rem, 5vw, 3.8rem);
-            color: var(--cream); line-height: 1.15; margin-bottom: 16px;
+            color: var(--bark); line-height: 1.15; margin-bottom: 16px;
             opacity: 0; animation: fadeUp 0.7s 0.1s ease forwards;
           }
-          h1 em { font-style: italic; color: var(--ochre); }
+          h1 em { font-style: italic; color: var(--bark); }
           p {
-            color: rgba(253,246,237,0.62); font-size: 1.05rem;
+            color: rgba(0,0,0,1); font-size: 1.05rem;
             max-width: 520px; line-height: 1.65;
             opacity: 0; animation: fadeUp 0.7s 0.25s ease forwards;
           }
@@ -287,7 +291,7 @@ function defineComponents() {
           <div class="crumb">
             <a href="index.html">Home</a>
             <span class="crumb-sep">›</span>
-            <span style="color:rgba(253,246,237,0.65);">${esc(breadcrumb)}</span>
+            <span style="color:rgba(0,0,0,1.0);">${esc(breadcrumb)}</span>
           </div>
           <h1>${esc(heading)} <em>${esc(accent)}</em></h1>
           <p>${esc(subheading)}</p>
@@ -1141,6 +1145,452 @@ function defineComponents() {
     }
   }
   customElements.define('pens-instagram', PensInstagram);
+
+  /* ── <pens-feature-card icon="" title="" color="terra|sage|ochre"> ── */
+  class PensFeatureCard extends HTMLElement {
+    constructor() { super(); this.attachShadow({ mode:'open' }); }
+    connectedCallback() {
+      const icon  = this.getAttribute('icon') || '📄';
+      const title = esc(this.getAttribute('title') || '');
+      const color = this.getAttribute('color') || 'terra';
+      const bg    = ICON_BG[color] || ICON_BG.terra;
+      this.shadowRoot.innerHTML = `
+        <style>
+          ${BASE_CSS}
+          :host { display:block; }
+          .card { background:var(--warm-white); border-radius:18px; padding:28px 24px; border:1px solid rgba(61,43,31,.07); transition:transform .25s,box-shadow .25s; position:relative; overflow:hidden; height:100%; }
+          .card:hover { transform:translateY(-5px); box-shadow:0 16px 44px rgba(61,43,31,.1); }
+          .icon { width:48px; height:48px; border-radius:13px; display:grid; place-items:center; font-size:24px; margin-bottom:16px; background:${bg}; }
+          h3 { font-family:var(--font-display); font-size:1.1rem; margin-bottom:8px; color:var(--bark); }
+          p  { font-size:14.5px; color:var(--bark-light); line-height:1.65; }
+          ::slotted(strong) { color:var(--bark); }
+        </style>
+        <div class="card">
+          <div class="icon">${icon}</div>
+          <h3>${title}</h3>
+          <p><slot></slot></p>
+        </div>
+      `;
+    }
+  }
+  customElements.define('pens-feature-card', PensFeatureCard);
+
+
+  /* ── 5. <pens-stat-card year="" year-label="" headline="" detail=""> ── */
+  class PensStatCard extends HTMLElement {
+    constructor() { super(); this.attachShadow({ mode:'open' }); }
+    connectedCallback() {
+      const year      = esc(this.getAttribute('year') || '');
+      const yearLabel = esc(this.getAttribute('year-label') || '');
+      const headline  = esc(this.getAttribute('headline') || '');
+      const detail    = esc(this.getAttribute('detail') || '');
+      this.shadowRoot.innerHTML = `
+        <style>
+          ${BASE_CSS}
+          :host { display:block; }
+          .card { background:var(--bark); border-radius:24px; padding:44px 36px; position:relative; overflow:hidden; }
+          .deco { position:absolute; top:-30px; right:-30px; width:180px; height:180px; border-radius:50%; background:radial-gradient(circle,rgba(122,158,126,.25) 0%,transparent 70%); }
+          .year-row { display:flex; align-items:baseline; gap:10px; margin-bottom:6px; }
+          .year { font-family:var(--font-display); font-size:4rem; font-weight:700; color:var(--ochre); line-height:1; }
+          .year-lbl { font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:rgba(253,246,237,.45); font-weight:500; }
+          .divider { width:40px; height:2px; background:var(--sage); margin:18px 0; border-radius:2px; }
+          .headline { font-family:var(--font-display); font-size:1.2rem; color:var(--cream); line-height:1.4; margin-bottom:12px; }
+          .detail { font-size:14px; color:rgba(253,246,237,.55); line-height:1.65; }
+        </style>
+        <div class="card">
+          <div class="deco"></div>
+          <div class="year-row">
+            <div class="year">${year}</div>
+            <div class="year-lbl">${yearLabel}</div>
+          </div>
+          <div class="divider"></div>
+          <div class="headline">${headline}</div>
+          <div class="detail">${detail}</div>
+        </div>
+      `;
+    }
+  }
+  customElements.define('pens-stat-card', PensStatCard);
+
+
+  /* ── 6. <pens-value-item icon="" heading=""> ── */
+  class PensValueItem extends HTMLElement {
+    constructor() { super(); this.attachShadow({ mode:'open' }); }
+    connectedCallback() {
+      const icon    = this.getAttribute('icon') || '✦';
+      const heading = esc(this.getAttribute('heading') || '');
+      this.shadowRoot.innerHTML = `
+        <style>
+          ${BASE_CSS}
+          :host { display:block; }
+          .item { display:flex; gap:14px; align-items:flex-start; background:var(--warm-white); border-radius:16px; padding:22px 20px; border:1px solid rgba(61,43,31,.07); }
+          .ico { font-size:22px; flex-shrink:0; margin-top:2px; line-height:1; }
+          h3 { font-family:var(--font-display); font-size:1rem; color:var(--bark); margin-bottom:6px; }
+          p  { font-size:14px; color:var(--bark-light); line-height:1.6; }
+        </style>
+        <div class="item">
+          <div class="ico">${icon}</div>
+          <div><h3>${heading}</h3><p><slot></slot></p></div>
+        </div>
+      `;
+    }
+  }
+  customElements.define('pens-value-item', PensValueItem);
+
+
+  /* ── 7. <pens-participation-grid> — self-contained grid of what parents do ── */
+  class PensParticipationGrid extends HTMLElement {
+    constructor() { super(); this.attachShadow({ mode:'open' }); }
+    connectedCallback() {
+      const items = [
+        { icon:'🏫', text:'Work in your child\'s class one day each week, arriving early to help the teacher set up' },
+        { icon:'🧹', text:'Stay after class to clean up and meet with the teacher and other parents for the weekly seminar' },
+        { icon:'🌙', text:'Attend Fun, Inspirational Education Nights — included with tuition, open to you and adult caregivers' },
+        { icon:'👥', text:'Attend small-group Class Meetings twice a year to discuss the class and your child\'s development' },
+        { icon:'🍎', text:'Provide a nutritious snack for your child\'s class approximately once a month' },
+        { icon:'🔧', text:'Take on a Support Job: Board Director, class photographer, gardening, shopping, and more' },
+        { icon:'🎉', text:'Contribute 4 hours of fundraising time and raise at least $100 per school year' },
+        { icon:'💛', text:'Be an active, invested partner in the school — because your participation is the heart of everything we do' },
+      ];
+      const cards = items.map(i => `
+        <div class="item">
+          <span class="ico">${i.icon}</span>
+          <p>${i.text}</p>
+        </div>
+      `).join('');
+      this.shadowRoot.innerHTML = `
+        <style>
+          ${BASE_CSS}
+          :host { display:block; }
+          .grid { display:grid; grid-template-columns:repeat(4,1fr); gap:2px; background:rgba(255,255,255,.05); border-radius:16px; overflow:hidden; margin-bottom:28px; }
+          .item { background:var(--bark); padding:28px 22px; transition:background .2s; }
+          .item:hover { background:rgba(255,255,255,.04); }
+          .ico { font-size:24px; display:block; margin-bottom:12px; }
+          p { font-size:13.5px; color:rgba(253,246,237,.58); line-height:1.65; }
+          @media(max-width:900px) { .grid { grid-template-columns:repeat(2,1fr); } }
+          @media(max-width:500px) { .grid { grid-template-columns:1fr; } }
+        </style>
+        <div class="grid">${cards}</div>
+      `;
+    }
+  }
+  customElements.define('pens-participation-grid', PensParticipationGrid);
+
+
+  /* ── 8. <pens-dark-stat number="" label="" sub=""> ── */
+  class PensDarkStat extends HTMLElement {
+    constructor() { super(); this.attachShadow({ mode:'open' }); }
+    connectedCallback() {
+      const number = esc(this.getAttribute('number') || '');
+      const label  = esc(this.getAttribute('label') || '');
+      const sub    = esc(this.getAttribute('sub') || '');
+      this.shadowRoot.innerHTML = `
+        <style>
+          ${BASE_CSS}
+          :host { display:block; }
+          .stat { background:var(--bark); padding:32px 24px; text-align:center; transition:background .2s; }
+          .stat:hover { background:rgba(255,255,255,.04); }
+          .num { font-family:var(--font-display); font-size:2.2rem; font-weight:700; color:var(--ochre); line-height:1; margin-bottom:8px; }
+          .lbl { font-size:13px; color:rgba(253,246,237,.62); line-height:1.4; }
+          .sub { font-size:11.5px; color:rgba(253,246,237,.35); margin-top:4px; }
+        </style>
+        <div class="stat">
+          <div class="num">${number}</div>
+          <div class="lbl">${label}</div>
+          ${sub ? `<div class="sub">${sub}</div>` : ''}
+        </div>
+      `;
+    }
+  }
+  customElements.define('pens-dark-stat', PensDarkStat);
+
+
+  /* ── 9. <pens-enrollment-steps> — self-contained quick-start steps ── */
+  class PensEnrollmentSteps extends HTMLElement {
+    constructor() { super(); this.attachShadow({ mode:'open' }); }
+    connectedCallback() {
+      const steps = [
+        { n:'01', title:'Contact the Membership Coordinator', desc:'Email soquelpensmembership@gmail.com — all families are considered first-come, first-served.' },
+        { n:'02', title:'Download &amp; sign the Requirements Contract', desc:'Once offered a space, complete the enrollment deposit and requirements contract.' },
+        { n:'03', title:'Pick up your Registration Packet', desc:'Collect the full packet at school or at the WASCAE office in Santa Cruz.' },
+        { n:'04', title:'Submit paperwork &amp; fees', desc:'Return fully completed forms with your TB test, immunization records, deposits, and registration fees.' },
+        { n:'05', title:'Receive fingerprint clearance', desc:'Once your Live Scan fingerprint clearance is confirmed (1–3 weeks), you\'re ready to start!' },
+      ];
+      const html = steps.map(s => `
+        <div class="step">
+          <div class="num">${s.n}</div>
+          <div class="body">
+            <div class="title">${s.title}</div>
+            <div class="desc">${s.desc}</div>
+          </div>
+        </div>
+      `).join('');
+      this.shadowRoot.innerHTML = `
+        <style>
+          ${BASE_CSS}
+          :host { display:block; }
+          .step { display:flex; gap:16px; padding-bottom:22px; position:relative; }
+          .step:last-child { padding-bottom:0; }
+          .step::before { content:''; position:absolute; left:19px; top:36px; bottom:0; width:1.5px; background:rgba(61,43,31,.1); }
+          .step:last-child::before { display:none; }
+          .num { font-family:var(--font-display); font-size:1.3rem; font-weight:700; color:var(--terracotta); width:40px; height:40px; border-radius:50%; background:rgba(196,96,58,.1); display:grid; place-items:center; flex-shrink:0; font-size:13px; }
+          .title { font-size:14px; font-weight:500; color:var(--bark); margin-bottom:4px; }
+          .desc  { font-size:13px; color:var(--bark-light); line-height:1.55; }
+        </style>
+        ${html}
+      `;
+    }
+  }
+  customElements.define('pens-enrollment-steps', PensEnrollmentSteps);
+
+
+
+  /* ── 4. <pens-chip color="terra|sage|ochre"> ── */
+  class PensChip extends HTMLElement {
+    constructor() { super(); this.attachShadow({mode:'open'}); }
+    connectedCallback() {
+      const c = this.getAttribute('color')||'terra';
+      const {bg, color} = CHIP_COLORS[c]||CHIP_COLORS.terra;
+      this.shadowRoot.innerHTML = `
+        <style>
+          ${BASE_CSS}:host{display:inline-block;}
+          .chip{display:inline-block;padding:6px 14px;border-radius:100px;font-size:12.5px;font-weight:500;background:${bg};color:${color};line-height:1.3;}
+        </style>
+        <span class="chip"><slot></slot></span>`;
+    }
+  }
+  customElements.define('pens-chip', PensChip);
+
+
+  /* ── 5a. <pens-teacher-photo> — large hero photo with decorative frame ── */
+  class PensTeacherPhoto extends HTMLElement {
+    constructor() { super(); this.attachShadow({mode:'open'}); }
+    connectedCallback() {
+      this.shadowRoot.innerHTML = `
+        <style>
+          ${BASE_CSS}
+          :host { display: block; margin-bottom: 20px; }
+          .frame {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            aspect-ratio: 4 / 3;
+            box-shadow: 0 24px 60px rgba(61,43,31,0.22);
+          }
+          img {
+            width: 100%; height: 100%;
+            object-fit: cover; object-position: center top;
+            display: block;
+            transition: transform 0.5s ease;
+          }
+          .frame:hover img { transform: scale(1.03); }
+          /* Subtle gradient overlay at bottom */
+          .frame::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 40%;
+            background: linear-gradient(to top, rgba(61,43,31,0.35) 0%, transparent 100%);
+            pointer-events: none;
+          }
+          /* Decorative sage orb behind the photo */
+          .orb {
+            position: absolute;
+            width: 200px; height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(122,158,126,0.3) 0%, transparent 70%);
+            top: -30px; right: -30px;
+            z-index: -1;
+          }
+          .caption {
+            position: absolute;
+            bottom: 16px; left: 16px;
+            z-index: 1;
+            background: rgba(253,246,237,0.92);
+            backdrop-filter: blur(8px);
+            border-radius: 10px;
+            padding: 8px 14px;
+            font-size: 12.5px;
+            font-weight: 500;
+            color: var(--bark);
+            letter-spacing: 0.03em;
+          }
+          .caption span { color: var(--terracotta); }
+        </style>
+        <div style="position:relative;">
+          <div class="orb"></div>
+          <div class="frame">
+            <img
+              src="/uploads/6/4/9/4/64940231/published/colleen-s-website-bio-photo.jpg"
+              alt="Soquel PENS Head Teacher"
+              loading="eager">
+            <div class="caption">Head Teacher · <span>Soquel PENS</span></div>
+          </div>
+        </div>
+      `;
+    }
+  }
+  customElements.define('pens-teacher-photo', PensTeacherPhoto);
+
+
+  /* ── 5. <pens-profile-card> — self-contained teacher credential card ── */
+  class PensProfileCard extends HTMLElement {
+    constructor() { super(); this.attachShadow({mode:'open'}); }
+    connectedCallback() {
+      this.shadowRoot.innerHTML = `
+        <style>
+          ${BASE_CSS}
+          :host{display:block;}
+          .card{background:var(--bark);border-radius:24px;padding:44px 36px;position:relative;overflow:hidden;}
+          .orb{position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(122,158,126,.22) 0%,transparent 70%);}
+          .avatar{width:100px;height:100px;border-radius:50%;overflow:hidden;margin-bottom:20px;box-shadow:0 8px 24px rgba(0,0,0,.35);border:3px solid rgba(255,255,255,.12);}
+          .avatar img{width:100%;height:100%;object-fit:cover;display:block;}
+          .name{font-family:var(--font-display);font-size:1.4rem;color:var(--cream);margin-bottom:4px;}
+          .role{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:rgba(253,246,237,.45);margin-bottom:24px;}
+          .divider{width:36px;height:2px;background:var(--ochre);margin-bottom:24px;border-radius:2px;}
+          .facts{display:flex;flex-direction:column;gap:14px;}
+          .fact{display:flex;align-items:flex-start;gap:12px;}
+          .fact-icon{font-size:16px;flex-shrink:0;margin-top:2px;}
+          .fact-text{font-size:13.5px;color:rgba(253,246,237,.62);line-height:1.55;}
+          .fact-text strong{color:rgba(253,246,237,.88);}
+          .badge-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;}
+          .badge{display:inline-block;padding:5px 12px;border-radius:100px;font-size:11.5px;font-weight:500;}
+          .badge-ochre{background:rgba(212,168,75,.18);color:var(--ochre);}
+          .badge-sage{background:rgba(122,158,126,.18);color:rgba(180,230,180,1);}
+        </style>
+        <div class="card">
+          <div class="orb"></div>
+          <div class="avatar"><img src="/uploads/6/4/9/4/64940231/published/colleen-s-website-bio-photo.jpg" alt="Soquel PENS Teacher"></div>
+          <div class="name">Our Teacher</div>
+          <div class="role">Head Teacher · Soquel PENS</div>
+          <div class="divider"></div>
+          <div class="facts">
+            <div class="fact"><span class="fact-icon">🎓</span><div class="fact-text"><strong>B.A. Childhood Education</strong>, minor in Psychology — Chico State University, 1988</div></div>
+            <div class="fact"><span class="fact-icon">📍</span><div class="fact-text">Based in <strong>Santa Cruz County</strong> — committed to this community for over 35 years</div></div>
+            <div class="fact"><span class="fact-icon">🌟</span><div class="fact-text"><strong>Certified Positive Discipline</strong> Educator &amp; Trainer (international program)</div></div>
+            <div class="fact"><span class="fact-icon">🤲</span><div class="fact-text">Trained in <strong>Hand In Hand Parenting</strong> (Patty Wipfler)</div></div>
+            <div class="fact"><span class="fact-icon">🏫</span><div class="fact-text">Taught at <strong>3 parent-participation preschools</strong> across Santa Cruz County</div></div>
+          </div>
+          <div class="badge-row">
+            <span class="badge badge-ochre">Positive Discipline</span>
+            <span class="badge badge-sage">Hand In Hand</span>
+            <span class="badge badge-ochre">Cabrillo Mentor</span>
+            <span class="badge badge-sage">Conference Speaker</span>
+          </div>
+        </div>`;
+    }
+  }
+  customElements.define('pens-profile-card', PensProfileCard);
+
+
+  /* ── 6. <pens-principle-card icon="" title="" color=""> ── */
+  class PensPrincipleCard extends HTMLElement {
+    constructor() { super(); this.attachShadow({mode:'open'}); }
+    connectedCallback() {
+      const icon  = this.getAttribute('icon')||'✦';
+      const title = esc(this.getAttribute('title')||'');
+      const c     = this.getAttribute('color')||'terra';
+      const bg    = ICON_BG[c]||ICON_BG.terra;
+      this.shadowRoot.innerHTML = `
+        <style>
+          ${BASE_CSS}:host{display:block;}
+          .card{background:var(--warm-white);border-radius:16px;padding:22px 22px;border:1px solid rgba(61,43,31,.07);display:flex;gap:16px;align-items:flex-start;transition:transform .2s,box-shadow .2s;}
+          .card:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(61,43,31,.09);}
+          .icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:22px;flex-shrink:0;background:${bg};}
+          h3{font-family:var(--font-display);font-size:1rem;margin-bottom:6px;color:var(--bark);}
+          p{font-size:14px;color:var(--bark-light);line-height:1.6;}
+        </style>
+        <div class="card">
+          <div class="icon">${icon}</div>
+          <div><h3>${title}</h3><p><slot></slot></p></div>
+        </div>`;
+    }
+  }
+  customElements.define('pens-principle-card', PensPrincipleCard);
+
+
+  /* ── 7. <pens-experience-card icon="" number="" unit="" label=""> ── */
+  class PensExperienceCard extends HTMLElement {
+    constructor() { super(); this.attachShadow({mode:'open'}); }
+    connectedCallback() {
+      const icon   = this.getAttribute('icon')||'📄';
+      const number = esc(this.getAttribute('number')||'');
+      const unit   = esc(this.getAttribute('unit')||'');
+      const label  = esc(this.getAttribute('label')||'');
+      this.shadowRoot.innerHTML = `
+        <style>
+          ${BASE_CSS}:host{display:block;}
+          .card{background:var(--warm-white);border-radius:18px;padding:28px 24px;border:1px solid rgba(61,43,31,.07);transition:transform .25s,box-shadow .25s;height:100%;}
+          .card:hover{transform:translateY(-4px);box-shadow:0 14px 40px rgba(61,43,31,.1);}
+          .top{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+          .ico{font-size:26px;}
+          .stat{display:flex;align-items:baseline;gap:4px;}
+          .num{font-family:var(--font-display);font-size:1.8rem;font-weight:700;color:var(--terracotta);line-height:1;}
+          .unit{font-size:12px;color:var(--bark-light);text-transform:uppercase;letter-spacing:.05em;}
+          .label{font-size:11.5px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--sage-dark);margin-bottom:8px;}
+          p{font-size:14px;color:var(--bark-light);line-height:1.6;}
+        </style>
+        <div class="card">
+          <div class="top"><span class="ico">${icon}</span><div class="stat"><span class="num">${number}</span>${unit?`<span class="unit">${unit}</span>`:''}</div></div>
+          <div class="label">${label}</div>
+          <p><slot></slot></p>
+        </div>`;
+    }
+  }
+  customElements.define('pens-experience-card', PensExperienceCard);
+
+
+  /* ── 8. <pens-dark-influence-card icon="" title="" author=""> ── */
+  class PensDarkInfluenceCard extends HTMLElement {
+    constructor() { super(); this.attachShadow({mode:'open'}); }
+    connectedCallback() {
+      const icon   = this.getAttribute('icon')||'✦';
+      const title  = esc(this.getAttribute('title')||'');
+      const author = esc(this.getAttribute('author')||'');
+      this.shadowRoot.innerHTML = `
+        <style>
+          ${BASE_CSS}:host{display:block;}
+          .card{background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);border-radius:20px;padding:36px 30px;transition:background .2s,transform .2s;}
+          .card:hover{background:rgba(255,255,255,.08);transform:translateY(-2px);}
+          .header{display:flex;align-items:center;gap:14px;margin-bottom:20px;}
+          .ico{font-size:32px;}
+          .title{font-family:var(--font-display);font-size:1.2rem;color:var(--cream);}
+          .author{font-size:12px;color:rgba(253,246,237,.4);letter-spacing:.05em;margin-top:3px;}
+          .divider{width:32px;height:1.5px;background:var(--ochre);border-radius:2px;margin-bottom:18px;}
+          p{font-size:14.5px;color:rgba(253,246,237,.6);line-height:1.7;}
+        </style>
+        <div class="card">
+          <div class="header"><span class="ico">${icon}</span><div><div class="title">${title}</div><div class="author">${author}</div></div></div>
+          <div class="divider"></div>
+          <p><slot></slot></p>
+        </div>`;
+    }
+  }
+  customElements.define('pens-dark-influence-card', PensDarkInfluenceCard);
+
+  /* ── 10. <pens-seminar-topic icon="" title=""> ── */
+  class PensSeminarTopic extends HTMLElement {
+    constructor() { super(); this.attachShadow({mode:'open'}); }
+    connectedCallback() {
+      const icon  = this.getAttribute('icon')||'📌';
+      const title = esc(this.getAttribute('title')||'');
+      this.shadowRoot.innerHTML = `
+        <style>
+          ${BASE_CSS}:host{display:block;}
+          .card{background:var(--cream);border-radius:16px;padding:22px 20px;border:1px solid rgba(61,43,31,.07);transition:transform .2s,box-shadow .2s;}
+          .card:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(61,43,31,.09);}
+          .top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+          .ico{font-size:20px;}
+          h4{font-family:var(--font-display);font-size:.95rem;color:var(--bark);}
+          p{font-size:13.5px;color:var(--bark-light);line-height:1.6;}
+        </style>
+        <div class="card">
+          <div class="top"><span class="ico">${icon}</span><h4>${title}</h4></div>
+          <p><slot></slot></p>
+        </div>`;
+    }
+  }
+  customElements.define('pens-seminar-topic', PensSeminarTopic);
 
 } // end defineComponents
 
