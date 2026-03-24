@@ -1592,6 +1592,214 @@ function defineComponents() {
   }
   customElements.define('pens-seminar-topic', PensSeminarTopic);
 
+
+  /* ── 4. <pens-resource-card icon="" category="" title="" url="" tag=""> ── */
+  customElements.define('pens-resource-card', class extends HTMLElement {
+    constructor() { super(); this.attachShadow({mode:'open'}); }
+    connectedCallback() {
+      const icon=this.getAttribute('icon')||'🔗',
+            cat=esc(this.getAttribute('category')||''),
+            title=esc(this.getAttribute('title')||''),
+            url=this.getAttribute('url')||'#',
+            tag=esc(this.getAttribute('tag')||'');
+      this.shadowRoot.innerHTML = `
+        <style>
+          ${BASE_CSS}:host{display:block;}
+          .card{background:var(--warm-white);border-radius:16px;padding:22px 20px;border:1px solid rgba(61,43,31,.07);transition:transform .22s,box-shadow .22s;height:100%;display:flex;flex-direction:column;}
+          .card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(61,43,31,.09);}
+          .top{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;}
+          .ico{font-size:22px;flex-shrink:0;margin-top:1px;}
+          .meta{}
+          .cat{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--sage-dark);font-weight:500;margin-bottom:3px;}
+          h3{font-family:var(--font-display);font-size:1rem;color:var(--bark);line-height:1.3;}
+          p{font-size:13.5px;color:var(--bark-light);line-height:1.6;flex:1;margin:8px 0 14px;}
+          a{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;color:var(--terracotta);text-decoration:none;transition:gap .2s;}
+          a:hover{gap:10px;}
+          .tag{font-size:11px;color:var(--bark-light);opacity:.7;font-family:monospace;}
+        </style>
+        <div class="card">
+          <div class="top">
+            <span class="ico">${icon}</span>
+            <div class="meta"><div class="cat">${cat}</div><h3>${title}</h3></div>
+          </div>
+          <p><slot></slot></p>
+          <a href="${esc(url)}" target="_blank" rel="noopener">
+            <span class="tag">${tag}</span> →
+          </a>
+        </div>`;
+    }
+  });
+
+
+  /* ── 5. <pens-suggest-box> ── */
+  customElements.define('pens-suggest-box', class extends HTMLElement {
+    constructor() { super(); this.attachShadow({mode:'open'}); }
+    connectedCallback() {
+      this.shadowRoot.innerHTML = `
+        <style>
+          ${BASE_CSS}:host{display:block;margin-top:24px;}
+          .box{background:var(--mist);border-radius:14px;padding:20px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+          .txt{flex:1;min-width:200px;}
+          .txt p{font-size:13.5px;color:var(--bark-light);line-height:1.6;}
+          .txt strong{color:var(--bark);}
+          a{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:100px;background:var(--sage);color:#fff;font-size:13.5px;font-weight:500;text-decoration:none;transition:background .2s,transform .2s;white-space:nowrap;}
+          a:hover{background:var(--sage-dark);transform:translateY(-1px);}
+        </style>
+        <div class="box">
+          <div class="txt"><p><strong>Know a great local resource?</strong> We'd love to add it to our directory. Email us with the name, link, and a brief description.</p></div>
+          <a href="mailto:soquelpens@gmail.com">Suggest a Resource →</a>
+        </div>`;
+    }
+  });
+
+
+  /* ── 6. <pens-biz-card icon="" name="" tagline="" color="terra|sage|ochre"> ── */
+  customElements.define('pens-biz-card', class extends HTMLElement {
+    constructor() { super(); this.attachShadow({mode:'open'}); }
+    connectedCallback() {
+      const icon=this.getAttribute('icon')||'🏪',
+            name=esc(this.getAttribute('name')||''),
+            tag=esc(this.getAttribute('tagline')||''),
+            c=this.getAttribute('color')||'terra',
+            bg=CHIP_COLORS[c]||CHIP_COLORS.terra;
+      this.shadowRoot.innerHTML = `
+        <style>
+          ${BASE_CSS}:host{display:block;}
+          .card{background:var(--warm-white);border-radius:16px;padding:24px 20px;border:1px solid rgba(61,43,31,.07);transition:transform .22s,box-shadow .22s;height:100%;}
+          .card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(61,43,31,.09);}
+          .icon-wrap{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-size:26px;background:${bg};margin-bottom:14px;}
+          .name{font-family:var(--font-display);font-size:1.05rem;color:var(--bark);margin-bottom:3px;}
+          .tag{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--sage-dark);font-weight:500;margin-bottom:10px;}
+          p{font-size:13.5px;color:var(--bark-light);line-height:1.6;}
+        </style>
+        <div class="card">
+          <div class="icon-wrap">${icon}</div>
+          <div class="name">${name}</div>
+          <div class="tag">${tag}</div>
+          <p><slot></slot></p>
+        </div>`;
+    }
+  });
+
+
+  /* ── 7. <pens-sponsor-card name="" type="" icon=""> ── */
+  customElements.define('pens-sponsor-card', class extends HTMLElement {
+    constructor() { super(); this.attachShadow({mode:'open'}); }
+    connectedCallback() {
+      const name=esc(this.getAttribute('name')||''),
+            type=esc(this.getAttribute('type')||''),
+            icon=this.getAttribute('icon')||'⭐';
+      this.shadowRoot.innerHTML = `
+        <style>
+          ${BASE_CSS}:host{display:block;}
+          .card{background:var(--warm-white);border-radius:16px;padding:24px 22px;border:1px solid rgba(61,43,31,.07);display:flex;gap:16px;align-items:flex-start;transition:transform .22s,box-shadow .22s;}
+          .card:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(61,43,31,.08);}
+          .ico{font-size:28px;flex-shrink:0;line-height:1;margin-top:2px;}
+          .type{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--sage-dark);font-weight:500;margin-bottom:4px;}
+          h3{font-family:var(--font-display);font-size:1rem;color:var(--bark);margin-bottom:8px;line-height:1.3;}
+          p{font-size:13.5px;color:var(--bark-light);line-height:1.6;}
+        </style>
+        <div class="card">
+          <span class="ico">${icon}</span>
+          <div><div class="type">${type}</div><h3>${name}</h3><p><slot></slot></p></div>
+        </div>`;
+    }
+  });
+
+
+  /* ── 8. <pens-sponsor-cta> ── */
+  customElements.define('pens-sponsor-cta', class extends HTMLElement {
+    constructor() { super(); this.attachShadow({mode:'open'}); }
+    connectedCallback() {
+      this.shadowRoot.innerHTML = `
+        <style>
+          ${BASE_CSS}:host{display:block;margin-top:28px;}
+          .box{background:var(--bark);border-radius:18px;padding:32px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;}
+          .txt h3{font-family:var(--font-display);font-size:1.2rem;color:var(--cream);margin-bottom:6px;}
+          .txt p{font-size:13.5px;color:rgba(253,246,237,.55);line-height:1.6;max-width:380px;}
+          a{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;border-radius:100px;background:var(--ochre);color:var(--bark);font-size:14.5px;font-weight:500;text-decoration:none;transition:opacity .2s,transform .2s;white-space:nowrap;}
+          a:hover{opacity:.88;transform:translateY(-1px);}
+        </style>
+        <div class="box">
+          <div class="txt">
+            <h3>Become a Sponsor</h3>
+            <p>Your business or donation directly supports child and parent education programs at Soquel PENS. We'd love to recognize your generosity here.</p>
+          </div>
+          <a href="mailto:soquelpens@gmail.com">💛 Get in Touch →</a>
+        </div>`;
+    }
+  });
+
+
+  /* ── 9. <pens-handout icon="" title="" category="" url=""> ── */
+  customElements.define('pens-handout', class extends HTMLElement {
+    constructor() { super(); this.attachShadow({mode:'open'}); }
+    connectedCallback() {
+      const icon=this.getAttribute('icon')||'📄',
+            title=esc(this.getAttribute('title')||''),
+            cat=esc(this.getAttribute('category')||''),
+            url=this.getAttribute('url')||'#';
+      this.shadowRoot.innerHTML = `
+        <style>
+          ${BASE_CSS}:host{display:block;}
+          a{display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--warm-white);border-radius:14px;border:1px solid rgba(61,43,31,.07);text-decoration:none;transition:background .18s,transform .18s,box-shadow .18s;}
+          a:hover{background:var(--mist);transform:translateX(4px);box-shadow:0 4px 18px rgba(61,43,31,.07);}
+          .ico{font-size:22px;flex-shrink:0;}
+          .body{flex:1;min-width:0;}
+          .cat{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--sage-dark);font-weight:500;margin-bottom:3px;}
+          h4{font-size:14.5px;font-weight:500;color:var(--bark);line-height:1.35;margin-bottom:4px;}
+          p{font-size:13px;color:var(--bark-light);line-height:1.5;}
+          .arrow{font-size:18px;color:var(--bark-light);flex-shrink:0;transition:color .18s,transform .18s;}
+          a:hover .arrow{color:var(--terracotta);transform:translateX(4px);}
+          ::slotted(*){display:none;}
+        </style>
+        <a href="${esc(url)}">
+          <span class="ico">${icon}</span>
+          <div class="body">
+            <div class="cat">${cat}</div>
+            <h4>${title}</h4>
+            <p><slot></slot></p>
+          </div>
+          <span class="arrow">→</span>
+        </a>`;
+    }
+  });
+
+
+  /* ── 10. <pens-toc-card> — table of contents for the sidebar ── */
+  customElements.define('pens-toc-card', class extends HTMLElement {
+    constructor() { super(); this.attachShadow({mode:'open'}); }
+    connectedCallback() {
+      const items = [
+        {href:'#community', icon:'🏘️', label:'Community Resources'},
+        {href:'#businesses',icon:'🛍️', label:'Business Directory'},
+        {href:'#sponsors',  icon:'⭐', label:'Sponsors'},
+        {href:'#handouts',  icon:'📄', label:'Seminar Handouts'},
+      ];
+      const links = items.map(i=>`
+        <a href="${i.href}" class="link">
+          <span class="ico">${i.icon}</span>
+          <span>${i.label}</span>
+          <span class="arrow">→</span>
+        </a>`).join('');
+      this.shadowRoot.innerHTML = `
+        <style>
+          ${BASE_CSS}:host{display:block;}
+          .card{background:var(--warm-white);border-radius:18px;padding:22px 20px;border:1.5px solid rgba(61,43,31,.08);}
+          h3{font-family:var(--font-display);font-size:1rem;color:var(--bark);margin-bottom:14px;}
+          .link{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;text-decoration:none;color:var(--bark);font-size:13.5px;font-weight:500;background:var(--cream);border:1px solid rgba(61,43,31,.06);margin-bottom:8px;transition:background .15s,transform .15s;}
+          .link:last-child{margin-bottom:0;}
+          .link:hover{background:var(--mist);transform:translateX(3px);}
+          .ico{font-size:16px;flex-shrink:0;}
+          .arrow{margin-left:auto;font-size:12px;color:var(--bark-light);}
+        </style>
+        <div class="card">
+          <h3>On this page</h3>
+          ${links}
+        </div>`;
+    }
+  });
+
 } // end defineComponents
 
 // The webcomponents-bundle polyfill fires 'WebComponentsReady' once Shadow DOM

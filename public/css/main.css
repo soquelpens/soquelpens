@@ -402,3 +402,8 @@ section { padding: 88px 5vw; }
 .seminars-section { padding: 88px 5vw; background: var(--warm-white); }
 
 p.lead { color: var(--bark-light); line-height: 1.75; }
+
+.wsite-youtube-container{position:relative;padding-bottom:56.25% !important;padding-top:30px;height:0;overflow:hidden}
+.wsite-youtube-container iframe,.wsite-youtube-container .wsite-youtube-coverbox{position:absolute;top:0;left:0;width:100%;height:100%}.wsite-youtube-container .wsite-youtube-coverbox{background:url(/images/blank.gif);z-index:2}.inside-active .wsite-youtube-coverbox{display:none}.wsite-youtube-wrapper{max-width:100%}.wsite-youtube-size-small{width:302px}.wsite-youtube-size-medium{width:401px}.wsite-youtube-size-large{width:501px}.wsite-youtube-size-xl{width:650px}.wsite-youtube-size-hd{width:853px}.wsite-youtube-align-center{margin:0 auto}.wsite-youtube-align-right{margin:0 0 0 auto}
+
+.sidebar { top: calc(var(--nav-h) + 40px); display: flex; flex-direction: column; gap: 20px; }
