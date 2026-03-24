@@ -1673,8 +1673,7 @@ function defineComponents() {
           p{font-size:13.5px;color:var(--bark-light);line-height:1.6;}
         </style>
         <div class="card">
-          <div class="icon-wrap">${icon}</div>
-          <div class="name">${name}</div>
+          <div class="name">${icon} ${name}</div>
           <div class="tag">${tag}</div>
           <p><slot></slot></p>
         </div>`;
@@ -1773,7 +1772,6 @@ function defineComponents() {
       const items = [
         {href:'#community', icon:'🏘️', label:'Community Resources'},
         {href:'#businesses',icon:'🛍️', label:'Business Directory'},
-        {href:'#sponsors',  icon:'⭐', label:'Sponsors'},
         {href:'#handouts',  icon:'📄', label:'Seminar Handouts'},
       ];
       const links = items.map(i=>`
