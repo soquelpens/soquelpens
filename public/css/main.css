@@ -407,3 +407,36 @@ p.lead { color: var(--bark-light); line-height: 1.75; }
 .wsite-youtube-container iframe,.wsite-youtube-container .wsite-youtube-coverbox{position:absolute;top:0;left:0;width:100%;height:100%}.wsite-youtube-container .wsite-youtube-coverbox{background:url(/images/blank.gif);z-index:2}.inside-active .wsite-youtube-coverbox{display:none}.wsite-youtube-wrapper{max-width:100%}.wsite-youtube-size-small{width:302px}.wsite-youtube-size-medium{width:401px}.wsite-youtube-size-large{width:501px}.wsite-youtube-size-xl{width:650px}.wsite-youtube-size-hd{width:853px}.wsite-youtube-align-center{margin:0 auto}.wsite-youtube-align-right{margin:0 0 0 auto}
 
 .sidebar { top: calc(var(--nav-h) + 40px); display: flex; flex-direction: column; gap: 20px; }
+
+
+/* PDF VIEWER */
+.pdf-section{background:#fff;padding:3rem 2rem 4rem;}
+.pdf-inner{max-width:900px;margin:0 auto;}
+.pdf-meta{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid #eee;}
+.pdf-meta-left{}
+.pdf-issue{font-family:'Montserrat',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#2b6b4f;margin-bottom:0.3rem;}
+.pdf-title{font-family:'Montserrat',sans-serif;font-size:1.2rem;font-weight:700;color:#222;}
+.pdf-date{font-size:0.85rem;color:#888;margin-top:0.2rem;}
+.pdf-actions{display:flex;gap:0.75rem;flex-wrap:wrap;}
+.pdf-btn{display:inline-flex;align-items:center;gap:0.4rem;font-family:'Montserrat',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;padding:0.55rem 1.1rem;text-decoration:none;transition:all 0.2s;border:1.5px solid #2b6b4f;color:#2b6b4f;}
+.pdf-btn:hover{background:#2b6b4f;color:#fff;}
+.pdf-btn.filled{background:#2b6b4f;color:#fff;}
+.pdf-btn.filled:hover{background:#1a4a35;border-color:#1a4a35;}
+.pdf-btn svg{flex-shrink:0;}
+
+/* PDF embed container */
+.pdf-embed-wrap{width:100%;background:#f0ede8;border:1px solid #ddd;position:relative;}
+.pdf-embed-wrap iframe{display:block;width:100%;height:80vh;min-height:600px;border:none;}
+.pdf-fallback{display:none;padding:3rem 2rem;text-align:center;}
+.pdf-fallback p{font-size:0.95rem;color:#666;margin-bottom:1.25rem;}
+.pdf-fallback a{color:#2b6b4f;font-weight:600;text-decoration:underline;}
+
+/* ARCHIVE */
+.archive-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:0;}
+.archive-card{background:#fff;border:1px solid #e8e8e8;padding:1.5rem;transition:border-color 0.2s,box-shadow 0.2s;cursor:pointer;text-decoration:none;display:block;border-top:3px solid #e8e8e8;}
+.archive-card:hover{border-color:#2b6b4f;border-top-color:#2b6b4f;box-shadow:0 2px 12px rgba(0,0,0,0.06);}
+.archive-card.active-issue{border-top:3px solid #2b6b4f;}
+.archive-season{font-family:'Montserrat',sans-serif;font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#2b6b4f;margin-bottom:0.4rem;}
+.archive-name{font-family:'Montserrat',sans-serif;font-size:0.92rem;font-weight:700;color:#222;margin-bottom:0.25rem;}
+.archive-desc{font-size:0.8rem;color:#888;line-height:1.5;}
+.archive-icon{margin-top:1rem;display:flex;align-items:center;gap:0.4rem;font-family:'Montserrat',sans-serif;font-size:0.72rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#2b6b4f;}

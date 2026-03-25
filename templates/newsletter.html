@@ -1,66 +1,48 @@
 {% render "_header.html" %}
-    <div class="banner-wrap">
-      <div class="wsite-elements wsite-not-footer wsite-header-elements">
-	<div class="wsite-section-wrap">
-	<div  class="wsite-section wsite-header-section wsite-section-bg-image" style="height: 332px;background-image: url(&quot;/uploads/6/4/9/4/64940231/background-images/1518229418.jpeg&quot;) ;background-repeat: no-repeat ;background-position: 50% 50% ;background-size: 100% ;background-color: transparent ;background-size: cover;" >
-		<div class="wsite-section-content">
 
-        <div class="container">
-          <div class="banner">
-				<div class="wsite-section-elements">
-					<h2 class="wsite-content-title">Soquel PENS Membership Newsletter</h2>
-				</div>
-			</div>
-        </div><!-- end container -->
-
-		</div>
-		<div class=""></div>
-	</div>
-</div>
-
-</div>
-
-    </div><!-- end banner-wrap -->
-    <div class="content-wrap">
-      <div id="wsite-content" class="wsite-elements wsite-not-footer">
-	<div class="wsite-section-wrap">
-	<div class="wsite-section wsite-body-section wsite-background-68" style="height: 194px;" >
-		<div class="wsite-section-content">
-        <div class="container">
-			<div class="wsite-section-elements">
-				<div class="paragraph" style="text-align:center;"><strong>View the full newsletter below.</strong>&nbsp; <strong>Click</strong> <font color="#da4444">&gt;&gt;&gt; <a href="uploads/6/4/9/4/64940231/spring_newsletter_soquel_pens.pdf">here</a><a href="uploads/6/4/9/4/64940231/spring_newsletter_soquel_pens.pdf">&lt;&lt;&lt;</a></font> for the <strong>PDF version</strong> where you can <strong>follow the links</strong> <strong>it contains!<br /><br /><br /><br />&#8203;</strong><br /></div>
-
-<div class="wsite-scribd">
+<pens-page-hero
+  heading="PENS"
+  heading-accent="Newsletter"
+  subheading="Stay connected with the Soquel PENS community. Our newsletter is published throughout the school year with updates, resources, and upcoming events."
+  breadcrumb="Newsletter"
+  bgimage="/uploads/6/4/9/4/64940231/background-images/119899516.jpg">
+</pens-page-hero>
 
 
-				<div id="350089504719760527-pdf-fallback" style="display: none;">
-					Your browser does not support viewing this document. Click <a href="uploads/6/4/9/4/64940231/spring_newsletter_soquel_pens.pdf" target="_blank" rel="noopener noreferrer">here</a> to download the document.
-				</div>
-				<div id="350089504719760527-pdf-embed" style="display: none; height: 500px;">
-				</div>
+<!-- CURRENT ISSUE PDF -->
+<div class="pdf-section">
+  <div class="pdf-inner">
 
-				<script type="text/javascript">
-					(function () {
-						if (window.wpdf && window.wpdf.supportsPDFs && window.wpdf.isPDF('/uploads/6/4/9/4/64940231/spring_newsletter_soquel_pens.pdf')) {
-							var embed = document.getElementById('350089504719760527-pdf-embed');
-							embed.style.display = 'block';
-							window.wpdf.embed('/uploads/6/4/9/4/64940231/spring_newsletter_soquel_pens.pdf', embed);
-						} else {
-							var fallback = document.getElementById('350089504719760527-pdf-fallback');
-							fallback.style.display = 'block';
-						}
-					})();
-				</script>
-			</div>
-			</div>
-		</div>
+    <div class="pdf-meta">
+      <div class="pdf-meta-left">
+        <div class="pdf-issue">Current Issue</div>
+        <div class="pdf-title">Soquel PENS Newsletter — Spring 2025</div>
+        <div class="pdf-date">Published March 2025 &nbsp;·&nbsp; School Year 2024–2025</div>
       </div>
+      <div class="pdf-actions">
+        <a href="/uploads/6/4/9/4/64940231/spring_newsletter_soquel_pens.pdf"
+           target="_blank" class="pdf-btn filled" id="downloadBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download PDF
+        </a>
+      </div>
+    </div>
 
-	</div>
+    <!-- PDF EMBED: uses Google Docs viewer as a reliable cross-browser renderer -->
+    <div class="pdf-embed-wrap" id="pdfWrap">
+      <iframe
+        id="pdfFrame"
+        src="https://docs.google.com/viewer?url=https%3A%2F%2Fwww.soquelpens.org%2Fuploads%2F6%2F4%2F9%2F4%2F64940231%2Fspring_newsletter_soquel_pens.pdf&embedded=true"
+        title="Soquel PENS Newsletter Spring 2025"
+        allowfullscreen>
+      </iframe>
+      <div class="pdf-fallback" id="pdfFallback">
+        <p>Having trouble viewing the PDF? You can open it directly in your browser.</p>
+        <a href="/uploads/6/4/9/4/64940231/spring_newsletter_soquel_pens.pdf" target="_blank">Open Newsletter PDF →</a>
+      </div>
+    </div>
+
+  </div>
 </div>
 
-</div>
-
-    </div><!-- end content-wrap -->
-
-    {% render "_footer.html" %}
+{% render "_footer.html" %}
