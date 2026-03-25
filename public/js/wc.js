@@ -252,49 +252,25 @@ function defineComponents() {
         <style>
           ${BASE_CSS}
           :host { background: var(--bark); display: block; overflow: hidden; position: relative; }
-          .bg {
-            position: absolute; inset: 0; pointer-events: none;
-            background: url('${bgimage}') center center / cover no-repeat;
+          .bg{
+            position:absolute;
+            inset:0;
+            pointer-events:none;
+            background:radial-gradient(ellipse 60% 80% at 90% 50%,rgba(122,158,126,.14) 0%,transparent 70%),radial-gradient(ellipse 40% 60% at 10% 80%,rgba(212,168,75,.1) 0%,transparent 65%);
           }
-          .inner {
-            position: relative; max-width: 1140px; margin: 0 auto;
-            padding: 72px 5vw 64px;
-          }
-          .crumb {
-            display: flex; align-items: center; gap: 8px;
-            font-size: 12.5px; color: rgba(253,246,237,0.45);
-            margin-bottom: 20px;
-          }
-          .crumb a { color: rgba(0,0,0,1.0); text-decoration: none; transition: color 0.2s; }
-          .crumb a:hover { color: var(--ochre); }
-          .crumb-sep { color: rgba(0,0,0,1.0); }
-          h1 {
-            font-family: var(--font-display);
-            font-size: clamp(2.2rem, 5vw, 3.8rem);
-            color: var(--bark); line-height: 1.15; margin-bottom: 16px;
-            opacity: 0; animation: fadeUp 0.7s 0.1s ease forwards;
-          }
-          h1 em { font-style: italic; color: var(--bark); }
-          p {
-            color: rgba(0,0,0,1); font-size: 1.05rem;
-            max-width: 520px; line-height: 1.65;
-            opacity: 0; animation: fadeUp 0.7s 0.25s ease forwards;
-          }
-          @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to   { opacity: 1; transform: translateY(0); }
-          }
-          @media (max-width: 600px) { .inner { padding: 52px 5vw 44px; } }
+          .inner{position:relative;max-width:1140px;margin:0 auto;padding:10px 5vw 30px;}
+          .crumb{display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(253,246,237,.45);margin-bottom:20px;}
+          .crumb a{color:rgba(253,246,237,.45);text-decoration:none;transition:color .2s;}.crumb a:hover{color:var(--ochre);}
+          h1{font-family:var(--font-display);font-size:clamp(2.2rem,5vw,3.8rem);color:var(--cream);line-height:1.15;margin-bottom:16px;opacity:0;animation:fu .7s .1s ease forwards;}
+          h1 em{font-style:italic;color:var(--ochre);}
+          p{color:rgba(253,246,237,.62);font-size:1.05rem;max-width:540px;line-height:1.65;opacity:0;animation:fu .7s .25s ease forwards;}
+          @keyframes fu{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+          @media(max-width:600px){.inner{padding:44px 5vw 30px;}}
         </style>
         <div class="bg"></div>
         <div class="inner">
-          <div class="crumb">
-            <a href="index.html">Home</a>
-            <span class="crumb-sep">›</span>
-            <span style="color:rgba(0,0,0,1.0);">${esc(breadcrumb)}</span>
-          </div>
-          <h1>${esc(heading)} <em>${esc(accent)}</em></h1>
-          <p>${esc(subheading)}</p>
+          <div class="crumb"><a href="index.html">Home</a><span>›</span><span style="color:rgba(253,246,237,.65)">${esc(breadcrumb)}</span></div>
+          <h1>${esc(heading)} <em>${esc(accent)}</em></h1><p>${esc(subheading)}</p>
         </div>
       `;
     }

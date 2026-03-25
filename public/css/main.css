@@ -440,3 +440,234 @@ p.lead { color: var(--bark-light); line-height: 1.75; }
 .archive-name{font-family:'Montserrat',sans-serif;font-size:0.92rem;font-weight:700;color:#222;margin-bottom:0.25rem;}
 .archive-desc{font-size:0.8rem;color:#888;line-height:1.5;}
 .archive-icon{margin-top:1rem;display:flex;align-items:center;gap:0.4rem;font-family:'Montserrat',sans-serif;font-size:0.72rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#2b6b4f;}
+
+
+/* ── Page layout ── */
+.page-body { padding: 72px 5vw; }
+.reg-grid {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 52px;
+  align-items: start;
+}
+.main-col { min-width: 0; }
+.sidebar { position: sticky; top: calc(var(--nav-h) + 24px); display: flex; flex-direction: column; gap: 20px; }
+
+/* ── Section blocks ── */
+.reg-section { margin-bottom: 64px; }
+.reg-section:last-child { margin-bottom: 0; }
+.reg-section > h2 { margin-bottom: 8px; }
+.section-intro { font-size: 15px; color: var(--bark-light); line-height: 1.7; margin-bottom: 32px; }
+.section-divider { border: none; border-top: 1px solid rgba(61,43,31,.09); margin: 60px 0; }
+
+/* ── Track tabs ── */
+.track-tabs { display: flex; gap: 10px; margin-bottom: 32px; flex-wrap: wrap; }
+.track-tab {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 20px; border-radius: 100px; font-size: 14px; font-weight: 500;
+  cursor: pointer; transition: all .2s; border: 1.5px solid transparent;
+  background: var(--warm-white); color: var(--bark-light);
+  border-color: rgba(61,43,31,.12);
+}
+.track-tab.active { background: var(--bark); color: var(--cream); border-color: var(--bark); }
+.track-tab:hover:not(.active) { border-color: var(--terracotta); color: var(--terracotta); }
+
+/* ── Steps ── */
+.steps-list { display: flex; flex-direction: column; gap: 0; }
+
+/* ── Fee summary grid ── */
+.fee-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 4px; }
+
+/* ── Forms download grid ── */
+.forms-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 4px; }
+
+/* ── FAQ ── */
+.faq-list { display: flex; flex-direction: column; gap: 12px; }
+
+/* ── MAIN CONTENT ── */
+.content-wrap {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+}
+
+/* Intro card */
+.intro-card {
+    background: var(--warm-white);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--sage);
+    border-radius: 12px;
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 3rem;
+    color: var(--mid);
+    font-size: 0.95rem;
+}
+.intro-card a { color: var(--sage-dark); font-weight: 500; }
+
+/* Section headers */
+.section-label {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+}
+.section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+}
+.section-label span {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 3vw, 1.85rem);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--charcoal);
+    margin-bottom: 2rem;
+}
+.section-title em {
+    font-style: italic;
+    color: var(--sage-dark);
+}
+
+/* Steps */
+.steps { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 3rem; }
+
+.step {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+    background: var(--warm-white);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+.step:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    border-color: var(--sage-light);
+}
+
+.step-num {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--sage-light);
+    color: var(--sage-dark);
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+}
+.step.highlight .step-num {
+    background: var(--sage);
+    color: #fff;
+}
+
+.step-body { flex: 1; }
+.step-body p {
+    font-size: 0.95rem;
+    color: var(--mid);
+    line-height: 1.6;
+}
+.step-body strong { color: var(--charcoal); font-weight: 600; }
+.step-body a {
+    color: var(--sage-dark);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1.5px solid var(--sage-light);
+    transition: border-color 0.2s, color 0.2s;
+}
+.step-body a:hover { color: var(--clay); border-color: var(--clay-light); }
+
+.doc-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.6rem;
+    background: var(--step-bg);
+    border: 1px solid var(--rule);
+    border-radius: 7px;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s;
+}
+.doc-link:hover { background: var(--sage-light); border-color: var(--sage); }
+.doc-link svg { color: var(--sage); }
+
+/* Section divider */
+.section-divider {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 3rem 0;
+}
+
+/* ── SECTION NAV ── */
+.section-nav {
+    background: var(--warm-white);
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 2rem;
+}
+.section-nav a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--mid);
+    text-decoration: none;
+    padding: 0.55rem 1.1rem;
+    border-radius: 8px;
+    border: 1.5px solid var(--rule);
+    background: transparent;
+    transition: all 0.2s;
+}
+.section-nav a:hover {
+    border-color: var(--sage);
+    color: var(--sage-dark);
+    background: var(--step-bg);
+}
+.section-nav a .tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--sage-light);
+    color: var(--sage-dark);
+    border-radius: 4px;
+    padding: 0.15em 0.45em;
+}
+.section-nav a:hover .tag {
+    background: var(--sage);
+    color: #fff;
+}
+
+/* Non-discrimination notice */
+.notice {
+    background: var(--step-bg);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.6;
+    font-style: italic;
+    margin-top: 3rem;
+}
