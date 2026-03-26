@@ -64,7 +64,7 @@ nav{background:#fff;border-bottom:1px solid #e8e8e8;position:sticky;top:0;z-inde
 .hero-content{position:relative;z-index:2;text-align:center;color:#fff;padding:1.5rem;}
 .hero-content h1{font-family:'Montserrat',sans-serif;font-size:clamp(1.7rem,5vw,3.8rem);font-weight:700;letter-spacing:-0.01em;line-height:1.15;margin-bottom:0.75rem;text-shadow:0 2px 20px rgba(0,0,0,0.4);}
 .hero-content h1 em{font-style:italic;font-family:'Lato',sans-serif;font-weight:300;}
-.hero-content p{font-family:'Lato',sans-serif;font-size:1rem;font-weight:300;letter-spacing:0.04em;margin-bottom:1.5rem;opacity:0.92;}
+.hero-content p{font-family:'Lato',sans-serif;font-size:1rem;font-weight:300;letter-spacing:0.04em;margin-bottom:1.5rem;opacity:0.92;color:#fff;}
 .hero-content .hero-sub{font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;font-weight:400;opacity:0.75;margin-bottom:1.5rem;}
 .hero-btns{display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;}
 .hero-btn{display:inline-block;font-family:'Montserrat',sans-serif;font-size:0.8rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#fff;border:2px solid rgba(255,255,255,0.8);padding:0.8rem 1.75rem;text-decoration:none;transition:all 0.2s;}
