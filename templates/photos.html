@@ -23,11 +23,10 @@
         </p>
       </div>
 
-      <div class="photo-grid" id="grid-play">
-        {% for img in page.imgs %}
+      <div class="photo-grid cols-4" id="grid-play">
+        {% for img in page.imgs.play %}
         <div class="photo-item" onclick="openLb('grid-play',{{ forloop.index }})">
           <img src="{{ img }}" alt="Children playing together" loading="lazy">
-          <div class="photo-overlay"><div class="photo-caption">Imaginative play</div></div>
         </div>
         {% endfor %}
       </div>
@@ -47,10 +46,9 @@
       </div>
 
       <div class="photo-grid cols-4" id="grid-outdoor">
-        {% for img in page.imgs %}
-        <div class="photo-item" onclick="openLb('grid-outdoor',0)">
-          <img src="https://images.unsplash.com/photo-1524503033411-c9566986fc8f?w=600&q=80&auto=format&fit=crop" alt="Playing outdoors" loading="lazy">
-          <div class="photo-overlay"><div class="photo-caption">Nature exploration</div></div>
+        {% for img in page.imgs.outdoor %}
+        <div class="photo-item" onclick="openLb('grid-outdoor',{{ forloop.index }})">
+          <img src="{{ img }}" alt="Playing outdoors" loading="lazy">
         </div>
         {% endfor %}
       </div>
@@ -69,11 +67,10 @@
         </p>
       </div>
 
-      <div class="photo-grid" id="grid-classroom">
-        {% for img in page.imgs %}
-        <div class="photo-item" onclick="openLb('grid-classroom',0)">
-          <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&q=80&auto=format&fit=crop" alt="Classroom setting" loading="lazy">
-          <div class="photo-overlay"><div class="photo-caption">Learning environment</div></div>
+      <div class="photo-grid cols-4" id="grid-classroom">
+        {% for img in page.imgs.classroom %}
+        <div class="photo-item" onclick="openLb('grid-classroom',{{ forloop.index }})">
+          <img src="{{ img }}" alt="Classroom setting" loading="lazy">
         </div>
         {% endfor %}
       </div>
@@ -92,11 +89,10 @@
         </p>
       </div>
 
-      <div class="photo-grid cols-2" id="grid-fieldtrips">
-        {% for img in page.imgs %}
-        <div class="photo-item" onclick="openLb('grid-fieldtrips',0)">
-          <img src="https://images.unsplash.com/photo-1500627965408-b5f2c8793b17?w=800&q=80&auto=format&fit=crop" alt="Farm visit" loading="lazy">
-          <div class="photo-overlay"><div class="photo-caption">Farm visit</div></div>
+      <div class="photo-grid cols-4" id="grid-fieldtrips">
+        {% for img in page.imgs.field %}
+        <div class="photo-item" onclick="openLb('grid-fieldtrips',{{ forloop.index }})">
+          <img src="{{ img }}" alt="Farm visit" loading="lazy">
         </div>
         {% endfor %}
       </div>
@@ -116,10 +112,9 @@
       </div>
 
       <div class="photo-grid cols-4" id="grid-firesafety">
-        {% for img in page.imgs %}
-        <div class="photo-item" onclick="openLb('grid-firesafety',0)">
-          <img src="https://images.unsplash.com/photo-1543674892-7d64d45df18b?w=600&q=80&auto=format&fit=crop" alt="Fire truck visit" loading="lazy">
-          <div class="photo-overlay"><div class="photo-caption">Fire truck up close</div></div>
+        {% for img in page.imgs.fire %}
+        <div class="photo-item" onclick="openLb('grid-firesafety',{{ forloop.index }})">
+          <img src="{{ img }}" alt="Fire truck visit" loading="lazy">
         </div>
         {% endfor %}
       </div>
