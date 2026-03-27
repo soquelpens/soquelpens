@@ -40,6 +40,14 @@ function defineComponents() {
     ochre: { bg:'rgba(212,168,75,0.14)', color:'#8a6a1a' },
   };
 
+  const LEVEL_STYLES = {
+    board:     { bg:'rgba(212,168,75,0.12)',    accent:'var(--ochre)',     label:'Leadership' },
+    classroom: { bg:'rgba(122,158,126,0.12)',   accent:'var(--sage-dark)', label:'Classroom' },
+    grounds:   { bg:'rgba(61,43,31,0.07)',      accent:'var(--bark-light)',label:'Grounds' },
+    events:    { bg:'rgba(196,96,58,0.10)',     accent:'var(--terracotta)',label:'Events' },
+    comms:     { bg:'rgba(122,158,126,0.10)',   accent:'var(--sage-dark)', label:'Comms' },
+  };
+
   /* ══════════════════════════════════════════════════════════════
      1. <pens-banner>
         Terracotta announcement strip. Uses a <slot> for content.
@@ -799,105 +807,6 @@ function defineComponents() {
   }
   customElements.define('pens-contact-info', PensContactInfo);
 
-
-  /* ══════════════════════════════════════════════════════════════
-     14. <pens-footer>
-         Self-contained site footer. Fully encapsulated with
-         all columns, contact strip, and bottom bar.
-     ══════════════════════════════════════════════════════════════ */
-  class PensFooter extends HTMLElement {
-    constructor() { super(); this.attachShadow({ mode: 'open' }); }
-    connectedCallback() {
-      this.shadowRoot.innerHTML = `
-        <style>
-          ${BASE_CSS}
-          :host { display: block; background: var(--bark); }
-          footer { color: var(--cream); padding: 64px 5vw 36px; }
-          .grid {
-            display: grid;
-            grid-template-columns: 1.6fr 1fr 1fr;
-            gap: 50px; margin-bottom: 50px;
-          }
-          .logo { font-family: var(--font-display); font-size: 1.2rem; color: var(--cream); margin-bottom: 11px; }
-          .logo span { color: var(--ochre); }
-          .brand p { font-size: 13px; color: rgba(253,246,237,0.48); line-height: 1.65; max-width: 230px; }
-          .contact {
-            background: rgba(255,255,255,0.04); border-radius: 12px;
-            padding: 16px 18px; margin-top: 20px;
-            display: flex; flex-direction: column; gap: 7px;
-          }
-          .contact-row { display: flex; align-items: center; gap: 9px; font-size: 12.5px; color: rgba(253,246,237,0.58); }
-          h4 {
-            font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
-            color: rgba(253,246,237,0.38); margin-bottom: 14px; font-weight: 500;
-          }
-          ul { list-style: none; }
-          li { margin-bottom: 8px; }
-          a  { color: rgba(253,246,237,0.62); text-decoration: none; font-size: 13px; transition: color 0.2s; }
-          a:hover { color: var(--ochre); }
-          .bottom {
-            border-top: 1px solid rgba(255,255,255,0.08);
-            padding-top: 22px; display: flex;
-            justify-content: space-between; align-items: center;
-            flex-wrap: wrap; gap: 8px;
-            font-size: 11.5px; color: rgba(253,246,237,0.28);
-          }
-          @media (max-width: 900px) {
-            .grid { grid-template-columns: 1fr 1fr; gap: 36px; }
-            .brand { grid-column: 1 / -1; }
-            .brand p { max-width: 100%; }
-          }
-          @media (max-width: 600px) {
-            .grid { grid-template-columns: 1fr; gap: 28px; }
-            .brand { grid-column: auto; }
-            .bottom { flex-direction: column; text-align: center; }
-          }
-        </style>
-        <footer>
-          <div class="grid">
-            <div class="brand">
-              <div class="logo">Soquel <span>PENS</span></div>
-              <p>A parent cooperative preschool serving Soquel and Santa Cruz County
-                since 1949. Non-profit, community-run, and open to all families.</p>
-              <div class="contact">
-                <div class="contact-row">📍 397 Old San Jose Rd, Soquel, CA</div>
-                <div class="contact-row">📞 (831) 429-3464</div>
-                <div class="contact-row">✉️ soquelpens@gmail.com</div>
-              </div>
-            </div>
-            <div>
-              <h4>School</h4>
-              <ul>
-                <li><a href="index.html#about">About Soquel PENS</a></li>
-                <li><a href="index.html#program">Our Program</a></li>
-                <li><a href="index.html#classes">Classes &amp; Tuition</a></li>
-                <li><a href="#">Teachers</a></li>
-                <li><a href="#">Board of Directors</a></li>
-                <li><a href="#">Photos</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4>Members &amp; Support</h4>
-              <ul>
-                <li><a href="index.html#enroll">Enrollment</a></li>
-                <li><a href="#">Member Information</a></li>
-                <li><a href="#">Calendar</a></li>
-                <li><a href="#">Support Jobs</a></li>
-                <li><a href="#">Cleaning Scholarships</a></li>
-                <li><a href="#">Donate</a></li>
-                <li><a href="#">Resources</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="bottom">
-            <span>© 2025 Soquel Parent Education Nursery School · Non-Profit 501(c)(3)</span>
-            <span>Soquel, CA · Est. 1949</span>
-          </div>
-        </footer>
-      `;
-    }
-  }
-  customElements.define('pens-footer', PensFooter);
 
   /* ══════════════════════════════════════════════════════════════
      15. <pens-instagram handle="soquelpens">
@@ -1741,36 +1650,137 @@ function defineComponents() {
   });
 
 
-  /* ── 10. <pens-toc-card> — table of contents for the sidebar ── */
+  /* ── 5. pens-jobs-overview — stats strip ── */
+  customElements.define('pens-jobs-overview', class extends HTMLElement {
+    constructor() { super(); this.attachShadow({mode:'open'}); }
+    connectedCallback() {
+      const stats=[
+        {num:'1',   label:'support job per family',   sub:'Assigned each school year'},
+        {num:'5',   label:'job categories',             sub:'Board · Classroom · Grounds · Events · Comms'},
+        {num:'25+', label:'roles available',             sub:'Something for every skill set'},
+        {num:'4 hrs',label:'fundraising per year',      sub:'Plus $100 minimum raised'},
+      ];
+      const cells=stats.map(s=>`
+        <div class="cell">
+          <div class="num">${s.num}</div>
+          <div class="lbl">${s.label}</div>
+          <div class="sub">${s.sub}</div>
+        </div>`).join('');
+      this.shadowRoot.innerHTML = `
+        <style>
+          ${BASE_CSS}:host{display:block;}
+          .strip{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:rgba(255,255,255,.06);border-radius:16px;overflow:hidden;}
+          .cell{background:var(--bark);padding:28px 20px;text-align:center;transition:background .2s;}
+          .cell:hover{background:var(--bark-light);}
+          .num{font-family:var(--font-display);font-size:2rem;font-weight:700;color:var(--ochre);line-height:1;margin-bottom:8px;}
+          .lbl{font-size:13px;color:rgba(253,246,237,.7);line-height:1.4;margin-bottom:4px;}
+          .sub{font-size:11px;color:rgba(253,246,237,.35);line-height:1.4;}
+          @media(max-width:700px){.strip{grid-template-columns:1fr 1fr;}}
+          @media(max-width:420px){.strip{grid-template-columns:1fr;}}
+        </style>
+        <div class="strip">${cells}</div>`;
+    }
+  });
+
+
+  /* ── 6. pens-job-card ── */
+  customElements.define('pens-job-card', class extends HTMLElement {
+    constructor() { super(); this.attachShadow({mode:'open'}); }
+    connectedCallback() {
+      const icon =this.getAttribute('icon')||'📌';
+      const title=esc(this.getAttribute('title')||'');
+      const time =esc(this.getAttribute('time')||'');
+      const lvl  =this.getAttribute('level')||'classroom';
+      const st   =LEVEL_STYLES[lvl]||LEVEL_STYLES.classroom;
+      this.shadowRoot.innerHTML = `
+        <style>
+          ${BASE_CSS}:host{display:block;}
+          .card{background:var(--warm-white);border-radius:16px;padding:22px 20px;border:1px solid rgba(61,43,31,.07);height:100%;display:flex;flex-direction:column;transition:transform .22s,box-shadow .22s;}
+          .card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(61,43,31,.09);}
+          .top{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;}
+          .ico-wrap{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:22px;flex-shrink:0;background:${st.bg};}
+          .title-block{}
+          h3{font-family:var(--font-display);font-size:1rem;color:var(--bark);margin-bottom:4px;line-height:1.3;}
+          .time{font-size:11.5px;color:var(--bark-light);}
+          .badge{display:inline-block;font-size:10.5px;font-weight:500;padding:2px 9px;border-radius:100px;background:${st.bg};color:${st.accent};letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px;}
+          p{font-size:13.5px;color:var(--bark-light);line-height:1.6;flex:1;}
+          ::slotted(strong){color:var(--bark);}
+        </style>
+        <div class="card">
+          <div class="top">
+            <div class="ico-wrap">${icon}</div>
+            <div class="title-block">
+              <div class="badge">${st.label}</div>
+              <h3>${title}</h3>
+              <div class="time">⏱ ${time}</div>
+            </div>
+          </div>
+          <p><slot></slot></p>
+        </div>`;
+    }
+  });
+
+
+  /* ── 7. pens-toc-card ── */
   customElements.define('pens-toc-card', class extends HTMLElement {
     constructor() { super(); this.attachShadow({mode:'open'}); }
     connectedCallback() {
-      const items = [
-        {href:'#community', icon:'🏘️', label:'Community Resources'},
-        {href:'#businesses',icon:'🛍️', label:'Business Directory'},
-        {href:'#handouts',  icon:'📄', label:'Seminar Handouts'},
+      const items=[
+        {href:'#board',       icon:'👑', label:'Board of Directors'},
+        {href:'#classroom',   icon:'🎨', label:'Classroom Support'},
+        {href:'#grounds',     icon:'🌱', label:'Grounds & Maintenance'},
+        {href:'#fundraising', icon:'🎉', label:'Fundraising & Events'},
+        {href:'#comms',       icon:'📱', label:'Communications'},
       ];
-      const links = items.map(i=>`
-        <a href="${i.href}" class="link">
-          <span class="ico">${i.icon}</span>
+      const links=items.map(i=>`
+        <a href="${i.href}" class="lk">
+          <span class="ic">${i.icon}</span>
           <span>${i.label}</span>
-          <span class="arrow">→</span>
+          <span class="ar">→</span>
         </a>`).join('');
       this.shadowRoot.innerHTML = `
         <style>
           ${BASE_CSS}:host{display:block;}
           .card{background:var(--warm-white);border-radius:18px;padding:22px 20px;border:1.5px solid rgba(61,43,31,.08);}
           h3{font-family:var(--font-display);font-size:1rem;color:var(--bark);margin-bottom:14px;}
-          .link{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;text-decoration:none;color:var(--bark);font-size:13.5px;font-weight:500;background:var(--cream);border:1px solid rgba(61,43,31,.06);margin-bottom:8px;transition:background .15s,transform .15s;}
-          .link:last-child{margin-bottom:0;}
-          .link:hover{background:var(--mist);transform:translateX(3px);}
-          .ico{font-size:16px;flex-shrink:0;}
-          .arrow{margin-left:auto;font-size:12px;color:var(--bark-light);}
+          .lk{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;text-decoration:none;color:var(--bark);font-size:13px;font-weight:500;background:var(--cream);border:1px solid rgba(61,43,31,.06);margin-bottom:7px;transition:background .15s,transform .15s;}
+          .lk:last-child{margin-bottom:0;}
+          .lk:hover{background:var(--mist);transform:translateX(3px);}
+          .ic{font-size:15px;flex-shrink:0;}
+          .ar{margin-left:auto;font-size:11px;color:var(--bark-light);}
         </style>
-        <div class="card">
-          <h3>On this page</h3>
-          ${links}
-        </div>`;
+        <div class="card"><h3>Job categories</h3>${links}</div>`;
+    }
+  });
+
+
+  /* ── 8. pens-effort-key ── */
+  customElements.define('pens-effort-key', class extends HTMLElement {
+    constructor() { super(); this.attachShadow({mode:'open'}); }
+    connectedCallback() {
+      const levels=[
+        {label:'Leadership', desc:'Monthly meetings + ongoing responsibility', color:'rgba(212,168,75,.18)', text:'#8a6a1a'},
+        {label:'Classroom',  desc:'Weekly or monthly classroom tasks',          color:'rgba(122,158,126,.16)', text:'var(--sage-dark)'},
+        {label:'Grounds',    desc:'Work parties + as-needed maintenance',       color:'rgba(61,43,31,.08)',    text:'var(--bark-light)'},
+        {label:'Events',     desc:'Intensive planning for specific events',     color:'rgba(196,96,58,.11)',   text:'var(--terracotta)'},
+        {label:'Comms',      desc:'Ongoing communications & coordination',      color:'rgba(122,158,126,.12)', text:'var(--sage-dark)'},
+      ];
+      const rows=levels.map(l=>`
+        <div class="row">
+          <span class="badge" style="background:${l.color};color:${l.text};">${l.label}</span>
+          <span class="desc">${l.desc}</span>
+        </div>`).join('');
+      this.shadowRoot.innerHTML = `
+        <style>
+          ${BASE_CSS}:host{display:block;}
+          .card{background:var(--warm-white);border-radius:18px;padding:22px 20px;border:1.5px solid rgba(61,43,31,.08);}
+          h3{font-family:var(--font-display);font-size:1rem;color:var(--bark);margin-bottom:14px;}
+          .row{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;}
+          .row:last-child{margin-bottom:0;}
+          .badge{display:inline-block;font-size:10.5px;font-weight:500;padding:3px 10px;border-radius:100px;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;flex-shrink:0;margin-top:1px;}
+          .desc{font-size:12.5px;color:var(--bark-light);line-height:1.5;}
+        </style>
+        <div class="card"><h3>Time commitment key</h3>${rows}</div>`;
     }
   });
 

@@ -54,7 +54,8 @@
     "title": "Payments"
   },
   "photos.html": {
-    "title": "Photos"
+    "title": "Photos",
+    "img_dir": "uploads/photos"
   },
   "program.html": {
     "title": "Program"

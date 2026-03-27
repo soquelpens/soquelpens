@@ -26,7 +26,18 @@ def generate(templates_dir: string, output_dir: string, data_file: string) -> in
             data[f]["url"] = f
             data[f]["name"] = f.replace(".html", "")
 
-            with open("public/%s" % (f), "w") as file:
+            if "img_dir" in data[f]:
+                imgs = []
+                try:
+                    for img in listdir(join(output_dir, data[f]["img_dir"])):
+                        fullimg = join(output_dir, data[f]["img_dir"], img)
+                        if isfile(fullimg):
+                            imgs.append(join(data[f]["img_dir"], img))
+                    data[f]["imgs"] = imgs
+                except FileNotFoundError:
+                    print("Skipping image dir %s" % (join(output_dir, data[f]["img_dir"])))
+
+            with open("%s/%s" % (output_dir, f), "w") as file:
                 file.write(template.render(page = data[f]))
                 written = written + 1
         else:
