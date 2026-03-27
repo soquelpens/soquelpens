@@ -1727,10 +1727,10 @@ function defineComponents() {
     connectedCallback() {
       const items=[
         {href:'#board',       icon:'👑', label:'Board of Directors'},
-        {href:'#classroom',   icon:'🎨', label:'Classroom Support'},
+        {href:'#classroom',     icon:' 🎉', label:'Classroom Support'},
         {href:'#grounds',     icon:'🌱', label:'Grounds & Maintenance'},
-        {href:'#fundraising', icon:'🎉', label:'Fundraising & Events'},
         {href:'#comms',       icon:'📱', label:'Communications'},
+
       ];
       const links=items.map(i=>`
         <a href="${i.href}" class="lk">
