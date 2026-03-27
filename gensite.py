@@ -12,6 +12,7 @@ def generate(templates_dir: string, output_dir: string, data_file: string) -> in
     env = Environment(loader=CachingFileSystemLoader(templates_dir, ext=".html"))
 
     files = []
+    written = 0
     for f in listdir(templates_dir):
         if isfile(join(templates_dir, f)) and not f.startswith("_"):
             files.append(f)
@@ -21,10 +22,14 @@ def generate(templates_dir: string, output_dir: string, data_file: string) -> in
 
     for f in files:
         template = env.get_template(f)
-        data[f]["url"] = f
-        data[f]["name"] = f.replace(".html", "")
+        if f in data:
+            data[f]["url"] = f
+            data[f]["name"] = f.replace(".html", "")
 
-        with open("public/%s" % (f), "w") as file:
-            file.write(template.render(page = data[f]))
+            with open("public/%s" % (f), "w") as file:
+                file.write(template.render(page = data[f]))
+                written = written + 1
+        else:
+            print("Skipping %s. Add this file to %s if needed." % (f, data_file))
 
-    return len(files)
+    return written
