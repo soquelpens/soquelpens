@@ -1658,7 +1658,7 @@ function defineComponents() {
         {num:'1',   label:'support job per family',   sub:'Assigned each school year'},
         {num:'5',   label:'job categories',             sub:'Board · Classroom · Grounds · Events · Comms'},
         {num:'25+', label:'roles available',             sub:'Something for every skill set'},
-        {num:'4 hrs',label:'fundraising per year',      sub:'Plus $100 minimum raised'},
+        {num:'2',label:'fundraising events per year',      sub:'Plus a minimum raised amount'},
       ];
       const cells=stats.map(s=>`
         <div class="cell">
