@@ -6,20 +6,22 @@ from liquid import render
 from os import listdir
 from os.path import isfile, join, isdir
 
-import json
+import yaml
 
 # Given a template directory, outout rendered templates to output_dir.
-def generate(templates_dir: string, output_dir: string, data_file: string) -> int:
+def generate(templates_dir: string, output_dir: string) -> int:
     env = Environment(loader=CachingFileSystemLoader(templates_dir, ext=".html"))
 
     files = []
     written = 0
+    data = {}
     for f in listdir(templates_dir):
         if isfile(join(templates_dir, f)) and not f.startswith("_"):
             files.append(f)
-
-    with open(data_file, 'r') as file:
-        data = json.load(file)
+            data[f] = {}
+            ld = yaml.safe_load(extract_data(join(templates_dir, f)))
+            if ld is not None:
+                data[f] = ld
 
     for f in files:
         template = env.get_template(f)
@@ -40,6 +42,7 @@ def generate(templates_dir: string, output_dir: string, data_file: string) -> in
     return written
 
 # Given an images directory, find categorized images for a given template.
+# Recurses down sub dirs, placing these as categories.
 def loadimgs(img_dir: string, output_dir: string, imgcat: dict) -> []:
     imgs = []
     try:
@@ -54,3 +57,17 @@ def loadimgs(img_dir: string, output_dir: string, imgcat: dict) -> []:
         print("Skipping missing image dir %s" % (join(output_dir, img_dir)))
 
     return imgs
+
+# Pull out any data defined in a template
+def extract_data(file_path: string) -> string:
+    base = []
+    good = False
+    with open(file_path, 'r') as file:
+        for line_number, line in enumerate(file, start=1):
+            if "END_DATA" in line:
+                return "\n".join(base)
+            if good:
+                base.append(line)
+            if "START_DATA" in line:
+                good = True
+    return ""

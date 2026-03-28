@@ -1,10 +1,15 @@
+{% comment %} START_DATA
+    title: Daily Photos
+    img_dir: "uploads/photos"
+END_DATA {% endcomment %}
+
 {% render "_header.html" %}
 
 <pens-page-hero
   heading="Life at"
   heading-accent="Soquel PENS"
   subheading="A glimpse into the joy, creativity, and community that make every day at Soquel PENS something special."
-  breadcrumb="Photos"
+  breadcrumb="{{ page.title }}"
   bgimage="/uploads/6/4/9/4/64940231/background-images/119899516.jpg">
 </pens-page-hero>
 

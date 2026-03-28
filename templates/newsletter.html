@@ -1,10 +1,14 @@
+{% comment %} START_DATA
+    title: "Newsletter"
+END_DATA {% endcomment %}
+
 {% render "_header.html" %}
 
 <pens-page-hero
   heading="PENS"
   heading-accent="Newsletter"
   subheading="Stay connected with the Soquel PENS community. Our newsletter is published throughout the school year with updates, resources, and upcoming events."
-  breadcrumb="Newsletter"
+  breadcrumb="{{ page.title }}"
   bgimage="/uploads/6/4/9/4/64940231/background-images/119899516.jpg">
 </pens-page-hero>
 
