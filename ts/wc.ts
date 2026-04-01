@@ -1,4 +1,3 @@
-"use strict";
 /**
  * wc.ts — Soquel PENS Custom Elements (TypeScript)
  * ─────────────────────────────────────────────────────────────────────────────
@@ -56,7 +55,81 @@
  * 37.  <pens-effort-key>           Time-commitment legend card
  * ─────────────────────────────────────────────────────────────────────────────
  */
+
+// ─── Shared types ─────────────────────────────────────────────────────────────
+
+/** Colour variant keys shared across icon badges and chip components. */
+type ColorVariant = 'terra' | 'sage' | 'ochre' | 'bark';
+
+/** Colour variant keys available for chip/badge pills (no bark). */
+type ChipVariant = 'terra' | 'sage' | 'ochre';
+
+/** Volunteer job level keys used by <pens-job-card>. */
+type LevelVariant = 'board' | 'classroom' | 'grounds' | 'events' | 'comms';
+
+/** Alert component variants. */
+type AlertVariant = 'default' | 'info';
+
+/** Button component variants. */
+type BtnVariant = 'primary' | 'sage' | 'ochre' | 'paypal' | 'outline';
+
+/** Button size options. */
+type BtnSize = 'normal' | 'sm';
+
+/** Sidebar card variants. */
+type SidebarVariant = 'default' | 'mist';
+
+/** Timeline item variants. */
+type TimelineVariant = 'ok' | 'warn';
+
+interface ChipColor {
+  bg: string;
+  color: string;
+}
+
+interface LevelStyle {
+  bg: string;
+  accent: string;
+  label: string;
+}
+
+interface StatItem {
+  num: string;
+  label: string;
+  sub: string;
+}
+
+interface ParticipationItem {
+  icon: string;
+  text: string;
+}
+
+interface EnrollmentStep {
+  n: string;
+  title: string;
+  desc: string;
+}
+
+interface InstagramTile {
+  img: string;
+  label: string;
+}
+
+interface TocItem {
+  href: string;
+  icon: string;
+  label: string;
+}
+
+interface EffortLevel {
+  label: string;
+  desc: string;
+  color: string;
+  text: string;
+}
+
 // ─── Shared utilities ─────────────────────────────────────────────────────────
+
 /**
  * Base CSS injected at the top of every shadow root.
  * Normalises box-sizing and sets the host's display + font.
@@ -65,71 +138,83 @@ const BASE_CSS = `
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :host { display: block; font-family: var(--font-body, sans-serif); }
 `;
+
 /**
  * Escapes a string for safe insertion into an innerHTML attribute.
  * Prevents XSS when rendering attribute values as HTML.
  */
-function esc(str) {
-    return String(str ?? '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+function esc(str: string | null | undefined): string {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
+
 /**
  * Maps an `icon-variant` / `color` attribute value to a translucent
  * background colour used for icon badge backgrounds.
  */
-const ICON_BG = {
-    terra: 'rgba(196,96,58,0.12)',
-    sage: 'rgba(122,158,126,0.15)',
-    ochre: 'rgba(212,168,75,0.14)',
-    bark: 'rgba(61,43,31,0.08)',
+const ICON_BG: Record<ColorVariant, string> = {
+  terra: 'rgba(196,96,58,0.12)',
+  sage:  'rgba(122,158,126,0.15)',
+  ochre: 'rgba(212,168,75,0.14)',
+  bark:  'rgba(61,43,31,0.08)',
 };
+
 /**
  * Background + foreground colour pairs for <pens-chip> pill badges.
  */
-const CHIP_COLORS = {
-    terra: { bg: 'rgba(196,96,58,0.12)', color: 'var(--terracotta)' },
-    sage: { bg: 'rgba(122,158,126,0.16)', color: 'var(--sage-dark)' },
-    ochre: { bg: 'rgba(212,168,75,0.14)', color: '#8a6a1a' },
+const CHIP_COLORS: Record<ChipVariant, ChipColor> = {
+  terra: { bg: 'rgba(196,96,58,0.12)',   color: 'var(--terracotta)' },
+  sage:  { bg: 'rgba(122,158,126,0.16)', color: 'var(--sage-dark)'  },
+  ochre: { bg: 'rgba(212,168,75,0.14)',  color: '#8a6a1a'            },
 };
+
 /**
  * Styling tokens for volunteer-job level badges (<pens-job-card>).
  */
-const LEVEL_STYLES = {
-    board: { bg: 'rgba(212,168,75,0.12)', accent: 'var(--ochre)', label: 'Leadership' },
-    classroom: { bg: 'rgba(122,158,126,0.12)', accent: 'var(--sage-dark)', label: 'Classroom' },
-    grounds: { bg: 'rgba(61,43,31,0.07)', accent: 'var(--bark-light)', label: 'Grounds' },
-    events: { bg: 'rgba(196,96,58,0.10)', accent: 'var(--terracotta)', label: 'Events' },
-    comms: { bg: 'rgba(122,158,126,0.10)', accent: 'var(--sage-dark)', label: 'Comms' },
+const LEVEL_STYLES: Record<LevelVariant, LevelStyle> = {
+  board:     { bg: 'rgba(212,168,75,0.12)',   accent: 'var(--ochre)',      label: 'Leadership' },
+  classroom: { bg: 'rgba(122,158,126,0.12)',  accent: 'var(--sage-dark)',  label: 'Classroom'  },
+  grounds:   { bg: 'rgba(61,43,31,0.07)',     accent: 'var(--bark-light)', label: 'Grounds'    },
+  events:    { bg: 'rgba(196,96,58,0.10)',    accent: 'var(--terracotta)', label: 'Events'     },
+  comms:     { bg: 'rgba(122,158,126,0.10)',  accent: 'var(--sage-dark)',  label: 'Comms'      },
 };
+
 /** Helper: resolve an ICON_BG entry, falling back to 'terra'. */
-function iconBg(variant) {
-    return ICON_BG[variant] ?? ICON_BG.terra;
+function iconBg(variant: string): string {
+  return ICON_BG[variant as ColorVariant] ?? ICON_BG.terra;
 }
+
 /** Helper: resolve a CHIP_COLORS entry, falling back to 'terra'. */
-function chipColor(variant) {
-    return CHIP_COLORS[variant] ?? CHIP_COLORS.terra;
+function chipColor(variant: string): ChipColor {
+  return CHIP_COLORS[variant as ChipVariant] ?? CHIP_COLORS.terra;
 }
+
 /** Helper: resolve a LEVEL_STYLES entry, falling back to 'classroom'. */
-function levelStyle(variant) {
-    return LEVEL_STYLES[variant] ?? LEVEL_STYLES.classroom;
+function levelStyle(variant: string): LevelStyle {
+  return LEVEL_STYLES[variant as LevelVariant] ?? LEVEL_STYLES.classroom;
 }
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // GLOBAL / SHARED COMPONENTS
 // ═══════════════════════════════════════════════════════════════════════════════
+
 // ── 1. <pens-banner> ───────────────────────────────────────────────────────────
 // Full-width terracotta announcement strip. Content goes in the slot;
 // any <a> slotted directly inside is styled in warm ivory.
 // ──────────────────────────────────────────────────────────────────────────────
+
 class PensBanner extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { background: var(--terracotta); color: #fff; }
@@ -145,37 +230,67 @@ class PensBanner extends HTMLElement {
       </style>
       <div class="wrap"><slot></slot></div>
     `;
-    }
+  }
 }
 customElements.define('pens-banner', PensBanner);
+
+
+// ── 2. <pens-nav page="payments"> ─────────────────────────────────────────────
+// Sticky site navigation with desktop links + hamburger mobile drawer.
+//
+// Attributes:
+//   page — key of the currently active link (e.g. "payments")
+//
+// All open/close state lives in _open. The drawer uses a CSS max-height
+// transition for a smooth slide animation.
+// ──────────────────────────────────────────────────────────────────────────────
+
+interface NavLink {
+  href: string;
+  label: string;
+  key?: string;
+  active: boolean;
+}
+
 class PensNav extends HTMLElement {
-    _open = false;
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        this._render();
-        this._attachEvents();
-    }
-    /** Returns nav link definitions, marking the active one. */
-    _links() {
-        const page = this.getAttribute('page') ?? '';
-        const items = [
-            { href: 'index.html#about', label: 'About' },
-            { href: 'index.html#program', label: 'Program' },
-            { href: 'index.html#classes', label: 'Classes' },
-            { href: 'payments', label: 'Payments', key: 'payments' },
-        ];
-        return items.map(l => ({ ...l, active: l.key === page }));
-    }
-    /** Builds the full shadow DOM. Only called once on connect. */
-    _render() {
-        const links = this._links();
-        const desktopLinks = links.map(l => `<li><a href="${esc(l.href)}"${l.active ? ' class="active"' : ''}>${l.label}</a></li>`).join('');
-        // Mobile links carry class="ml" so the close handler can target them
-        const mobileLinks = links.map(l => `<li><a href="${esc(l.href)}" class="ml">${l.label}</a></li>`).join('');
-        this.shadowRoot.innerHTML = `
+  private _open: boolean = false;
+
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    this._render();
+    this._attachEvents();
+  }
+
+  /** Returns nav link definitions, marking the active one. */
+  private _links(): NavLink[] {
+    const page = this.getAttribute('page') ?? '';
+    const items: Omit<NavLink, 'active'>[] = [
+      { href: 'index.html#about',   label: 'About'    },
+      { href: 'index.html#program', label: 'Program'  },
+      { href: 'index.html#classes', label: 'Classes'  },
+      { href: 'payments',           label: 'Payments', key: 'payments' },
+    ];
+    return items.map(l => ({ ...l, active: l.key === page }));
+  }
+
+  /** Builds the full shadow DOM. Only called once on connect. */
+  private _render(): void {
+    const links = this._links();
+
+    const desktopLinks = links.map(l =>
+      `<li><a href="${esc(l.href)}"${l.active ? ' class="active"' : ''}>${l.label}</a></li>`
+    ).join('');
+
+    // Mobile links carry class="ml" so the close handler can target them
+    const mobileLinks = links.map(l =>
+      `<li><a href="${esc(l.href)}" class="ml">${l.label}</a></li>`
+    ).join('');
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; position: sticky; top: 0; z-index: 200; }
@@ -316,60 +431,72 @@ class PensNav extends HTMLElement {
         <a href="index.html#enroll" class="drawer-cta ml">🌱 Apply for Enrollment</a>
       </div>
     `;
-    }
-    /** Wires click, keyboard, and outside-click handlers after first render. */
-    _attachEvents() {
-        const sr = this.shadowRoot;
-        const burger = sr.getElementById('burger');
-        const drawer = sr.getElementById('drawer');
-        const close = () => {
-            this._open = false;
-            burger.classList.remove('open');
-            drawer.classList.remove('open');
-            burger.setAttribute('aria-expanded', 'false');
-        };
-        const toggle = () => {
-            this._open = !this._open;
-            burger.classList.toggle('open', this._open);
-            drawer.classList.toggle('open', this._open);
-            burger.setAttribute('aria-expanded', String(this._open));
-        };
-        // stopPropagation prevents the document handler from immediately closing on open
-        burger.addEventListener('click', (e) => { e.stopPropagation(); toggle(); });
-        // All mobile links close the drawer when tapped
-        sr.querySelectorAll('.ml').forEach(l => l.addEventListener('click', close));
-        // Close on outside click
-        document.addEventListener('click', (e) => {
-            if (!this.contains(e.target))
-                close();
-        });
-        // Close on Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape')
-                close();
-        });
-    }
+  }
+
+  /** Wires click, keyboard, and outside-click handlers after first render. */
+  private _attachEvents(): void {
+    const sr     = this.shadowRoot!;
+    const burger = sr.getElementById('burger') as HTMLButtonElement;
+    const drawer = sr.getElementById('drawer') as HTMLDivElement;
+
+    const close = (): void => {
+      this._open = false;
+      burger.classList.remove('open');
+      drawer.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+    };
+
+    const toggle = (): void => {
+      this._open = !this._open;
+      burger.classList.toggle('open', this._open);
+      drawer.classList.toggle('open', this._open);
+      burger.setAttribute('aria-expanded', String(this._open));
+    };
+
+    // stopPropagation prevents the document handler from immediately closing on open
+    burger.addEventListener('click', (e: MouseEvent) => { e.stopPropagation(); toggle(); });
+
+    // All mobile links close the drawer when tapped
+    sr.querySelectorAll<HTMLAnchorElement>('.ml').forEach(l =>
+      l.addEventListener('click', close)
+    );
+
+    // Close on outside click
+    document.addEventListener('click', (e: MouseEvent) => {
+      if (!this.contains(e.target as Node)) close();
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Escape') close();
+    });
+  }
 }
 customElements.define('pens-nav', PensNav);
+
+
 // ── 3. <pens-page-hero heading="" heading-accent="" subheading="" breadcrumb="" bgimage=""> ──
 // Dark bark-background hero for inner pages.
 // heading="How to" heading-accent="Join"  →  How to <em>Join</em>
 //
 // The h1 and p fade + slide up on load via the `fu` keyframe animation.
 // ──────────────────────────────────────────────────────────────────────────────
+
 class PensPageHero extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const heading = this.getAttribute('heading') ?? '';
-        const accent = this.getAttribute('heading-accent') ?? '';
-        const subheading = this.getAttribute('subheading') ?? '';
-        const breadcrumb = this.getAttribute('breadcrumb') ?? 'Page';
-        const bgimage = this.getAttribute('bgimage')
-            ?? '/uploads/6/4/9/4/64940231/background-images/1134880908.jpg';
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const heading    = this.getAttribute('heading')        ?? '';
+    const accent     = this.getAttribute('heading-accent') ?? '';
+    const subheading = this.getAttribute('subheading')     ?? '';
+    const breadcrumb = this.getAttribute('breadcrumb')     ?? 'Page';
+    const bgimage    = this.getAttribute('bgimage')
+      ?? '/uploads/6/4/9/4/64940231/background-images/1134880908.jpg';
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { background: var(--bark); display: block; overflow: hidden; position: relative; }
@@ -431,9 +558,11 @@ class PensPageHero extends HTMLElement {
         <p>${esc(subheading)}</p>
       </div>
     `;
-    }
+  }
 }
 customElements.define('pens-page-hero', PensPageHero);
+
+
 // ── 4. <pens-alert variant="default|info" icon="📅"> ──────────────────────────
 // Callout box. Body content goes in the slot.
 //
@@ -441,19 +570,23 @@ customElements.define('pens-page-hero', PensPageHero);
 //   variant — "info" renders sage-green; anything else is terracotta
 //   icon    — optional emoji to the left of the message
 // ──────────────────────────────────────────────────────────────────────────────
+
 class PensAlert extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const variant = (this.getAttribute('variant') ?? 'default');
-        const icon = this.getAttribute('icon') ?? '';
-        const isInfo = variant === 'info';
-        const bg = isInfo ? 'rgba(122,158,126,0.1)' : 'rgba(196,96,58,0.08)';
-        const border = isInfo ? 'rgba(122,158,126,0.28)' : 'rgba(196,96,58,0.22)';
-        const strongColor = isInfo ? 'var(--sage-dark)' : 'var(--terracotta)';
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const variant: AlertVariant = (this.getAttribute('variant') ?? 'default') as AlertVariant;
+    const icon    = this.getAttribute('icon') ?? '';
+    const isInfo  = variant === 'info';
+
+    const bg          = isInfo ? 'rgba(122,158,126,0.1)'  : 'rgba(196,96,58,0.08)';
+    const border      = isInfo ? 'rgba(122,158,126,0.28)' : 'rgba(196,96,58,0.22)';
+    const strongColor = isInfo ? 'var(--sage-dark)'       : 'var(--terracotta)';
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; }
@@ -474,20 +607,25 @@ class PensAlert extends HTMLElement {
         <div><slot></slot></div>
       </div>
     `;
-    }
+  }
 }
 customElements.define('pens-alert', PensAlert);
+
+
 // ── 5. <pens-chip color="terra|sage|ochre"> ───────────────────────────────────
 // Inline pill badge. Slot provides the label text.
 // ──────────────────────────────────────────────────────────────────────────────
+
 class PensChip extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const { bg, color: fg } = chipColor(this.getAttribute('color') ?? 'terra');
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const { bg, color: fg } = chipColor(this.getAttribute('color') ?? 'terra');
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: inline-block; }
@@ -504,9 +642,11 @@ class PensChip extends HTMLElement {
       </style>
       <span class="chip"><slot></slot></span>
     `;
-    }
+  }
 }
 customElements.define('pens-chip', PensChip);
+
+
 // ── 6. <pens-btn href="" variant="primary|sage|ochre|paypal|outline" size="normal|sm" full> ──
 // Styled link-button rendered as an <a> element inside shadow DOM.
 //
@@ -516,26 +656,31 @@ customElements.define('pens-chip', PensChip);
 //   size    — "sm" for compact sizing; "normal" (default) for standard
 //   full    — boolean; stretches to 100% width when present
 // ──────────────────────────────────────────────────────────────────────────────
+
 class PensBtn extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const href = this.getAttribute('href') ?? '#';
-        const variant = (this.getAttribute('variant') ?? 'primary');
-        const size = (this.getAttribute('size') ?? 'normal');
-        const full = this.hasAttribute('full');
-        const COLOR = {
-            primary: 'background: var(--terracotta); color: #fff;',
-            sage: 'background: var(--sage); color: #fff;',
-            ochre: 'background: var(--ochre); color: var(--bark);',
-            paypal: 'background: #0070ba; color: #fff;',
-            outline: 'background: transparent; color: var(--bark); border: 1.5px solid rgba(61,43,31,0.25);',
-        };
-        const padding = size === 'sm' ? '10px 20px' : '13px 28px';
-        const fontSize = size === 'sm' ? '13.5px' : '15px';
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const href    = this.getAttribute('href')    ?? '#';
+    const variant = (this.getAttribute('variant') ?? 'primary') as BtnVariant;
+    const size    = (this.getAttribute('size')    ?? 'normal') as BtnSize;
+    const full    = this.hasAttribute('full');
+
+    const COLOR: Record<BtnVariant, string> = {
+      primary: 'background: var(--terracotta); color: #fff;',
+      sage:    'background: var(--sage); color: #fff;',
+      ochre:   'background: var(--ochre); color: var(--bark);',
+      paypal:  'background: #0070ba; color: #fff;',
+      outline: 'background: transparent; color: var(--bark); border: 1.5px solid rgba(61,43,31,0.25);',
+    };
+
+    const padding  = size === 'sm' ? '10px 20px' : '13px 28px';
+    const fontSize = size === 'sm' ? '13.5px'    : '15px';
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: ${full ? 'block' : 'inline-block'}; }
@@ -562,19 +707,23 @@ class PensBtn extends HTMLElement {
       </style>
       <a href="${esc(href)}"><slot></slot></a>
     `;
-    }
+  }
 }
 customElements.define('pens-btn', PensBtn);
+
+
 // ── 7. <pens-contact-info> ────────────────────────────────────────────────────
 // Self-contained contact details block. No attributes — data is baked in.
 // ──────────────────────────────────────────────────────────────────────────────
+
 class PensContactInfo extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; }
@@ -589,39 +738,47 @@ class PensContactInfo extends HTMLElement {
         <li>✉️ <a href="mailto:soquelpens@gmail.com">soquelpens@gmail.com</a></li>
       </ul>
     `;
-    }
+  }
 }
 customElements.define('pens-contact-info', PensContactInfo);
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // PAYMENTS PAGE COMPONENTS
 // ═══════════════════════════════════════════════════════════════════════════════
+
 // ── 8. <pens-accordion icon="" title="" subtitle="" amount="" icon-variant="" open> ──
 // Animated expand/collapse card.
 //
 // _render() writes the shadow DOM once. _update() only toggles .open
 // so the slot distribution is never destroyed on click.
 // ──────────────────────────────────────────────────────────────────────────────
+
 class PensAccordion extends HTMLElement {
-    _open = false;
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        this._open = this.hasAttribute('open');
-        this._render();
-        this.shadowRoot.querySelector('.header').addEventListener('click', () => {
-            this._open = !this._open;
-            this._update();
-        });
-    }
-    _render() {
-        const icon = this.getAttribute('icon') ?? '📄';
-        const title = esc(this.getAttribute('title') ?? '');
-        const subtitle = esc(this.getAttribute('subtitle') ?? '');
-        const amount = esc(this.getAttribute('amount') ?? '');
-        const bg = iconBg(this.getAttribute('icon-variant') ?? 'terra');
-        this.shadowRoot.innerHTML = `
+  private _open: boolean = false;
+
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    this._open = this.hasAttribute('open');
+    this._render();
+    this.shadowRoot!.querySelector('.header')!.addEventListener('click', () => {
+      this._open = !this._open;
+      this._update();
+    });
+  }
+
+  private _render(): void {
+    const icon     = this.getAttribute('icon')         ?? '📄';
+    const title    = esc(this.getAttribute('title')    ?? '');
+    const subtitle = esc(this.getAttribute('subtitle') ?? '');
+    const amount   = esc(this.getAttribute('amount')   ?? '');
+    const bg       = iconBg(this.getAttribute('icon-variant') ?? 'terra');
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; }
@@ -686,24 +843,29 @@ class PensAccordion extends HTMLElement {
         </div>
       </div>
     `;
-    }
-    /** Toggles .open without re-rendering, preserving slot distribution. */
-    _update() {
-        this.shadowRoot.querySelector('.card').classList.toggle('open', this._open);
-    }
+  }
+
+  /** Toggles .open without re-rendering, preserving slot distribution. */
+  private _update(): void {
+    this.shadowRoot!.querySelector('.card')!.classList.toggle('open', this._open);
+  }
 }
 customElements.define('pens-accordion', PensAccordion);
+
+
 // ── 9. <pens-tuition-table> ───────────────────────────────────────────────────
 // Self-contained tuition schedule table. All data is baked in.
 // The sibling-discount column hides at ≤ 640px via .col-discount.
 // ──────────────────────────────────────────────────────────────────────────────
+
 class PensTuitionTable extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; margin: 28px 0; }
@@ -768,19 +930,23 @@ class PensTuitionTable extends HTMLElement {
         </tbody>
       </table>
     `;
-    }
+  }
 }
 customElements.define('pens-tuition-table', PensTuitionTable);
+
+
 // ── 10. <pens-memo> ───────────────────────────────────────────────────────────
 // Monospace payment-reference box. <strong> in the slot renders terracotta.
 // ──────────────────────────────────────────────────────────────────────────────
+
 class PensMemo extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; }
@@ -798,23 +964,28 @@ class PensMemo extends HTMLElement {
       </style>
       <div class="box"><slot></slot></div>
     `;
-    }
+  }
 }
 customElements.define('pens-memo', PensMemo);
+
+
 // ── 11. <pens-fee-item icon="" heading="" amount="" memo=""> ──────────────────
 // Compact fee card for the 2-column fees grid.
 // ──────────────────────────────────────────────────────────────────────────────
+
 class PensFeeItem extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const icon = this.getAttribute('icon') ?? '📄';
-        const heading = this.getAttribute('heading') ?? '';
-        const amount = this.getAttribute('amount') ?? '';
-        const memo = this.getAttribute('memo') ?? '';
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const icon    = this.getAttribute('icon')    ?? '📄';
+    const heading = this.getAttribute('heading') ?? '';
+    const amount  = this.getAttribute('amount')  ?? '';
+    const memo    = this.getAttribute('memo')    ?? '';
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; }
@@ -854,21 +1025,26 @@ class PensFeeItem extends HTMLElement {
         </div>
       </div>
     `;
-    }
+  }
 }
 customElements.define('pens-fee-item', PensFeeItem);
+
+
 // ── 12. <pens-quick-link href="" icon=""> ─────────────────────────────────────
 // Full-width anchor row for the "Quick Pay" sidebar. Slides right on hover.
 // ──────────────────────────────────────────────────────────────────────────────
+
 class PensQuickLink extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const href = this.getAttribute('href') ?? '#';
-        const icon = this.getAttribute('icon') ?? '→';
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const href = this.getAttribute('href') ?? '#';
+    const icon = this.getAttribute('icon') ?? '→';
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; }
@@ -893,25 +1069,30 @@ class PensQuickLink extends HTMLElement {
         <span class="arrow">→</span>
       </a>
     `;
-    }
+  }
 }
 customElements.define('pens-quick-link', PensQuickLink);
+
+
 // ── 13. <pens-timeline-item date="" variant="ok|warn"> ────────────────────────
 // One step in the payment timeline. The connecting line hides automatically
 // on the last item via :host(:last-child) .line — no JS needed.
 // ──────────────────────────────────────────────────────────────────────────────
+
 class PensTimelineItem extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const date = esc(this.getAttribute('date') ?? '');
-        const variant = (this.getAttribute('variant') ?? 'ok');
-        const isWarn = variant === 'warn';
-        const dotColor = isWarn ? 'var(--terracotta)' : 'var(--sage)';
-        const dateColor = isWarn ? 'var(--terracotta)' : 'var(--sage-dark)';
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const date      = esc(this.getAttribute('date') ?? '');
+    const variant   = (this.getAttribute('variant') ?? 'ok') as TimelineVariant;
+    const isWarn    = variant === 'warn';
+    const dotColor  = isWarn ? 'var(--terracotta)' : 'var(--sage)';
+    const dateColor = isWarn ? 'var(--terracotta)' : 'var(--sage-dark)';
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: flex; gap: 14px; padding-bottom: 18px; }
@@ -937,23 +1118,28 @@ class PensTimelineItem extends HTMLElement {
         <div class="desc"><slot></slot></div>
       </div>
     `;
-    }
+  }
 }
 customElements.define('pens-timeline-item', PensTimelineItem);
+
+
 // ── 14. <pens-sidebar-card heading="" variant="default|mist"> ────────────────
 // Card wrapper for sidebar content. Accepts quick-links, timeline items, etc.
 // ──────────────────────────────────────────────────────────────────────────────
+
 class PensSidebarCard extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const heading = esc(this.getAttribute('heading') ?? '');
-        const variant = (this.getAttribute('variant') ?? 'default');
-        const bg = variant === 'mist' ? 'var(--mist)' : 'var(--warm-white)';
-        const border = variant === 'mist' ? 'rgba(122,158,126,0.22)' : 'rgba(61,43,31,0.08)';
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const heading = esc(this.getAttribute('heading') ?? '');
+    const variant = (this.getAttribute('variant') ?? 'default') as SidebarVariant;
+    const bg     = variant === 'mist' ? 'var(--mist)'               : 'var(--warm-white)';
+    const border = variant === 'mist' ? 'rgba(122,158,126,0.22)'    : 'rgba(61,43,31,0.08)';
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; }
@@ -977,23 +1163,29 @@ class PensSidebarCard extends HTMLElement {
         <slot></slot>
       </div>
     `;
-    }
+  }
 }
 customElements.define('pens-sidebar-card', PensSidebarCard);
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // HOME / ABOUT PAGE COMPONENTS
 // ═══════════════════════════════════════════════════════════════════════════════
+
 // ── 15. <pens-feature-card icon="" title="" color="terra|sage|ochre"> ─────────
+
 class PensFeatureCard extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const icon = this.getAttribute('icon') ?? '📄';
-        const title = esc(this.getAttribute('title') ?? '');
-        const bg = iconBg(this.getAttribute('color') ?? 'terra');
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const icon  = this.getAttribute('icon')  ?? '📄';
+    const title = esc(this.getAttribute('title') ?? '');
+    const bg    = iconBg(this.getAttribute('color') ?? 'terra');
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; }
@@ -1015,21 +1207,26 @@ class PensFeatureCard extends HTMLElement {
         <p><slot></slot></p>
       </div>
     `;
-    }
+  }
 }
 customElements.define('pens-feature-card', PensFeatureCard);
+
+
 // ── 16. <pens-stat-card year="" year-label="" headline="" detail=""> ──────────
+
 class PensStatCard extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const year = esc(this.getAttribute('year') ?? '');
-        const yearLabel = esc(this.getAttribute('year-label') ?? '');
-        const headline = esc(this.getAttribute('headline') ?? '');
-        const detail = esc(this.getAttribute('detail') ?? '');
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const year      = esc(this.getAttribute('year')       ?? '');
+    const yearLabel = esc(this.getAttribute('year-label') ?? '');
+    const headline  = esc(this.getAttribute('headline')   ?? '');
+    const detail    = esc(this.getAttribute('detail')     ?? '');
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; }
@@ -1050,19 +1247,24 @@ class PensStatCard extends HTMLElement {
         <div class="detail">${detail}</div>
       </div>
     `;
-    }
+  }
 }
 customElements.define('pens-stat-card', PensStatCard);
+
+
 // ── 17. <pens-value-item icon="" heading=""> ──────────────────────────────────
+
 class PensValueItem extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const icon = this.getAttribute('icon') ?? '✦';
-        const heading = esc(this.getAttribute('heading') ?? '');
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const icon    = this.getAttribute('icon')    ?? '✦';
+    const heading = esc(this.getAttribute('heading') ?? '');
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; }
@@ -1076,35 +1278,41 @@ class PensValueItem extends HTMLElement {
         <div><h3>${heading}</h3><p><slot></slot></p></div>
       </div>
     `;
-    }
+  }
 }
 customElements.define('pens-value-item', PensValueItem);
+
+
 // ── 18. <pens-participation-grid> ────────────────────────────────────────────
 // Self-contained 4-col grid. All content is baked in — no attributes.
 // ──────────────────────────────────────────────────────────────────────────────
+
 class PensParticipationGrid extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const items = [
-            { icon: '🏫', text: "Work in your child's class one day each week, arriving early to help the teacher set up" },
-            { icon: '🧹', text: 'Stay after class to clean up and meet with the teacher and other parents for the weekly seminar' },
-            { icon: '🌙', text: 'Attend Fun, Inspirational Education Nights — included with tuition, open to you and adult caregivers' },
-            { icon: '👥', text: "Attend small-group Class Meetings twice a year to discuss the class and your child's development" },
-            { icon: '🍎', text: "Provide a nutritious snack for your child's class approximately once a month" },
-            { icon: '🔧', text: 'Take on a Support Job: Board Director, class photographer, gardening, shopping, and more' },
-            { icon: '🎉', text: 'Contribute 4 hours of fundraising time and raise at least $100 per school year' },
-            { icon: '💛', text: 'Be an active, invested partner in the school — because your participation is the heart of everything we do' },
-        ];
-        const cards = items.map(i => `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const items: ParticipationItem[] = [
+      { icon: '🏫', text: "Work in your child's class one day each week, arriving early to help the teacher set up" },
+      { icon: '🧹', text: 'Stay after class to clean up and meet with the teacher and other parents for the weekly seminar' },
+      { icon: '🌙', text: 'Attend Fun, Inspirational Education Nights — included with tuition, open to you and adult caregivers' },
+      { icon: '👥', text: "Attend small-group Class Meetings twice a year to discuss the class and your child's development" },
+      { icon: '🍎', text: "Provide a nutritious snack for your child's class approximately once a month" },
+      { icon: '🔧', text: 'Take on a Support Job: Board Director, class photographer, gardening, shopping, and more' },
+      { icon: '🎉', text: 'Contribute 4 hours of fundraising time and raise at least $100 per school year' },
+      { icon: '💛', text: 'Be an active, invested partner in the school — because your participation is the heart of everything we do' },
+    ];
+
+    const cards = items.map(i => `
       <div class="item">
         <span class="ico">${i.icon}</span>
         <p>${i.text}</p>
       </div>
     `).join('');
-        this.shadowRoot.innerHTML = `
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; }
@@ -1118,20 +1326,25 @@ class PensParticipationGrid extends HTMLElement {
       </style>
       <div class="grid">${cards}</div>
     `;
-    }
+  }
 }
 customElements.define('pens-participation-grid', PensParticipationGrid);
+
+
 // ── 19. <pens-dark-stat number="" label="" sub=""> ────────────────────────────
+
 class PensDarkStat extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const number = esc(this.getAttribute('number') ?? '');
-        const label = esc(this.getAttribute('label') ?? '');
-        const sub = esc(this.getAttribute('sub') ?? '');
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const number = esc(this.getAttribute('number') ?? '');
+    const label  = esc(this.getAttribute('label')  ?? '');
+    const sub    = esc(this.getAttribute('sub')    ?? '');
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; }
@@ -1147,26 +1360,31 @@ class PensDarkStat extends HTMLElement {
         ${sub ? `<div class="sub">${sub}</div>` : ''}
       </div>
     `;
-    }
+  }
 }
 customElements.define('pens-dark-stat', PensDarkStat);
+
+
 // ── 20. <pens-enrollment-steps> ──────────────────────────────────────────────
 // Self-contained numbered enrollment checklist. All steps are baked in.
 // ──────────────────────────────────────────────────────────────────────────────
+
 class PensEnrollmentSteps extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const steps = [
-            { n: '01', title: 'Contact the Membership Coordinator', desc: 'Email soquelpensmembership@gmail.com — all families are considered first-come, first-served.' },
-            { n: '02', title: 'Download &amp; sign the Requirements Contract', desc: 'Once offered a space, complete the enrollment deposit and requirements contract.' },
-            { n: '03', title: 'Pick up your Registration Packet', desc: 'Collect the full packet at school or at the WASCAE office in Santa Cruz.' },
-            { n: '04', title: 'Submit paperwork &amp; fees', desc: 'Return fully completed forms with your TB test, immunization records, deposits, and registration fees.' },
-            { n: '05', title: 'Receive fingerprint clearance', desc: "Once your Live Scan fingerprint clearance is confirmed (1–3 weeks), you're ready to start!" },
-        ];
-        const html = steps.map(s => `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const steps: EnrollmentStep[] = [
+      { n: '01', title: 'Contact the Membership Coordinator',         desc: 'Email soquelpensmembership@gmail.com — all families are considered first-come, first-served.' },
+      { n: '02', title: 'Download &amp; sign the Requirements Contract', desc: 'Once offered a space, complete the enrollment deposit and requirements contract.' },
+      { n: '03', title: 'Pick up your Registration Packet',            desc: 'Collect the full packet at school or at the WASCAE office in Santa Cruz.' },
+      { n: '04', title: 'Submit paperwork &amp; fees',                   desc: 'Return fully completed forms with your TB test, immunization records, deposits, and registration fees.' },
+      { n: '05', title: 'Receive fingerprint clearance',               desc: "Once your Live Scan fingerprint clearance is confirmed (1–3 weeks), you're ready to start!" },
+    ];
+
+    const html = steps.map(s => `
       <div class="step">
         <div class="num">${s.n}</div>
         <div class="body">
@@ -1175,7 +1393,8 @@ class PensEnrollmentSteps extends HTMLElement {
         </div>
       </div>
     `).join('');
-        this.shadowRoot.innerHTML = `
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; }
@@ -1189,39 +1408,46 @@ class PensEnrollmentSteps extends HTMLElement {
       </style>
       ${html}
     `;
-    }
+  }
 }
 customElements.define('pens-enrollment-steps', PensEnrollmentSteps);
+
+
 // ── 21. <pens-instagram handle="soquelpens"> ──────────────────────────────────
 // Instagram section with 6-up tile grid + follow CTA. No API key required.
 //
 // Attributes:
 //   handle — Instagram username without @ (default: "soquelpens")
 // ──────────────────────────────────────────────────────────────────────────────
+
 class PensInstagram extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const handle = this.getAttribute('handle') ?? 'soquelpens';
-        const profileUrl = `https://www.instagram.com/${handle}/`;
-        const tiles = [
-            { img: '/uploads/instanature.jpg', label: 'Nature play' },
-            { img: '/uploads/instaart.jpg', label: 'Art time' },
-            { img: '/uploads/instastory.jpg', label: 'Story time' },
-            { img: '/uploads/instaout.jpg', label: 'Outdoor fun' },
-            { img: '/uploads/instapub.jpg', label: 'Community' },
-            { img: '/uploads/instafam.jpg', label: 'Families' },
-        ];
-        const tilesHTML = tiles.map(t => `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const handle     = this.getAttribute('handle') ?? 'soquelpens';
+    const profileUrl = `https://www.instagram.com/${handle}/`;
+
+    const tiles: InstagramTile[] = [
+      { img: '/uploads/instanature.jpg', label: 'Nature play' },
+      { img: '/uploads/instaart.jpg',    label: 'Art time'    },
+      { img: '/uploads/instastory.jpg',  label: 'Story time'  },
+      { img: '/uploads/instaout.jpg',    label: 'Outdoor fun' },
+      { img: '/uploads/instapub.jpg',    label: 'Community'   },
+      { img: '/uploads/instafam.jpg',    label: 'Families'    },
+    ];
+
+    const tilesHTML = tiles.map(t => `
       <a class="tile" href="${profileUrl}" target="_blank" rel="noopener"
          title="See our ${t.label} photos on Instagram"
          style="background: url('${t.img}') center / cover no-repeat;">
         <span class="tile-label">${t.label}</span>
       </a>
     `).join('');
-        this.shadowRoot.innerHTML = `
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; background: var(--bark); }
@@ -1293,20 +1519,25 @@ class PensInstagram extends HTMLElement {
         </div>
       </div>
     `;
-    }
+  }
 }
 customElements.define('pens-instagram', PensInstagram);
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // TEACHER / ABOUT PAGE COMPONENTS
 // ═══════════════════════════════════════════════════════════════════════════════
+
 // ── 22. <pens-teacher-photo> ──────────────────────────────────────────────────
+
 class PensTeacherPhoto extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; margin-bottom: 20px; }
@@ -1326,17 +1557,21 @@ class PensTeacherPhoto extends HTMLElement {
         </div>
       </div>
     `;
-    }
+  }
 }
 customElements.define('pens-teacher-photo', PensTeacherPhoto);
+
+
 // ── 23. <pens-profile-card> ───────────────────────────────────────────────────
+
 class PensProfileCard extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; }
@@ -1378,20 +1613,25 @@ class PensProfileCard extends HTMLElement {
         </div>
       </div>
     `;
-    }
+  }
 }
 customElements.define('pens-profile-card', PensProfileCard);
+
+
 // ── 24. <pens-principle-card icon="" title="" color=""> ───────────────────────
+
 class PensPrincipleCard extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const icon = this.getAttribute('icon') ?? '✦';
-        const title = esc(this.getAttribute('title') ?? '');
-        const bg = iconBg(this.getAttribute('color') ?? 'terra');
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const icon  = this.getAttribute('icon')  ?? '✦';
+    const title = esc(this.getAttribute('title') ?? '');
+    const bg    = iconBg(this.getAttribute('color') ?? 'terra');
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; }
@@ -1406,21 +1646,26 @@ class PensPrincipleCard extends HTMLElement {
         <div><h3>${title}</h3><p><slot></slot></p></div>
       </div>
     `;
-    }
+  }
 }
 customElements.define('pens-principle-card', PensPrincipleCard);
+
+
 // ── 25. <pens-experience-card icon="" number="" unit="" label=""> ──────────────
+
 class PensExperienceCard extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const icon = this.getAttribute('icon') ?? '📄';
-        const number = esc(this.getAttribute('number') ?? '');
-        const unit = esc(this.getAttribute('unit') ?? '');
-        const label = esc(this.getAttribute('label') ?? '');
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const icon   = this.getAttribute('icon')   ?? '📄';
+    const number = esc(this.getAttribute('number') ?? '');
+    const unit   = esc(this.getAttribute('unit')   ?? '');
+    const label  = esc(this.getAttribute('label')  ?? '');
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; }
@@ -1446,20 +1691,25 @@ class PensExperienceCard extends HTMLElement {
         <p><slot></slot></p>
       </div>
     `;
-    }
+  }
 }
 customElements.define('pens-experience-card', PensExperienceCard);
+
+
 // ── 26. <pens-dark-influence-card icon="" title="" author=""> ─────────────────
+
 class PensDarkInfluenceCard extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const icon = this.getAttribute('icon') ?? '✦';
-        const title = esc(this.getAttribute('title') ?? '');
-        const author = esc(this.getAttribute('author') ?? '');
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const icon   = this.getAttribute('icon')   ?? '✦';
+    const title  = esc(this.getAttribute('title')  ?? '');
+    const author = esc(this.getAttribute('author') ?? '');
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; }
@@ -1481,19 +1731,24 @@ class PensDarkInfluenceCard extends HTMLElement {
         <p><slot></slot></p>
       </div>
     `;
-    }
+  }
 }
 customElements.define('pens-dark-influence-card', PensDarkInfluenceCard);
+
+
 // ── 27. <pens-seminar-topic icon="" title=""> ─────────────────────────────────
+
 class PensSeminarTopic extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const icon = this.getAttribute('icon') ?? '📌';
-        const title = esc(this.getAttribute('title') ?? '');
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const icon  = this.getAttribute('icon')  ?? '📌';
+    const title = esc(this.getAttribute('title') ?? '');
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; }
@@ -1509,25 +1764,31 @@ class PensSeminarTopic extends HTMLElement {
         <p><slot></slot></p>
       </div>
     `;
-    }
+  }
 }
 customElements.define('pens-seminar-topic', PensSeminarTopic);
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // RESOURCES PAGE COMPONENTS
 // ═══════════════════════════════════════════════════════════════════════════════
+
 // ── 28. <pens-resource-card icon="" category="" title="" url="" tag=""> ────────
+
 class PensResourceCard extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const icon = this.getAttribute('icon') ?? '🔗';
-        const cat = esc(this.getAttribute('category') ?? '');
-        const title = esc(this.getAttribute('title') ?? '');
-        const url = this.getAttribute('url') ?? '#';
-        const tag = esc(this.getAttribute('tag') ?? '');
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const icon  = this.getAttribute('icon')         ?? '🔗';
+    const cat   = esc(this.getAttribute('category') ?? '');
+    const title = esc(this.getAttribute('title')    ?? '');
+    const url   = this.getAttribute('url')          ?? '#';
+    const tag   = esc(this.getAttribute('tag')      ?? '');
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; }
@@ -1553,17 +1814,21 @@ class PensResourceCard extends HTMLElement {
         </a>
       </div>
     `;
-    }
+  }
 }
 customElements.define('pens-resource-card', PensResourceCard);
+
+
 // ── 29. <pens-suggest-box> ────────────────────────────────────────────────────
+
 class PensSuggestBox extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; margin-top: 24px; }
@@ -1581,21 +1846,26 @@ class PensSuggestBox extends HTMLElement {
         <a href="mailto:soquelpens@gmail.com">Suggest a Resource →</a>
       </div>
     `;
-    }
+  }
 }
 customElements.define('pens-suggest-box', PensSuggestBox);
+
+
 // ── 30. <pens-biz-card icon="" name="" tagline="" color=""> ───────────────────
+
 class PensBizCard extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const icon = this.getAttribute('icon') ?? '🏪';
-        const name = esc(this.getAttribute('name') ?? '');
-        const tagline = esc(this.getAttribute('tagline') ?? '');
-        const { bg } = chipColor(this.getAttribute('color') ?? 'terra');
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const icon    = this.getAttribute('icon')        ?? '🏪';
+    const name    = esc(this.getAttribute('name')    ?? '');
+    const tagline = esc(this.getAttribute('tagline') ?? '');
+    const { bg }  = chipColor(this.getAttribute('color') ?? 'terra');
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; }
@@ -1611,20 +1881,25 @@ class PensBizCard extends HTMLElement {
         <p><slot></slot></p>
       </div>
     `;
-    }
+  }
 }
 customElements.define('pens-biz-card', PensBizCard);
+
+
 // ── 31. <pens-sponsor-card name="" type="" icon=""> ───────────────────────────
+
 class PensSponsorCard extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const name = esc(this.getAttribute('name') ?? '');
-        const type = esc(this.getAttribute('type') ?? '');
-        const icon = this.getAttribute('icon') ?? '⭐';
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const name = esc(this.getAttribute('name') ?? '');
+    const type = esc(this.getAttribute('type') ?? '');
+    const icon = this.getAttribute('icon')     ?? '⭐';
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; }
@@ -1640,17 +1915,21 @@ class PensSponsorCard extends HTMLElement {
         <div><div class="type">${type}</div><h3>${name}</h3><p><slot></slot></p></div>
       </div>
     `;
-    }
+  }
 }
 customElements.define('pens-sponsor-card', PensSponsorCard);
+
+
 // ── 32. <pens-sponsor-cta> ────────────────────────────────────────────────────
+
 class PensSponsorCta extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; margin-top: 28px; }
@@ -1668,21 +1947,26 @@ class PensSponsorCta extends HTMLElement {
         <a href="mailto:soquelpens@gmail.com">💛 Get in Touch →</a>
       </div>
     `;
-    }
+  }
 }
 customElements.define('pens-sponsor-cta', PensSponsorCta);
+
+
 // ── 33. <pens-handout icon="" title="" category="" url=""> ────────────────────
+
 class PensHandout extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const icon = this.getAttribute('icon') ?? '📄';
-        const title = esc(this.getAttribute('title') ?? '');
-        const cat = esc(this.getAttribute('category') ?? '');
-        const url = this.getAttribute('url') ?? '#';
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const icon  = this.getAttribute('icon')         ?? '📄';
+    const title = esc(this.getAttribute('title')    ?? '');
+    const cat   = esc(this.getAttribute('category') ?? '');
+    const url   = this.getAttribute('url')          ?? '#';
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; }
@@ -1706,33 +1990,40 @@ class PensHandout extends HTMLElement {
         <span class="arrow">→</span>
       </a>
     `;
-    }
+  }
 }
 customElements.define('pens-handout', PensHandout);
+
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // JOBS / PARTICIPATION PAGE COMPONENTS
 // ═══════════════════════════════════════════════════════════════════════════════
+
 // ── 34. <pens-jobs-overview> ──────────────────────────────────────────────────
+
 class PensJobsOverview extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const stats = [
-            { num: '1', label: 'support job per family', sub: 'Assigned each school year' },
-            { num: '5', label: 'job categories', sub: 'Board · Classroom · Grounds · Events · Comms' },
-            { num: '25+', label: 'roles available', sub: 'Something for every skill set' },
-            { num: '2', label: 'fundraising events per year', sub: 'Plus a minimum raised amount' },
-        ];
-        const cells = stats.map(s => `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const stats: StatItem[] = [
+      { num: '1',   label: 'support job per family',      sub: 'Assigned each school year'                    },
+      { num: '5',   label: 'job categories',              sub: 'Board · Classroom · Grounds · Events · Comms' },
+      { num: '25+', label: 'roles available',             sub: 'Something for every skill set'                },
+      { num: '2',   label: 'fundraising events per year', sub: 'Plus a minimum raised amount'                 },
+    ];
+
+    const cells = stats.map(s => `
       <div class="cell">
         <div class="num">${s.num}</div>
         <div class="lbl">${s.label}</div>
         <div class="sub">${s.sub}</div>
       </div>
     `).join('');
-        this.shadowRoot.innerHTML = `
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; }
@@ -1747,23 +2038,28 @@ class PensJobsOverview extends HTMLElement {
       </style>
       <div class="strip">${cells}</div>
     `;
-    }
+  }
 }
 customElements.define('pens-jobs-overview', PensJobsOverview);
+
+
 // ── 35. <pens-job-card icon="" title="" time="" level="board|classroom|grounds|events|comms"> ──
 // The `level` attribute drives the badge colour via LEVEL_STYLES.
 // ──────────────────────────────────────────────────────────────────────────────
+
 class PensJobCard extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const icon = this.getAttribute('icon') ?? '📌';
-        const title = esc(this.getAttribute('title') ?? '');
-        const time = esc(this.getAttribute('time') ?? '');
-        const st = levelStyle(this.getAttribute('level') ?? 'classroom');
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const icon  = this.getAttribute('icon')  ?? '📌';
+    const title = esc(this.getAttribute('title') ?? '');
+    const time  = esc(this.getAttribute('time')  ?? '');
+    const st    = levelStyle(this.getAttribute('level') ?? 'classroom');
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; }
@@ -1789,30 +2085,36 @@ class PensJobCard extends HTMLElement {
         <p><slot></slot></p>
       </div>
     `;
-    }
+  }
 }
 customElements.define('pens-job-card', PensJobCard);
+
+
 // ── 36. <pens-toc-card> ───────────────────────────────────────────────────────
+
 class PensTocCard extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const items = [
-            { href: '#board', icon: '👑', label: 'Board of Directors' },
-            { href: '#classroom', icon: '🎉', label: 'Classroom Support' },
-            { href: '#grounds', icon: '🌱', label: 'Grounds & Maintenance' },
-            { href: '#comms', icon: '📱', label: 'Communications' },
-        ];
-        const links = items.map(i => `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const items: TocItem[] = [
+      { href: '#board',     icon: '👑', label: 'Board of Directors'    },
+      { href: '#classroom', icon: '🎉', label: 'Classroom Support'     },
+      { href: '#grounds',   icon: '🌱', label: 'Grounds & Maintenance' },
+      { href: '#comms',     icon: '📱', label: 'Communications'        },
+    ];
+
+    const links = items.map(i => `
       <a href="${i.href}" class="lk">
         <span class="ic">${i.icon}</span>
         <span>${i.label}</span>
         <span class="ar">→</span>
       </a>
     `).join('');
-        this.shadowRoot.innerHTML = `
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; }
@@ -1826,30 +2128,36 @@ class PensTocCard extends HTMLElement {
       </style>
       <div class="card"><h3>Job categories</h3>${links}</div>
     `;
-    }
+  }
 }
 customElements.define('pens-toc-card', PensTocCard);
+
+
 // ── 37. <pens-effort-key> ─────────────────────────────────────────────────────
+
 class PensEffortKey extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
-    connectedCallback() {
-        const levels = [
-            { label: 'Leadership', desc: 'Monthly meetings + ongoing responsibility', color: 'rgba(212,168,75,.18)', text: '#8a6a1a' },
-            { label: 'Classroom', desc: 'Weekly or monthly classroom tasks', color: 'rgba(122,158,126,.16)', text: 'var(--sage-dark)' },
-            { label: 'Grounds', desc: 'Work parties + as-needed maintenance', color: 'rgba(61,43,31,.08)', text: 'var(--bark-light)' },
-            { label: 'Events', desc: 'Intensive planning for specific events', color: 'rgba(196,96,58,.11)', text: 'var(--terracotta)' },
-            { label: 'Comms', desc: 'Ongoing communications & coordination', color: 'rgba(122,158,126,.12)', text: 'var(--sage-dark)' },
-        ];
-        const rows = levels.map(l => `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    const levels: EffortLevel[] = [
+      { label: 'Leadership', desc: 'Monthly meetings + ongoing responsibility', color: 'rgba(212,168,75,.18)',   text: '#8a6a1a'           },
+      { label: 'Classroom',  desc: 'Weekly or monthly classroom tasks',         color: 'rgba(122,158,126,.16)', text: 'var(--sage-dark)'  },
+      { label: 'Grounds',    desc: 'Work parties + as-needed maintenance',      color: 'rgba(61,43,31,.08)',    text: 'var(--bark-light)' },
+      { label: 'Events',     desc: 'Intensive planning for specific events',    color: 'rgba(196,96,58,.11)',   text: 'var(--terracotta)' },
+      { label: 'Comms',      desc: 'Ongoing communications & coordination',     color: 'rgba(122,158,126,.12)', text: 'var(--sage-dark)'  },
+    ];
+
+    const rows = levels.map(l => `
       <div class="row">
         <span class="badge" style="background: ${l.color}; color: ${l.text};">${l.label}</span>
         <span class="desc">${l.desc}</span>
       </div>
     `).join('');
-        this.shadowRoot.innerHTML = `
+
+    this.shadowRoot!.innerHTML = `
       <style>
         ${BASE_CSS}
         :host { display: block; }
@@ -1862,22 +2170,23 @@ class PensEffortKey extends HTMLElement {
       </style>
       <div class="card"><h3>Time commitment key</h3>${rows}</div>
     `;
-    }
+  }
 }
 customElements.define('pens-effort-key', PensEffortKey);
+
+
 // ─── Bootstrap ────────────────────────────────────────────────────────────────
 // Register components once Custom Elements are confirmed available.
 // Modern browsers support `customElements` natively; the else branch handles
 // the WebComponents polyfill which fires 'WebComponentsReady' once patched.
 if (window.customElements) {
-    // Native support — already bootstrapped above via top-level class definitions
-    // (no-op: classes call customElements.define() at parse time)
-}
-else {
-    // Polyfill path — shouldn't be reached in modern browsers but kept for safety
-    window.addEventListener('WebComponentsReady', () => {
-        // Components are already defined via customElements.define() above.
-        // This branch exists as a safety net if the polyfill defers the registry.
-        console.warn('WebComponentsReady fired — polyfill path active.');
-    });
+  // Native support — already bootstrapped above via top-level class definitions
+  // (no-op: classes call customElements.define() at parse time)
+} else {
+  // Polyfill path — shouldn't be reached in modern browsers but kept for safety
+  window.addEventListener('WebComponentsReady', () => {
+    // Components are already defined via customElements.define() above.
+    // This branch exists as a safety net if the polyfill defers the registry.
+    console.warn('WebComponentsReady fired — polyfill path active.');
+  });
 }

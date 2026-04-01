@@ -10,9 +10,17 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: "3.14"
+      - name: Install npm
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
       - name: Install dependencies
         run: |
-          pipx install uv==0.10.8 && uv run make html
+          npm ci
+          pipx install uv==0.10.8
+      - name: Make world
+        run:
+          PATH=`pwd`/node_modules/.bin:$PATH uv run make
       - name: Run test suite
         run: |
           PYTHONPATH=`pwd` uv run pytest

@@ -12,3 +12,10 @@ Test with
 ```
 PYTHONPATH=`pwd` uv run pytest
 ```
+
+Build the world with:
+
+```
+npm install
+PATH=`pwd`/node_modules/.bin:$PATH uv run make
+```
