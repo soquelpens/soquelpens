@@ -25,9 +25,8 @@ jobs:
         run: |
           PYTHONPATH=`pwd` uv run pytest
       - name: Publish to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: f0475103cd8ef5b387615aba326c80b7
-          projectName: soquelpensorg
-          directory: public
+          command: pages deploy public --project-name=soquelpensorg
