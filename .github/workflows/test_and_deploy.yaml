@@ -1,7 +1,7 @@
-name: Run Tests
+name: Test and Deploy
 on: push
 jobs:
-  test:
+  test_and_deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -24,3 +24,9 @@ jobs:
       - name: Run test suite
         run: |
           PYTHONPATH=`pwd` uv run pytest
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: f0475103cd8ef5b387615aba326c80b7
+          command: pages deploy public --project-name=soquelpensorg

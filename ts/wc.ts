@@ -1378,7 +1378,7 @@ class PensEnrollmentSteps extends HTMLElement {
   connectedCallback(): void {
     const steps: EnrollmentStep[] = [
       { n: '01', title: 'Contact the Membership Coordinator',         desc: 'Email soquelpensmembership@gmail.com — all families are considered first-come, first-served.' },
-      { n: '02', title: 'Download &amp; sign the Requirements Contract', desc: 'Once offered a space, complete the enrollment deposit and requirements contract.' },
+      { n: '02', title: 'Download &amp; sign the Requirements Contract', desc: 'Once offered a space, <a href="/registration">complete the enrollment deposit and requirements contract</a>.' },
       { n: '03', title: 'Pick up your Registration Packet',            desc: 'Collect the full packet at school or at the WASCAE office in Santa Cruz.' },
       { n: '04', title: 'Submit paperwork &amp; fees',                   desc: 'Return fully completed forms with your TB test, immunization records, deposits, and registration fees.' },
       { n: '05', title: 'Receive fingerprint clearance',               desc: "Once your Live Scan fingerprint clearance is confirmed (1–3 weeks), you're ready to start!" },
