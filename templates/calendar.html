@@ -1,64 +1,52 @@
+{% comment %} START_DATA
+    title: "Calendar"
+END_DATA {% endcomment %}
+
 {% render "_header.html" %}
-    <div class="banner-wrap">
-      <div class="wsite-elements wsite-not-footer wsite-header-elements">
-	<div class="wsite-section-wrap">
-	<div  class="wsite-section wsite-header-section wsite-section-bg-image" style="height: 250px;vertical-align: middle;background-image: url(&quot;/uploads/6/4/9/4/64940231/background-images/1148485695.jpg&quot;) ;background-repeat: no-repeat ;background-position: 50% 50% ;background-size: 100% ;background-color: transparent ;background-size: cover;" >
-		<div class="wsite-section-content">
 
-        <div class="container">
-          <div class="banner">
-				<div class="wsite-section-elements">
-					<h2 class="wsite-content-title">CALENDAR</h2>
-				</div>
-			</div>
-        </div><!-- end container -->
-
-		</div>
-		<div class=""></div>
-	</div>
-</div>
-
-</div>
-
-    </div><!-- end banner-wrap -->
-    <div class="content-wrap">
-      <div id="wsite-content" class="wsite-elements wsite-not-footer">
-	<div class="wsite-section-wrap">
-	<div class="wsite-section wsite-body-section wsite-background-76" style="height: auto;" >
-		<div class="wsite-section-content">
-        <div class="container">
-			<div class="wsite-section-elements">
-				<div class="wsite-scribd">
+<pens-page-hero
+  heading="PENS"
+  heading-accent="{{ page.title }}"
+  subheading="Stay up to date with the Soquel PENS school calendar."
+  breadcrumb="{{ page.title }}"
+  bgimage="/uploads/6/4/9/4/64940231/background-images/119899516.jpg">
+</pens-page-hero>
 
 
-				<div id="267601113351169741-pdf-fallback" style="display: none;">
-					Your browser does not support viewing this document. Click <a href="uploads/6/4/9/4/64940231/spens_25-26__2_.pdf" target="_blank" rel="noopener noreferrer">here</a> to download the document.
-				</div>
-				<div id="267601113351169741-pdf-embed" style="display: none; height: 750px;">
-				</div>
+<!-- Calendar PDF -->
+<div class="pdf-section">
+  <div class="pdf-inner">
 
-				<script type="text/javascript">
-					(function () {
-						if (window.wpdf && window.wpdf.supportsPDFs && window.wpdf.isPDF('/uploads/6/4/9/4/64940231/spens_25-26__2_.pdf')) {
-							var embed = document.getElementById('267601113351169741-pdf-embed');
-							embed.style.display = 'block';
-							window.wpdf.embed('/uploads/6/4/9/4/64940231/spens_25-26__2_.pdf', embed);
-						} else {
-							var fallback = document.getElementById('267601113351169741-pdf-fallback');
-							fallback.style.display = 'block';
-						}
-					})();
-				</script>
-			</div>
-			</div>
-		</div>
+    <div class="pdf-meta">
+      <div class="pdf-meta-left">
+        <div class="pdf-issue">Calendar</div>
+        <div class="pdf-title">Soquel PENS Calendar — 2025-2026</div>
+        <div class="pdf-date">Published August 2025 &nbsp;·&nbsp; School Year 2025–2026</div>
       </div>
+      <div class="pdf-actions">
+        <a href="/uploads/6/4/9/4/64940231/spens_25-26__2_.pdf"
+           target="_blank" class="pdf-btn filled" id="downloadBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download PDF
+        </a>
+      </div>
+    </div>
 
-	</div>
+    <!-- PDF EMBED: uses Google Docs viewer as a reliable cross-browser renderer -->
+    <div class="pdf-embed-wrap" id="pdfWrap">
+      <iframe
+        id="pdfFrame"
+        src="https://docs.google.com/viewer?url=https%3A%2F%2Fwww.soquelpens.org%2Fuploads%2F6%2F4%2F9%2F4%2F64940231%2Fspens_25-26__2_.pdf&embedded=true"
+        title="Soquel PENS Newsletter Spring 2025"
+        allowfullscreen>
+      </iframe>
+      <div class="pdf-fallback" id="pdfFallback">
+        <p>Having trouble viewing the PDF? You can open it directly in your browser.</p>
+        <a href="/uploads/6/4/9/4/64940231/spens_25-26__2_.pdf" target="_blank">Open Newsletter PDF →</a>
+      </div>
+    </div>
+
+  </div>
 </div>
 
-</div>
-
-    </div><!-- end content-wrap -->
-
-  {% render "_footer.html" %}
+{% render "_footer.html" %}

@@ -5,5 +5,7 @@ description = "Soquel Parent Education School"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
+    "pytest>=9.0.2",
     "python-liquid>=2.1.0",
+    "pyyaml>=6.0.3",
 ]

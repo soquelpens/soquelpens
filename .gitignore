@@ -1,4 +1,14 @@
 public/*.html
+public/css/
+public/js/
 __pycache__
 .python-version
 node_modules/
+.DS_Store
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example

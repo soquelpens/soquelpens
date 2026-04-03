@@ -1,0 +1,32 @@
+name: Test and Deploy
+on: push
+jobs:
+  test_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v6
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+      - name: Install npm
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: Install dependencies
+        run: |
+          npm ci
+          pipx install uv==0.10.8
+      - name: Make world
+        run:
+          PATH=`pwd`/node_modules/.bin:$PATH uv run make
+      - name: Run test suite
+        run: |
+          PYTHONPATH=`pwd` uv run pytest
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: f0475103cd8ef5b387615aba326c80b7
+          command: pages deploy public --project-name=soquelpensorg
