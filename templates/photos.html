@@ -54,9 +54,9 @@ END_DATA {% endcomment %}
         </p>
       </div>
 
-      <div class="photo-grid cols-4" id="grid-play">
+      <div class="photo-grid cols-4" id="grid-{{ s.key }}">
         {% for img in page.imgs[s.key] %}
-        <div class="photo-item" onclick="openLb('grid-play',{{ forloop.index }})">
+        <div class="photo-item" onclick="openLb('grid-{{ s.key }}',{{ forloop.index0 }})">
           <img src="{{ img }}" alt="Children playing together" loading="lazy">
         </div>
         {% endfor %}
@@ -101,7 +101,7 @@ let currentGrid = null, currentIdx = 0;
 
 function openLb(gridId, idx) {
   currentGrid = indexGrid(gridId);
-  currentIdx  = idx - 1;
+  currentIdx  = idx;
   showLb();
 }
 
