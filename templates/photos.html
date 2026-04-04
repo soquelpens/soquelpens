@@ -1,6 +1,27 @@
 {% comment %} START_DATA
-    title: Daily Photos
-    img_dir: "uploads/photos"
+title: Daily Photos
+img_dir: "uploads/photos"
+sections:
+  - key: play
+    short: "Play"
+    title: "Children at <em>play</em>"
+    desc: "Play is the work of childhood. Here our children explore, imagine, build, and discover the world together — guided by curious minds and supportive teachers."
+  - key : outdoor
+    short: "Outside"
+    title: "Outdoor <em>play area</em>"
+    desc: "Our outdoor space is a world of its own — gardens to dig in, structures to climb, tricycles to race, and open sky above it all. Nature is our greatest teacher."
+  - key: classroom
+    short: Inside
+    title: "Our <em>classroom</em>"
+    desc: "A warm, thoughtfully prepared environment where children choose their own activities and parents work alongside teachers in every corner of the room."
+  - key: field
+    short: "Field Trips"
+    title: "Field <em>trips</em>"
+    desc: "Learning doesn't stop at the classroom door. We venture out to farms, nature centers, fire stations, and more — always with parents right there alongside us."
+  - key: fire
+    short: Fire
+    title: "Learning <em>fire safety</em>"
+    desc: "Every year our class visits the fire station — and sometimes firefighters visit us! Children learn about fire safety in a hands-on, age-appropriate way they never forget."
 END_DATA {% endcomment %}
 
 {% render "_header.html" %}
@@ -10,44 +31,32 @@ END_DATA {% endcomment %}
   heading-accent="Soquel PENS"
   subheading="A glimpse into the joy, creativity, and community that make every day at Soquel PENS something special."
   breadcrumb="{{ page.title }}"
-  bgimage="/uploads/6/4/9/4/64940231/background-images/119899516.jpg">
+  bgimage="{{ page.pgimage }}">
 </pens-page-hero>
 
 <!-- SECTION NAV -->
 <div class="section-nav">
-  <a href="#play">
-    <span class="tag">Play</span>
+  {% for s in page.sections %}
+  <a href="#{{ s.key }}">
+    <span class="tag">{{ s.short }}</span>
   </a>
-  <a href="#outdoor">
-    <span class="tag">Outside</span>
-  </a>
-  <a href="#classroom">
-    <span class="tag">Inside</span>
-  </a>
-  <p><a href="#fieldtrips">
-    <span class="tag">Field Trips</span>
-  </a>
-  <p><a href="#firesafety">
-    <span class="tag">Fire</span>
-  </a>
+  {% endfor %}
 </div>
 
 <div class="page-body">
   <div class="container">
-
-    <!-- ── 1. CHILDREN AT PLAY ── -->
-    <div class="gallery-section" id="play">
+    {% for s in page.sections %}
+    <div class="gallery-section" id="{{ s.key }}">
       <div class="gallery-header">
-        <h2>Children at <em>play</em></h2>
+        <h2>{{ s.title }}</h2>
         <p class="gallery-desc">
-          Play is the work of childhood. Here our children explore, imagine, build, and
-          discover the world together — guided by curious minds and supportive teachers.
+        {{ s.desc }}
         </p>
       </div>
 
-      <div class="photo-grid cols-4" id="grid-play">
-        {% for img in page.imgs.play %}
-        <div class="photo-item" onclick="openLb('grid-play',{{ forloop.index }})">
+      <div class="photo-grid cols-4" id="grid-{{ s.key }}">
+        {% for img in page.imgs[s.key] %}
+        <div class="photo-item" onclick="openLb('grid-{{ s.key }}',{{ forloop.index0 }})">
           <img src="{{ img }}" alt="Children playing together" loading="lazy">
         </div>
         {% endfor %}
@@ -55,88 +64,7 @@ END_DATA {% endcomment %}
     </div>
 
     <hr class="section-divider">
-
-    <!-- ── 2. OUTDOOR PLAY AREA ── -->
-    <div class="gallery-section" id="outdoor">
-      <div class="gallery-header">
-        <h2>Outdoor <em>play area</em></h2>
-        <p class="gallery-desc">
-          Our outdoor space is a world of its own — gardens to dig in, structures to
-          climb, tricycles to race, and open sky above it all. Nature is our greatest teacher.
-        </p>
-      </div>
-
-      <div class="photo-grid cols-4" id="grid-outdoor">
-        {% for img in page.imgs.outdoor %}
-        <div class="photo-item" onclick="openLb('grid-outdoor',{{ forloop.index }})">
-          <img src="{{ img }}" alt="Playing outdoors" loading="lazy">
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-
-    <hr class="section-divider">
-
-    <!-- ── 3. OUR CLASSROOM ── -->
-    <div class="gallery-section" id="classroom">
-      <div class="gallery-header">
-        <h2>Our <em>classroom</em></h2>
-        <p class="gallery-desc">
-          A warm, thoughtfully prepared environment where children choose their own activities
-          and parents work alongside teachers in every corner of the room.
-        </p>
-      </div>
-
-      <div class="photo-grid cols-4" id="grid-classroom">
-        {% for img in page.imgs.classroom %}
-        <div class="photo-item" onclick="openLb('grid-classroom',{{ forloop.index }})">
-          <img src="{{ img }}" alt="Classroom setting" loading="lazy">
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-
-    <hr class="section-divider">
-
-    <!-- ── 4. FIELD TRIPS ── -->
-    <div class="gallery-section" id="fieldtrips">
-      <div class="gallery-header">
-        <h2>Field <em>trips</em></h2>
-        <p class="gallery-desc">
-          Learning doesn't stop at the classroom door. We venture out to farms, nature
-          centers, fire stations, and more — always with parents right there alongside us.
-        </p>
-      </div>
-
-      <div class="photo-grid cols-4" id="grid-fieldtrips">
-        {% for img in page.imgs.field %}
-        <div class="photo-item" onclick="openLb('grid-fieldtrips',{{ forloop.index }})">
-          <img src="{{ img }}" alt="Farm visit" loading="lazy">
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-
-    <hr class="section-divider">
-
-    <!-- ── 5. LEARNING FIRE SAFETY ── -->
-    <div class="gallery-section" id="firesafety">
-      <div class="gallery-header">
-        <h2>Learning <em>fire safety</em></h2>
-        <p class="gallery-desc">
-          Every year our class visits the fire station — and sometimes firefighters visit us!
-          Children learn about fire safety in a hands-on, age-appropriate way they never forget.
-        </p>
-      </div>
-
-      <div class="photo-grid cols-4" id="grid-firesafety">
-        {% for img in page.imgs.fire %}
-        <div class="photo-item" onclick="openLb('grid-firesafety',{{ forloop.index }})">
-          <img src="{{ img }}" alt="Fire truck visit" loading="lazy">
-        </div>
-        {% endfor %}
-      </div>
-    </div>
+    {% endfor %}
 
   </div><!-- /container -->
 </div><!-- /page-body -->
@@ -173,7 +101,7 @@ let currentGrid = null, currentIdx = 0;
 
 function openLb(gridId, idx) {
   currentGrid = indexGrid(gridId);
-  currentIdx  = idx - 1;
+  currentIdx  = idx;
   showLb();
 }
 
