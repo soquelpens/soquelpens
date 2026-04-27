@@ -2174,132 +2174,131 @@ class PensEffortKey extends HTMLElement {
 }
 customElements.define('pens-effort-key', PensEffortKey);
 
-    /* ── <give-card> ─────────────────────────────────────────────────────── */
-    class GiveCard extends HTMLElement {
-      static get observedAttributes() {
+/* ── <give-card> ─────────────────────────────────────────────────────── */
+class GiveCard extends HTMLElement {
+    static get observedAttributes() {
         return ['href', 'img', 'label', 'title'];
-      }
+    }
 
-      connectedCallback()                { this._init(); }
-      attributeChangedCallback()         { if (this.shadowRoot) this._render(); }
+    connectedCallback()                { this._init(); }
+    attributeChangedCallback()         { if (this.shadowRoot) this._render(); }
 
-      _init() {
+    _init() {
         this.attachShadow({ mode: 'open' });
         this._render();
-      }
+    }
 
-      _render() {
+    _render() {
         const href  = this.getAttribute('href')  || '#';
         const img   = this.getAttribute('img')   || '';
         const label = this.getAttribute('label') || '';
         const title = this.getAttribute('title') || '';
 
         this.shadowRoot!.innerHTML = `
-          <style>
-            ${BASE_CSS}
+<style>
+${BASE_CSS}
+
 .pen-card {
-    background: #fff;
-    padding: 2.5rem 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    text-decoration: none;
-    color: inherit;
-    transition: background 0.2s ease;
+  background: #fff;
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.2s ease;
 }
 
 .pen-card:hover {
-    background: #f7f7f5;
+  background: #f7f7f5;
 }
 
 .pen-card:hover .pen-img-wrap img {
-    filter: grayscale(0%);
-    opacity: 1;
+  filter: grayscale(0%);
+  opacity: 1;
 }
 
 .pen-card:hover .pen-card-arrow {
-    opacity: 1;
-    transform: translateX(0);
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .pen-img-wrap {
-    width: 90px;
-    height: 90px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1.5rem;
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
 }
 
 .pen-img-wrap img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-//    filter: grayscale(100%);
-    opacity: 0.75;
-    transition: filter 0.25s ease, opacity 0.25s ease;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0.75;
+  transition: filter 0.25s ease, opacity 0.25s ease;
 }
 
 .pen-divider {
-    width: 24px;
-    height: 1px;
-    background: #ccc;
-    margin: 0 auto 1.1rem;
+  width: 24px;
+  height: 1px;
+  background: #ccc;
+  margin: 0 auto 1.1rem;
 }
 
 .pen-card-label {
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #999;
-    font-weight: 400;
-    margin-bottom: 0.4rem;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #999;
+  font-weight: 400;
+  margin-bottom: 0.4rem;
 }
 
 .pen-card-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 400;
-    color: #1a1a1a;
-    margin-bottom: 1.25rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: #1a1a1a;
+  margin-bottom: 1.25rem;
 }
 
 .pen-card-cta {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 10px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #888;
-    font-weight: 500;
-    margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #888;
+  font-weight: 500;
+  margin-top: auto;
 }
 
 .pen-card-arrow {
-    opacity: 0;
-    transform: translateX(-5px);
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    font-size: 13px;
+  opacity: 0;
+  transform: translateX(-5px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  font-size: 13px;
 }
-          </style>
+</style>
 
-    <a class="pen-card" href="${href}">
-      <div class="pen-img-wrap">
-        <img src="${img}" alt="${title}" />
-      </div>
-      <div class="pen-divider"></div>
-      <span class="pen-card-label">${label}</span>
-      <h3 class="pen-card-title">${title}</h3>
-      <div class="pen-card-cta">Learn more <span class="pen-card-arrow">→</span></div>
-    </a>
-        `;
-      }
+<a class="pen-card" href="${href}">
+  <div class="pen-img-wrap">
+    <img src="${img}" alt="${title}" />
+  </div>
+  <div class="pen-divider"></div>
+  <span class="pen-card-label">${label}</span>
+  <h3 class="pen-card-title">${title}</h3>
+  <div class="pen-card-cta">Learn more <span class="pen-card-arrow">→</span></div>
+</a>
+`;
     }
+}
 
-    customElements.define('give-card',    GiveCard);
-
+customElements.define('give-card',    GiveCard);
 
 // ─── Bootstrap ────────────────────────────────────────────────────────────────
 // Register components once Custom Elements are confirmed available.
