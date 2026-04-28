@@ -3,6 +3,7 @@
   <div class="footer-brand">
     <span class="logo">Soquel Parent Education Nursery School</span>
     <p>397 Old San Jose Road<br>Soquel, CA 95073<br>​831.429.3464<br><a href="mailto:soquelpensmembership@gmail.com">soquelpensmembership@gmail.com</a><br><br>Soquel PENS is a 501(c)(3) nonprofit organization.<br>Tax ID: 77-0465586</p>
+    <span id="dark-mode-btn"><img src="uploads/dark.png" width="20px"></span>
   </div>
   <div>
     <h4>About</h4>
@@ -45,12 +46,25 @@
 
 <script src="/js/wc.js"></script>
 <script>
-var btn = document.getElementById('hamburger');
-var menu = document.getElementById('mobile-menu');
-btn.addEventListener('click', function(){
-  var open = menu.classList.toggle('open');
-  btn.classList.toggle('open', open);
-});
+  var btn = document.getElementById('hamburger');
+  var menu = document.getElementById('mobile-menu');
+  btn.addEventListener('click', function(){
+    var open = menu.classList.toggle('open');
+    btn.classList.toggle('open', open);
+  });
+
+  // Setup dark mode if set.
+  var dark = document.getElementById('dark-mode-btn')
+  dark.addEventListener('click', function(){
+    mode = (document.documentElement.getAttribute('data-theme') == 'dark')? "light": "dark";
+    document.documentElement.setAttribute('data-theme', mode);
+    localStorage.setItem('userPrefs', JSON.stringify({ theme: mode }));
+  });
+  const savedUser = JSON.parse(localStorage.getItem('userPrefs'));
+  if (savedUser && savedUser.theme) {
+    document.documentElement.setAttribute('data-theme', savedUser.theme);
+  }
+
 </script>
 </body>
 </html>

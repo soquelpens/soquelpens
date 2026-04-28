@@ -1,0 +1,766 @@
+@use 'sass:color';
+
+// ─────────────────────────────────────────────
+// Dark Mode
+// Supports both:
+//   1. prefers-color-scheme: dark  (automatic OS-level)
+//   2. [data-theme="dark"]         (manual JS toggle)
+//
+// Usage (JS toggle):
+//   document.documentElement.setAttribute('data-theme', 'dark')
+//   document.documentElement.setAttribute('data-theme', 'light')
+// ─────────────────────────────────────────────
+
+// ── Dark palette tokens ───────────────────────────────────────────────────
+//
+// Naming mirrors the light tokens so overrides are 1:1 swaps.
+// Suffixed -dk to avoid collision with light vars when inspecting DevTools.
+
+$dm-bg:           #121212;       // page background
+$dm-bg-raised:    #1c1c1e;       // cards, nav, footer
+$dm-bg-sunken:    #0d0d0d;       // inputs, code blocks
+$dm-surface:      #252525;       // sections, panels
+$dm-surface-alt:  #2c2c2e;       // alternate section
+
+$dm-border:       rgba(255,255,255,0.08);
+$dm-border-mid:   rgba(255,255,255,0.13);
+
+$dm-text:         #e8e3dc;       // primary text  (warm off-white)
+$dm-text-mid:     #b0a89e;       // secondary text
+$dm-text-muted:   #6e665e;       // placeholder, captions
+
+$dm-green:        #4aaa7a;       // $green lightened for dark bg
+$dm-green-dark:   #38886080;
+$dm-terracotta:   #e07a58;       // $terracotta lightened
+$dm-terracotta2:  #d47a5a;
+$dm-ochre:        #e0b85c;       // $ochre lightened
+$dm-sage:         #92b896;       // $sage lightened
+$dm-sage-dark:    #6fa074;
+$dm-bark:         #e0d8ce;       // $bark inverted → light cream
+$dm-bark-light:   #c0b8ae;
+$dm-cream:        #1e1a16;       // $cream inverted → dark warm
+$dm-warm-white:   #1a1714;       // $warm-white inverted
+$dm-mist:         #1e2220;       // $mist inverted
+
+// ─────────────────────────────────────────────
+// Mixin: apply dark tokens as CSS custom props
+// ─────────────────────────────────────────────
+@mixin dark-tokens {
+  --cream:        #{$dm-cream};
+  --warm-white:   #{$dm-warm-white};
+  --terracotta:   #{$dm-terracotta};
+  --sage:         #{$dm-sage};
+  --sage-dark:    #{$dm-sage-dark};
+  --ochre:        #{$dm-ochre};
+  --bark:         #{$dm-bark};
+  --bark-light:   #{$dm-bark-light};
+  --mist:         #{$dm-mist};
+
+  // Extended dark-only tokens referenced by component overrides below
+  --dm-bg:          #{$dm-bg};
+  --dm-bg-raised:   #{$dm-bg-raised};
+  --dm-bg-sunken:   #{$dm-bg-sunken};
+  --dm-surface:     #{$dm-surface};
+  --dm-surface-alt: #{$dm-surface-alt};
+  --dm-border:      #{$dm-border};
+  --dm-border-mid:  #{$dm-border-mid};
+  --dm-text:        #{$dm-text};
+  --dm-text-mid:    #{$dm-text-mid};
+  --dm-text-muted:  #{$dm-text-muted};
+  --dm-green:       #{$dm-green};
+  --dm-terracotta:  #{$dm-terracotta};
+}
+
+// ─────────────────────────────────────────────
+// Apply tokens — both OS and manual triggers
+// ─────────────────────────────────────────────
+@media (prefers-color-scheme: dark) {
+  :root { @include dark-tokens; }
+}
+
+[data-theme="dark"] { @include dark-tokens; }
+
+// Convenience mixin so component blocks below stay DRY
+@mixin dark {
+  @media (prefers-color-scheme: dark) { @content; }
+  [data-theme="dark"] & { @content; }
+}
+
+// Root-level dark mixin (for :root / body overrides)
+@mixin dark-root {
+  @media (prefers-color-scheme: dark) { @content; }
+  [data-theme="dark"] { @content; }
+}
+
+
+// ═════════════════════════════════════════════
+// Component Overrides
+// ═════════════════════════════════════════════
+
+// ── Body ─────────────────────────────────────
+body {
+  @include dark {
+    background: $dm-bg;
+    color: $dm-text;
+  }
+}
+
+// ── Headings ─────────────────────────────────
+h2 {
+  @include dark {
+    color: $dm-bark;
+    em { color: $dm-terracotta; }
+  }
+}
+
+// ── Paragraphs ───────────────────────────────
+p, p.lead {
+  @include dark { color: $dm-bark-light; }
+}
+
+// ── Blockquote ───────────────────────────────
+blockquote {
+  @include dark {
+    border-left-color: $dm-green;
+    color: $dm-text-mid;
+    cite { color: $dm-text-muted; }
+  }
+}
+
+// ─────────────────────────────────────────────
+// Navigation
+// ─────────────────────────────────────────────
+
+nav {
+  @include dark {
+    background: $dm-bg-raised;
+    border-bottom-color: $dm-border;
+  }
+}
+
+.nav-logo {
+  @include dark {
+    color: $dm-bark;
+    span { color: $dm-terracotta; }
+  }
+}
+
+.nav-links a {
+  @include dark {
+    color: $dm-text-mid;
+    &:hover { color: $dm-text; }
+  }
+}
+
+.nav-dropdown {
+  @include dark {
+    background: $dm-bg-raised;
+    border-color: $dm-border;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+
+    a {
+      color: $dm-text-mid;
+      border-bottom-color: $dm-border;
+      &:hover { background: $dm-surface; color: $dm-text; }
+    }
+  }
+}
+
+.nav-donate {
+  @include dark { background: $dm-green; }
+}
+
+// ─────────────────────────────────────────────
+// Hamburger
+// ─────────────────────────────────────────────
+
+.hamburger span {
+  @include dark { background: $dm-text; }
+}
+
+// ─────────────────────────────────────────────
+// Mobile Menu
+// ─────────────────────────────────────────────
+
+.mobile-menu {
+  @include dark {
+    background: $dm-bg-raised;
+    border-top-color: $dm-border;
+
+    a {
+      color: $dm-text;
+      border-bottom-color: $dm-border;
+      &:hover { background: $dm-surface; }
+    }
+
+    .m-sub  { color: $dm-text-mid; }
+    .m-section { color: $dm-text-muted; }
+  }
+}
+
+.mobile-donate {
+  @include dark { background: $dm-green; }
+}
+
+// ─────────────────────────────────────────────
+// Banner
+// ─────────────────────────────────────────────
+
+.banner {
+  @include dark {
+    background: $dm-surface;
+    border-top-color: $dm-terracotta2;
+    border-bottom-color: $dm-border;
+    h3 { color: $dm-text; }
+    p  { color: $dm-text-mid; }
+    strong { color: $dm-terracotta2; }
+  }
+}
+
+// ─────────────────────────────────────────────
+// Generic Section Backgrounds
+// ─────────────────────────────────────────────
+
+.section-white {
+  @include dark { background: $dm-bg; }
+}
+
+.section-light {
+  @include dark { background: $dm-surface; }
+}
+
+.section-dark {
+  @include dark { background: $dm-bg-sunken; }
+}
+
+.profile-section {
+  @include dark { background: $dm-warm-white; }
+}
+
+.philosophy-section {
+  @include dark { background: $dm-cream; }
+}
+
+.influences-section {
+  @include dark { background: $dm-mist; }
+}
+
+.pd-section {
+  @include dark { background: $dm-bg-sunken; }
+}
+
+.seminars-section {
+  @include dark { background: $dm-warm-white; }
+}
+
+// ─────────────────────────────────────────────
+// Section misc
+// ─────────────────────────────────────────────
+
+.section-label {
+  @include dark { color: $dm-sage-dark; }
+}
+
+.section-intro {
+  @include dark { color: $dm-bark-light; }
+}
+
+.section-divider {
+  @include dark { border-top-color: $dm-border; }
+}
+
+.section-title {
+  @include dark {
+    color: $dm-text;
+    em { color: $dm-sage-dark; }
+  }
+}
+
+// ─────────────────────────────────────────────
+// Intro block
+// ─────────────────────────────────────────────
+
+.intro {
+  @include dark {
+    h2 { color: $dm-text; }
+    .lead { color: $dm-text-mid; }
+  }
+}
+
+.divider {
+  @include dark { background: $dm-green; }
+}
+
+// ─────────────────────────────────────────────
+// Card Grid
+// ─────────────────────────────────────────────
+
+.card {
+  @include dark {
+    background: $dm-bg-raised;
+
+    &-body {
+      h2 { color: $dm-text; }
+      p  { color: $dm-text-mid; }
+    }
+
+    &-link {
+      color: $dm-green;
+      border-bottom-color: $dm-green;
+    }
+
+    &-border-top { border-top-color: $dm-green; }
+  }
+}
+
+// ─────────────────────────────────────────────
+// Programs
+// ─────────────────────────────────────────────
+
+.prog-col {
+  @include dark {
+    h3 {
+      color: $dm-green;
+      border-bottom-color: $dm-green;
+    }
+
+    ul li {
+      color: $dm-text-mid;
+      border-bottom-color: $dm-border;
+      &::before { color: $dm-terracotta2; }
+    }
+  }
+}
+
+// ─────────────────────────────────────────────
+// Fees
+// ─────────────────────────────────────────────
+
+.fee-box {
+  @include dark {
+    background: $dm-bg-raised;
+    border-color: $dm-border;
+  }
+}
+
+.fee-num {
+  @include dark { color: $dm-green; }
+}
+
+.fee-label {
+  @include dark { color: $dm-text-muted; }
+}
+
+// ─────────────────────────────────────────────
+// Steps (How to Join)
+// ─────────────────────────────────────────────
+
+.steps-list li {
+  @include dark { border-bottom-color: $dm-border; }
+}
+
+.step-n {
+  @include dark { color: $dm-surface-alt; }
+}
+
+.step-content {
+  @include dark {
+    h4 { color: $dm-text; }
+    p  { color: $dm-text-mid; }
+  }
+}
+
+// ─────────────────────────────────────────────
+// CTA Section
+// ─────────────────────────────────────────────
+
+.cta-btn {
+  @include dark {
+    &.solid {
+      background: $dm-green;
+      border-color: $dm-green;
+      &:hover { background: color.scale($dm-green, $lightness: -12%); }
+    }
+  }
+}
+
+// ─────────────────────────────────────────────
+// Testimonial Strip
+// ─────────────────────────────────────────────
+
+.testimonial-strip {
+  @include dark {
+    background: color.scale($dm-green, $lightness: -18%);
+    blockquote { color: rgba($dm-text, 0.88); }
+  }
+}
+
+// ─────────────────────────────────────────────
+// Mission Quote / Quote Strip
+// ─────────────────────────────────────────────
+
+.mission-quote {
+  @include dark {
+    background: $dm-bg-sunken;
+    blockquote { color: $dm-cream; em { color: $dm-ochre; } }
+    cite { color: rgba($dm-cream, 0.38); }
+  }
+}
+
+.quote-strip {
+  @include dark {
+    background: $dm-bg-sunken;
+    blockquote { color: $dm-cream; em { color: $dm-ochre; } }
+    cite { color: rgba($dm-cream, 0.38); }
+  }
+}
+
+// ─────────────────────────────────────────────
+// Nondiscrimination
+// ─────────────────────────────────────────────
+
+.nondiscrim {
+  @include dark {
+    background: $dm-mist;
+    border-left-color: $dm-sage;
+    color: $dm-bark-light;
+  }
+}
+
+// ─────────────────────────────────────────────
+// Content Wrap
+// ─────────────────────────────────────────────
+
+.intro-card {
+  @include dark {
+    background: $dm-warm-white;
+    border-color: $dm-border;
+    border-left-color: $dm-sage;
+    color: $dm-text-mid;
+    a { color: $dm-sage-dark; }
+  }
+}
+
+// ─────────────────────────────────────────────
+// Steps (content-wrap variant)
+// ─────────────────────────────────────────────
+
+.step {
+  @include dark {
+    background: $dm-bg-raised;
+    border-color: $dm-border;
+    &:hover { border-color: $dm-sage; box-shadow: 0 4px 24px rgba(0,0,0,0.35); }
+  }
+}
+
+.step-body {
+  @include dark {
+    p { color: $dm-text-mid; }
+    strong { color: $dm-text; }
+    a { color: $dm-sage-dark; border-bottom-color: rgba($dm-sage, 0.3); }
+  }
+}
+
+.doc-link {
+  @include dark {
+    background: $dm-surface;
+    border-color: $dm-border;
+    color: $dm-text;
+    &:hover { background: rgba($dm-sage, 0.15); border-color: $dm-sage; }
+  }
+}
+
+// ─────────────────────────────────────────────
+// Notice
+// ─────────────────────────────────────────────
+
+.notice {
+  @include dark {
+    background: $dm-surface;
+    border-color: $dm-border;
+    border-left-color: #fff;
+    color: $dm-text-mid;
+
+    // tuition page notice mark / strong
+    strong { color: $dm-text; }
+    mark   { color: $dm-terracotta; }
+  }
+}
+
+// ─────────────────────────────────────────────
+// Section Nav
+// ─────────────────────────────────────────────
+
+.section-nav {
+  @include dark {
+    background: $dm-bg-raised;
+    border-bottom-color: $dm-border;
+
+    a {
+      color: $dm-text-mid;
+      border-color: $dm-border;
+      &:hover { border-color: $dm-sage; color: $dm-sage-dark; background: $dm-surface; }
+    }
+  }
+}
+
+// ─────────────────────────────────────────────
+// Track Tabs
+// ─────────────────────────────────────────────
+
+.track-tab {
+  @include dark {
+    background: $dm-bg-raised;
+    border-color: $dm-border;
+    color: $dm-text-mid;
+
+    &.active {
+      background: $dm-text;
+      color: $dm-bg;
+      border-color: $dm-text;
+    }
+
+    &:hover:not(.active) {
+      border-color: $dm-terracotta;
+      color: $dm-terracotta;
+    }
+  }
+}
+
+// ─────────────────────────────────────────────
+// PDF Viewer
+// ─────────────────────────────────────────────
+
+.pdf-section {
+  @include dark { background: $dm-bg; }
+}
+
+.pdf-meta {
+  @include dark { border-bottom-color: $dm-border; }
+}
+
+.pdf-issue {
+  @include dark { color: $dm-green; }
+}
+
+.pdf-title {
+  @include dark { color: $dm-text; }
+}
+
+.pdf-date {
+  @include dark { color: $dm-text-muted; }
+}
+
+.pdf-btn {
+  @include dark {
+    border-color: $dm-green;
+    color: $dm-green;
+    &:hover { background: $dm-green; color: $dm-bg; }
+
+    &.filled {
+      background: $dm-green;
+      color: $dm-bg;
+      border-color: $dm-green;
+      &:hover { background: color.scale($dm-green, $lightness: -12%); border-color: color.scale($dm-green, $lightness: -12%); }
+    }
+  }
+}
+
+.pdf-embed-wrap {
+  @include dark {
+    background: $dm-surface;
+    border-color: $dm-border;
+  }
+}
+
+// ─────────────────────────────────────────────
+// Archive
+// ─────────────────────────────────────────────
+
+.archive-card {
+  @include dark {
+    background: $dm-bg-raised;
+    border-color: $dm-border;
+    border-top-color: $dm-border;
+
+    &:hover {
+      border-color: $dm-green;
+      border-top-color: $dm-green;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.4);
+    }
+
+    &.active-issue { border-top-color: $dm-green; }
+  }
+}
+
+.archive-season {
+  @include dark { color: $dm-green; }
+}
+
+.archive-name {
+  @include dark { color: $dm-text; }
+}
+
+.archive-desc {
+  @include dark { color: $dm-text-muted; }
+}
+
+.archive-icon {
+  @include dark { color: $dm-green; }
+}
+
+// ─────────────────────────────────────────────
+// Gallery
+// ─────────────────────────────────────────────
+
+.gallery-desc {
+  @include dark { color: $dm-bark-light; }
+}
+
+// ─────────────────────────────────────────────
+// Instagram Slideshow
+// ─────────────────────────────────────────────
+
+.ig-handle {
+  @include dark {
+    color: $dm-green;
+    border-bottom-color: $dm-green;
+  }
+}
+
+.ig-caption {
+  @include dark {
+    background: $dm-bg-raised;
+    border-color: $dm-border;
+    color: $dm-text-mid;
+    strong { color: $dm-text; }
+  }
+}
+
+.ig-prev,
+.ig-next {
+  @include dark {
+    background: rgba($dm-bg-raised, 0.9);
+    border-color: $dm-border;
+    color: $dm-text;
+    &:hover { background: $dm-surface; box-shadow: 0 2px 16px rgba(0,0,0,0.5); }
+  }
+}
+
+.ig-dot {
+  @include dark {
+    background: $dm-border-mid;
+    &.active { background: $dm-green; }
+  }
+}
+
+.ig-follow-btn {
+  @include dark {
+    color: $dm-green;
+    border-color: $dm-green;
+    &:hover { background: $dm-green; color: $dm-bg; }
+  }
+}
+
+// ─────────────────────────────────────────────
+// Footer
+// ─────────────────────────────────────────────
+
+footer {
+  @include dark {
+    background: $dm-bg-sunken;
+    color: $dm-text-muted;
+
+    h4 { color: $dm-text-muted; }
+
+    ul a {
+      color: $dm-text-muted;
+      &:hover { color: $dm-text; }
+    }
+  }
+}
+
+.footer-brand {
+  @include dark {
+    .logo { color: $dm-text; }
+    p { color: $dm-text-muted; }
+    a { color: $dm-text-mid; }
+  }
+}
+
+.footer-bottom {
+  @include dark {
+    background: $dm-bg;
+    color: $dm-text-muted;
+  }
+}
+
+// ─────────────────────────────────────────────
+// Tuition / Price tables (tuition.html)
+// ─────────────────────────────────────────────
+
+.tuition-wrap {
+  // inherits body bg — no override needed
+}
+
+.price-grid {
+  @include dark {
+    background: $dm-border;
+    border-color: $dm-border;
+  }
+}
+
+.price-col {
+  @include dark { background: $dm-bg-raised; }
+}
+
+.col-label {
+  @include dark { color: $dm-text; }
+}
+
+.col-divider {
+  @include dark { background: $dm-border-mid; }
+}
+
+.col-note {
+  @include dark { color: $dm-text-muted; }
+}
+
+.table-heading {
+  @include dark { color: $dm-text-muted; }
+}
+
+// ─────────────────────────────────────────────
+// Pen-style give cards (ways-to-give.html)
+// ─────────────────────────────────────────────
+
+.pen-grid {
+  @include dark {
+    background: $dm-border;
+    border-color: $dm-border;
+  }
+}
+
+// ─────────────────────────────────────────────
+// Optional: smooth color transitions on toggle
+// ─────────────────────────────────────────────
+
+body,
+nav,
+.card,
+.fee-box,
+.archive-card,
+.price-col,
+.step,
+.banner,
+footer,
+.footer-bottom,
+.mobile-menu,
+.ig-caption,
+.ig-prev,
+.ig-next {
+  transition:
+    background-color 0.25s ease,
+    border-color     0.25s ease,
+    color            0.2s  ease;
+}
