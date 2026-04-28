@@ -1,0 +1,129 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background: #fff;
+    color: #1a1a1a;
+    font-family: 'Jost', sans-serif;
+}
+
+/* ── Page wrapper ───────────────────────────────────────────────────── */
+.tuition-wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 2rem;
+}
+
+.section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: #1a1a1a;
+    letter-spacing: -0.01em;
+    margin-bottom: 2rem;
+}
+
+/* ── Notice banner ──────────────────────────────────────────────────── */
+.notice {
+    border: 1px solid #e0e0e0;
+    border-left: 3px solid #1a1a1a;
+    padding: 1.25rem 1.5rem;
+    font-size: 14px;
+    font-weight: 300;
+    color: #555;
+    line-height: 1.7;
+    background: #fafaf9;
+    margin-bottom: 3rem;
+}
+
+.notice strong {
+    font-weight: 500;
+    color: #1a1a1a;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.notice mark {
+    background: none;
+    color: #c0392b;
+    font-weight: 500;
+}
+
+/* ── Price table ────────────────────────────────────────────────────── */
+.price-table {
+    margin-bottom: 3rem;
+}
+
+.table-heading {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #888;
+    font-weight: 400;
+    margin-bottom: 1rem;
+}
+
+.price-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: #e0e0e0;
+    border: 1px solid #e0e0e0;
+}
+
+/* ── Price column ───────────────────────────────────────────────────── */
+.price-col {
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem 1.5rem;
+    gap: 1rem;
+}
+
+.col-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: #1a1a1a;
+    line-height: 1.2;
+}
+
+.col-divider {
+    width: 20px;
+    height: 1px;
+    background: #ddd;
+    flex-shrink: 0;
+}
+
+.col-paypal {
+    width: 100%;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-shrink: 0;
+}
+
+.col-paypal iframe,
+.col-paypal paypal-add-to-cart-button {
+    width: 100%;
+    height: 350px;
+}
+
+.col-note {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #999;
+    font-weight: 400;
+    line-height: 1.6;
+    margin-top: auto;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+    .price-grid {
+        grid-template-columns: 1fr;
+    }
+}
