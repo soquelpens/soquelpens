@@ -5,8 +5,13 @@ css:
 sections:
   - key: tuition
     short: "Monthly Tuition"
+    token: "#"
   - key: fees
     short: "Deposits &amp; Fees"
+    token: "#"
+  - key: subscribe
+    token: "/"
+    short: "Monthly Subscriptions"
 END_DATA {% endcomment %}
 
 {% render "_header.html" %}
@@ -32,7 +37,7 @@ END_DATA {% endcomment %}
   <!-- SECTION NAV -->
   <div class="section-nav">
     {% for s in page.sections %}
-    <a href="#{{ s.key }}">
+    <a href="{{ s.token }}{{ s.key }}">
       <span class="tag">{{ s.short }}</span>
     </a>
     {% endfor %}

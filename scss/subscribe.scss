@@ -1,0 +1,278 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --ink:      #1a1f2e;
+    --slate:    #4a5568;
+    --mist:     #f0f4f8;
+    --white:    #ffffff;
+    --gold:     #c9a84c;
+    --gold-lt:  #f5ead0;
+    --rule:     #dde3ec;
+    --radius:   12px;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--mist);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ── Header ── */
+header {
+    background: var(--ink);
+    padding: 40px 24px 36px;
+    text-align: center;
+}
+
+header .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+}
+
+header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 6vw, 3rem);
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 16px;
+}
+
+header p {
+    color: #a0aec0;
+    font-size: 15px;
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.65;
+}
+
+/* ── Decorative rule ── */
+.gold-rule {
+    width: 48px;
+    height: 3px;
+    background: var(--gold);
+    margin: 0 auto 14px;
+    border-radius: 2px;
+}
+
+/* ── Main layout ── */
+main {
+    flex: 1;
+    max-width: 860px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 48px 20px 64px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    align-items: start;
+}
+
+@media (max-width: 600px) {
+    main { grid-template-columns: 1fr; }
+}
+
+/* ── Card ── */
+.plan-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    border: 1px solid var(--rule);
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s;
+}
+
+.plan-card:hover {
+    box-shadow: 0 6px 28px rgba(0,0,0,0.11);
+}
+
+.plan-header {
+    background: var(--ink);
+    padding: 24px 28px 20px;
+}
+
+.plan-badge {
+    display: inline-block;
+    background: var(--gold-lt);
+    color: #7a5c1a;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+}
+
+.plan-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.65rem;
+    color: var(--white);
+    line-height: 1.2;
+}
+
+.plan-days {
+    display: flex;
+    gap: 6px;
+    margin-top: 12px;
+}
+
+.day-chip {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    background: rgba(201,168,76,0.18);
+    color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.35);
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.plan-body {
+    padding: 24px 28px 28px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.plan-description {
+    font-size: 14px;
+    color: var(--slate);
+    line-height: 1.6;
+}
+
+/* ── Form styling ── */
+.field-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin-bottom: 6px;
+    display: block;
+}
+
+.name-field {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--rule);
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--mist);
+    transition: border-color 0.15s, background 0.15s;
+    outline: none;
+}
+
+.name-field:focus {
+    border-color: var(--gold);
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
+}
+
+.name-field::placeholder {
+    color: #b0b8c9;
+}
+
+.subscribe-btn {
+    display: block;
+    text-align: center;
+}
+
+.subscribe-btn input[type="image"] {
+    display: block;
+    margin: 0 auto;
+    transition: opacity 0.15s, transform 0.15s;
+}
+
+.subscribe-btn input[type="image"]:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+}
+
+.secure-note {
+    font-size: 11px;
+    color: #a0aec0;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.secure-note::before {
+    content: "🔒";
+    font-size: 10px;
+}
+
+/* ── Validation error ── */
+.field-error {
+    display: none;
+    font-size: 12px;
+    color: #c0392b;
+    margin-top: 6px;
+    font-weight: 500;
+    align-items: center;
+    gap: 4px;
+}
+
+.field-error.visible {
+    display: flex;
+}
+
+.name-field.invalid {
+    border-color: #c0392b;
+    background: #fff5f5;
+    box-shadow: 0 0 0 3px rgba(192,57,43,0.1);
+}
+
+/* ── Divider between cards on mobile ── */
+.divider {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .divider { display: block; border: none; border-top: 1px solid var(--rule); margin: 4px 0; }
+}
+
+/* ── Notice banner ──────────────────────────────────────────────────── */
+.notice {
+    border: 1px solid #e0e0e0;
+    border-left: 3px solid #1a1a1a;
+    padding: 1.25rem 1.5rem;
+    font-size: 14px;
+    font-weight: 300;
+    color: #555;
+    line-height: 1.7;
+    background: #fafaf9;
+    margin-bottom: 3rem;
+}
+
+.notice strong {
+    font-weight: 500;
+    color: #1a1a1a;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.notice mark {
+    background: none;
+    color: #c0392b;
+    font-weight: 500;
+}
+
+.tuition-wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 2rem;
+}

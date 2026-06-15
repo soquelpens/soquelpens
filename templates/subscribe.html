@@ -1,0 +1,174 @@
+{% comment %} START_DATA
+title: "Subscribe to PENS"
+css:
+  - subscribe.css
+END_DATA {% endcomment %}
+
+{% render "_header.html" %}
+
+<pens-page-hero
+  heading="Soquel PENS"
+  heading-accent="Subscriptions"
+  subheading="Automated payments for members."
+  breadcrumb="{{ page.title }}"
+  bgimage="{{ page.pgimage }}">
+</pens-page-hero>
+
+<!-- Notice -->
+<div class="tuition-wrap">
+<div class="notice">
+  Choose your child's schedule and set up a recurring subscription through PayPal.
+  All PayPal transactions include a fee of 1.99% + $0.49.
+</div>
+</div>
+
+<main>
+
+  <!-- MWF Card -->
+  <div class="plan-card">
+    <div class="plan-header">
+      <div class="plan-badge">3 days / week</div>
+      <div class="plan-title">MWF Tuition</div>
+      <div class="plan-days">
+        <span class="day-chip">Mon</span>
+        <span class="day-chip">Wed</span>
+        <span class="day-chip">Fri</span>
+      </div>
+    </div>
+    <div class="plan-body">
+      <p class="plan-description">$357.46 per month for Monday, Wednesday &amp; Friday sessions. Enter your child's name below, then click Subscribe to set up your recurring payment.</p>
+
+      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+        <input type="hidden" name="cmd" value="_s-xclick" />
+        <input type="hidden" name="hosted_button_id" value="3J9WJQDZSGXV8" />
+        <input type="hidden" name="on0" value="Child's Name (Required)" />
+        <input type="hidden" name="currency_code" value="USD" />
+
+        <div>
+          <label class="field-label" for="mwf-name">Child's Name <span style="color:#c9a84c">*</span></label>
+          <input
+            class="name-field"
+            type="text"
+            id="mwf-name"
+            name="os0"
+            maxlength="200"
+            placeholder="First and last name"
+            required
+            />
+          <span class="field-error" id="mwf-error">⚠ Please enter your child's name before subscribing.</span>
+        </div>
+
+        <div class="subscribe-btn" style="margin-top: 20px;">
+          <input
+            type="image"
+            src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribe_LG.gif"
+            border="0"
+            name="submit"
+            title="PayPal - The safer, easier way to pay online!"
+            alt="Subscribe"
+            />
+        </div>
+      </form>
+
+      <p class="secure-note">Payments processed securely by PayPal</p>
+    </div>
+  </div>
+
+  <!-- TTH Card -->
+  <div class="plan-card">
+    <div class="plan-header">
+      <div class="plan-badge">2 days / week</div>
+      <div class="plan-title">TTH Tuition</div>
+      <div class="plan-days">
+        <span class="day-chip">Tue</span>
+        <span class="day-chip">Thu</span>
+      </div>
+    </div>
+    <div class="plan-body">
+      <p class="plan-description">$255.47 per month for Tuesday &amp; Thursday sessions. Enter your child's name below, then click Subscribe to set up your recurring payment.</p>
+
+      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+        <input type="hidden" name="cmd" value="_s-xclick" />
+        <input type="hidden" name="hosted_button_id" value="LUSWCTL7RWMBE" />
+        <input type="hidden" name="on0" value="Child's Name (Required)" />
+        <input type="hidden" name="currency_code" value="USD" />
+
+        <div>
+          <label class="field-label" for="tth-name">Child's Name <span style="color:#c9a84c">*</span></label>
+          <input
+            class="name-field"
+            type="text"
+            id="tth-name"
+            name="os0"
+            maxlength="200"
+            placeholder="First and last name"
+            required
+            />
+          <span class="field-error" id="tth-error">⚠ Please enter your child's name before subscribing.</span>
+        </div>
+
+        <div class="subscribe-btn" style="margin-top: 20px;">
+          <input
+            type="image"
+            src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribe_LG.gif"
+            border="0"
+            name="submit"
+            title="PayPal - The safer, easier way to pay online!"
+            alt="Subscribe"
+            />
+        </div>
+      </form>
+
+      <p class="secure-note">Payments processed securely by PayPal</p>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  function validateForm(fieldId, errorId, form) {
+    const field = document.getElementById(fieldId);
+    const error = document.getElementById(errorId);
+
+    // Clear previous error state
+    field.classList.remove('invalid');
+    error.classList.remove('visible');
+
+    if (field.value.trim() === '') {
+      field.classList.add('invalid');
+      error.classList.add('visible');
+      field.focus();
+      return false; // block submission
+    }
+
+    return true; // allow submission
+  }
+
+  // MWF form
+  document.querySelector('form[action*="3J9WJQDZSGXV8"], form:has(#mwf-name)') ||
+  document.getElementById('mwf-name').closest('form');
+
+  document.getElementById('mwf-name').closest('form').addEventListener('submit', function(e) {
+    if (!validateForm('mwf-name', 'mwf-error', this)) {
+      e.preventDefault();
+    }
+  });
+
+  // TTH form
+  document.getElementById('tth-name').closest('form').addEventListener('submit', function(e) {
+    if (!validateForm('tth-name', 'tth-error', this)) {
+      e.preventDefault();
+    }
+  });
+
+  // Clear error state as soon as the user starts typing
+  ['mwf-name', 'tth-name'].forEach(function(id) {
+    var errorId = id.replace('-name', '-error');
+    document.getElementById(id).addEventListener('input', function() {
+      this.classList.remove('invalid');
+      document.getElementById(errorId).classList.remove('visible');
+    });
+  });
+</script>
+
+{% render "_footer.html" %}
