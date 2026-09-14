@@ -134,6 +134,9 @@
   card.addEventListener('click', (e) => e.stopPropagation());
 
   async function hasSeenSplash() {
+    // Turning off for now because we don't have anything to adversize.
+    return true;
+
     {% if page.showSplash %}
     return false;
     {% else %}
